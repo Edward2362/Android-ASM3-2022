@@ -16,9 +16,12 @@ const uploadBook = async (req, response) => {
 
     const book = await Book.create(bookInput);
 
-    response.json(book);
+    return response.json({
+      message: "",
+      error: false,
+      data: [book]
+    });
 };
-
 
 const updateBook = async (req, response) => {
     const books = await Book.find({
@@ -26,8 +29,10 @@ const updateBook = async (req, response) => {
     });
 
     if (books.length == 0) {
-      response.json({
-        message: "Error"
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
       });
     }
 
@@ -37,18 +42,28 @@ const updateBook = async (req, response) => {
 
     const book = await Book.findOneAndUpdate({_id: books[0]._id}, {$set: bookInput}, {new: true});
 
-    response.json(book);
+    return response.json({
+      message: "",
+      error: false,
+      data: [book]
+    });
 };
 
 const deleteBook = (req, response) => {
     Book.deleteOne({_id: req.params.id}, (error, result) => {
         if (error) {
-          response.json({
-            message: "Error"
+          return response.json({
+            message: "Error",
+            error: true,
+            data: []
           });
         }
 
-        response.json(result);
+        return response.json({
+          message: "",
+          error: false,
+          data: []
+        });
     });
 };
 
