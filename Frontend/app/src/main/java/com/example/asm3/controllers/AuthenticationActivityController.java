@@ -14,6 +14,8 @@ import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.api.ApiService;
+import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.PostData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.fragments.authenticationActivity.LoginFragment;
 import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
@@ -25,12 +27,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AuthenticationActivityController extends BaseController {
+public class AuthenticationActivityController extends BaseController implements AsyncTaskCallBack {
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
     private ApiService apiService;
     private LocalFileController localFileController;
 
+    private PostData postData;
 
     public AuthenticationActivityController(Context context, Activity activity) {
         super(context, activity);
@@ -40,7 +43,8 @@ public class AuthenticationActivityController extends BaseController {
         apiService = new ApiService(Constant.baseDomain);
         loginFragment.setController(this);
         registerFragment.setController(this);
-        localFileController = new LocalFileController("token.txt", getContext());
+        localFileController = new LocalFileController(Constant.tokenFile, getContext());
+        postData = new PostData(getContext(), this);
     }
 
     @Override
@@ -67,8 +71,9 @@ public class AuthenticationActivityController extends BaseController {
     }
 
     public void registerCustomer(Customer customer) {
-        RegisterCustomer registerCustomerTask = new RegisterCustomer();
-        registerCustomerTask.execute(Customer.toJSON(customer));
+        postData.setEndPoint(Constant.registerCustomer);
+        postData.setTaskType(Constant.register);
+        postData.execute(Customer.toJSON(customer));
     }
 
     public void loginCustomer(String username, String password) {
@@ -77,55 +82,12 @@ public class AuthenticationActivityController extends BaseController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(Constant.username, username);
             jsonObject.put(Constant.password, password);
-            LoginCustomer loginCustomerTask = new LoginCustomer();
-            loginCustomerTask.execute(jsonObject);
+
+            postData.setEndPoint(Constant.loginCustomer);
+            postData.setTaskType(Constant.login);
+            postData.execute(jsonObject);
         } catch(JSONException jsonException) {
             jsonException.printStackTrace();
-        }
-    }
-
-    private class RegisterCustomer extends AsyncTask<JSONObject, String, String> {
-        @Override
-        protected String doInBackground(JSONObject... data) {
-            String message = apiService.postJSON(Constant.registerCustomer, data[0]);
-            return message;
-        }
-
-        @Override
-        protected void onPostExecute(String message) {
-            onFinished(message, Constant.register);
-        }
-    }
-
-    private class LoginCustomer extends AsyncTask<JSONObject, String, String> {
-
-        @Override
-        protected String doInBackground(JSONObject... data) {
-            String message = apiService.postJSON(Constant.loginCustomer, data[0]);
-            return message;
-        }
-
-        @Override
-        protected void onPostExecute(String message) {
-            onFinished(message, Constant.login);
-        }
-    }
-
-    public void onFinished(String message, String mainFragment) {
-        try {
-            JSONObject jsonObject = new JSONObject(message);
-            if (jsonObject.getBoolean("error")) {
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-            } else {
-                if (mainFragment.equals(Constant.register)) {
-                    onRegisterFinished();
-                } else if (mainFragment.equals(Constant.login)) {
-                    onLoginFinished(message);
-                }
-            }
-        } catch(JSONException jsonException) {
-            jsonException.printStackTrace();
-            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -139,10 +101,9 @@ public class AuthenticationActivityController extends BaseController {
         ArrayList<String> arrayList = new ArrayList<String>();
         arrayList.add(getToken(ApiData.getData(message)));
         localFileController.writeFile(arrayList);
-
         Intent intent = new Intent(getContext(), MainActivity.class);
         ApiData<Customer> customerData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
-        intent.putExtra("customerData", customerData.getData());
+        intent.putExtra(Constant.customerKey, customerData.getData());
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
     }
@@ -150,10 +111,19 @@ public class AuthenticationActivityController extends BaseController {
     private String getToken(JSONObject jsonObject) {
         String token = "";
         try {
-            token = jsonObject.getString("token");
+            token = jsonObject.getString(Customer.tokenKey);
         } catch(JSONException jsonException) {
             jsonException.printStackTrace();
         }
         return token;
+    }
+
+    @Override
+    public void onFinished(String message, String taskType) {
+        if (taskType.equals(Constant.register)) {
+            onRegisterFinished();
+        } else if (taskType.equals(Constant.login)) {
+            onLoginFinished(message);
+        }
     }
 }

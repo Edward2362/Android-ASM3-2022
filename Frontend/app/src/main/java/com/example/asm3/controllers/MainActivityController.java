@@ -17,7 +17,9 @@ import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.api.ApiService;
+import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.AuthApi;
+import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Customer;
@@ -27,31 +29,35 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivityController extends BaseController {
+public class MainActivityController extends BaseController implements AsyncTaskCallBack {
     private LocalFileController localFileController;
     private boolean isAuth = false;
     private Customer customer;
     private String token;
     private LinearLayout linearLayout;
-    private ApiService apiService;
+    private GetAuthenticatedData getAuthenticatedData;
 
     public MainActivityController(Context context, Activity activity) {
         super(context, activity);
 
-        localFileController = new LocalFileController("token.txt", context);
+        localFileController = new LocalFileController(Constant.tokenFile, context);
         linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
-        apiService = new ApiService(Constant.baseDomain);
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
     }
 
     @Override
     public void onInit() {
         ArrayList<String> list = new ArrayList<String>();
         list = localFileController.readFile();
+
         if (list.isEmpty() || list.get(0).equals("")) {
             setLoginLayout();
         } else {
-            GetCustomer getCustomerTask = new GetCustomer();
-            getCustomerTask.execute(list.get(0));
+            getAuthenticatedData.setEndPoint(Constant.getCustomerData);
+            getAuthenticatedData.setToken(list.get(0));
+
+            getAuthenticatedData.setTaskType(Constant.getCustomer);
+            getAuthenticatedData.execute();
         }
     }
 
@@ -118,20 +124,20 @@ public class MainActivityController extends BaseController {
     public void goToRegister() {
         Intent intent = new Intent(getContext(), AuthenticationActivity.class);
         intent.putExtra(Constant.mainFragment, Constant.register);
-        getActivity().startActivityForResult(intent, 200);
+        getActivity().startActivityForResult(intent, Constant.registerActivity);
     }
 
     public void goToLogin() {
         Intent intent = new Intent(getContext(), AuthenticationActivity.class);
         intent.putExtra(Constant.mainFragment, Constant.login);
-        getActivity().startActivityForResult(intent, 500);
+        getActivity().startActivityForResult(intent, Constant.loginActivity);
     }
 
     public void onActivityFinished(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 500) {
-                if (data.getExtras().getSerializable("customerData") != null) {
-                    customer = (Customer) data.getExtras().getSerializable("customerData");
+            if (requestCode == Constant.loginActivity) {
+                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
+                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
 
                     setCustomerDataLayout();
                 }
@@ -139,33 +145,12 @@ public class MainActivityController extends BaseController {
         }
     }
 
-    private class GetCustomer extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String... data) {
-            String message = apiService.getJSON(Constant.getCustomerData, data[0]);
-            return message;
-        }
-
-        @Override
-        protected void onPostExecute(String message) {
-            onFinished(message);
-        }
-    }
-
-    public void onFinished(String message) {
-        try {
-            JSONObject jsonObject = new JSONObject(message);
-            if (jsonObject.getBoolean("error")) {
-                Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-            } else {
-                ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
-
-                customer = apiData.getData();
-                setCustomerDataLayout();
-            }
-        } catch(JSONException jsonException) {
-            jsonException.printStackTrace();
-            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onFinished(String message, String taskType) {
+        if (taskType.equals(Constant.getCustomer)) {
+            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
+            customer = apiData.getData();
+            setCustomerDataLayout();
         }
     }
 }

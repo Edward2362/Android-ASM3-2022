@@ -69,7 +69,7 @@ public class RegisterFragment extends Fragment {
         firstName = String.valueOf(firstNameInput.getText());
         lastName = String.valueOf(lastNameInput.getText());
         address = String.valueOf(addressInput.getText());
-        role = "CUSTOMER_ROLE";
+        role = Customer.customerRole;
 
         Customer customer = new Customer(username, password, firstName, lastName, address, role, rating);
 

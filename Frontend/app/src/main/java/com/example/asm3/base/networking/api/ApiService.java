@@ -18,6 +18,13 @@ public class ApiService {
     private String baseUrl;
     private HttpURLConnection httpURLConnection;
 
+
+
+    public static String get = "GET";
+    public static String post = "POST";
+
+    public static String errorKey = "error";
+
     public ApiService(String baseUrl) {
         this.baseUrl = baseUrl;
     }

@@ -13,7 +13,16 @@ public class Customer implements Serializable {
     private String address;
     private String role;
     private float rating;
+    public static String usernameKey = "username";
+    public static String passwordKey = "password";
+    public static String firstNameKey = "first_name";
+    public static String lastNameKey = "last_name";
+    public static String addressKey = "address";
+    public static String roleKey = "role";
 
+    public static String ratingsKey = "ratings";
+    public static String tokenKey = "token";
+    public static String customerRole = "CUSTOMER_ROLE";
 
     public Customer(String username, String password, String firstName, String lastName, String address, String role, float rating) {
         this.username = username;
@@ -92,13 +101,13 @@ public class Customer implements Serializable {
         float rating = 0F;
         if (jsonObject != null) {
             try {
-                username = jsonObject.getString("username");
-                password = jsonObject.getString("password");
-                firstName = jsonObject.getString("first_name");
-                lastName = jsonObject.getString("last_name");
-                address = jsonObject.getString("address");
-                role = jsonObject.getString("role");
-                rating = (float) jsonObject.getDouble("ratings");
+                username = jsonObject.getString(usernameKey);
+                password = jsonObject.getString(passwordKey);
+                firstName = jsonObject.getString(firstNameKey);
+                lastName = jsonObject.getString(lastNameKey);
+                address = jsonObject.getString(addressKey);
+                role = jsonObject.getString(roleKey);
+                rating = (float) jsonObject.getDouble(ratingsKey);
                 customer = new Customer(username, password, firstName, lastName, address, role, rating);
             } catch(Exception exception) {
                 exception.printStackTrace();
@@ -112,13 +121,13 @@ public class Customer implements Serializable {
         if (customer != null) {
             try {
                 jsonObject = new JSONObject();
-                jsonObject.put("username", customer.username);
-                jsonObject.put("password", customer.password);
-                jsonObject.put("first_name", customer.firstName);
-                jsonObject.put("last_name", customer.lastName);
-                jsonObject.put("address", customer.address);
-                jsonObject.put("role", customer.role);
-                jsonObject.put("ratings", customer.rating);
+                jsonObject.put(usernameKey, customer.username);
+                jsonObject.put(passwordKey, customer.password);
+                jsonObject.put(firstNameKey, customer.firstName);
+                jsonObject.put(lastNameKey, customer.lastName);
+                jsonObject.put(addressKey, customer.address);
+                jsonObject.put(roleKey, customer.role);
+                jsonObject.put(ratingsKey, customer.rating);
             } catch(JSONException jsonException) {
                 jsonException.printStackTrace();
             }
