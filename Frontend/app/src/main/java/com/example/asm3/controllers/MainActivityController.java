@@ -3,29 +3,22 @@ package com.example.asm3.controllers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
 
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.localStorage.LocalFileController;
-import com.example.asm3.base.networking.api.ApiService;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
-import com.example.asm3.base.networking.services.AuthApi;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Customer;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -45,6 +38,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
     }
 
+    // Render functions
     @Override
     public void onInit() {
         ArrayList<String> list = new ArrayList<String>();
@@ -121,6 +115,13 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         }
     }
 
+    // Helpers
+
+
+    // Request functions
+
+
+    // Start activity functions
     public void goToRegister() {
         Intent intent = new Intent(getContext(), AuthenticationActivity.class);
         intent.putExtra(Constant.mainFragment, Constant.register);
@@ -133,6 +134,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         getActivity().startActivityForResult(intent, Constant.loginActivity);
     }
 
+    // Callback functions
     public void onActivityFinished(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constant.loginActivity) {

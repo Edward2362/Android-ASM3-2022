@@ -35,6 +35,7 @@ public class AuthenticationActivityController extends BaseController implements 
 
     private PostData postData;
 
+
     public AuthenticationActivityController(Context context, Activity activity) {
         super(context, activity);
 
@@ -47,6 +48,7 @@ public class AuthenticationActivityController extends BaseController implements 
         postData = new PostData(getContext(), this);
     }
 
+    // Render functions
     @Override
     public void onInit() {
         Intent intent = getActivity().getIntent();
@@ -70,6 +72,18 @@ public class AuthenticationActivityController extends BaseController implements 
         fragmentTransaction.commit();
     }
 
+    // Helpers
+    private String getToken(JSONObject jsonObject) {
+        String token = "";
+        try {
+            token = jsonObject.getString(Customer.tokenKey);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+        return token;
+    }
+
+    // Request functions
     public void registerCustomer(Customer customer) {
         postData.setEndPoint(Constant.registerCustomer);
         postData.setTaskType(Constant.register);
@@ -86,11 +100,15 @@ public class AuthenticationActivityController extends BaseController implements 
             postData.setEndPoint(Constant.loginCustomer);
             postData.setTaskType(Constant.login);
             postData.execute(jsonObject);
-        } catch(JSONException jsonException) {
+        } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
     }
 
+    // Start activity functions
+
+
+    // Callback functions
     public void onRegisterFinished() {
         Intent intent = new Intent(getContext(), MainActivity.class);
         getActivity().setResult(Activity.RESULT_OK, intent);
@@ -106,16 +124,6 @@ public class AuthenticationActivityController extends BaseController implements 
         intent.putExtra(Constant.customerKey, customerData.getData());
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
-    }
-
-    private String getToken(JSONObject jsonObject) {
-        String token = "";
-        try {
-            token = jsonObject.getString(Customer.tokenKey);
-        } catch(JSONException jsonException) {
-            jsonException.printStackTrace();
-        }
-        return token;
     }
 
     @Override

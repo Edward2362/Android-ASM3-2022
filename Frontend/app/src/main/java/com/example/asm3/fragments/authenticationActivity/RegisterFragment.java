@@ -44,7 +44,6 @@ public class RegisterFragment extends Fragment {
     }
 
 
-
     public void setController(AuthenticationActivityController authenticationActivityController) {
         this.authenticationActivityController = authenticationActivityController;
     }

@@ -18,8 +18,6 @@ public class ApiService {
     private String baseUrl;
     private HttpURLConnection httpURLConnection;
 
-
-
     public static String get = "GET";
     public static String post = "POST";
 
@@ -75,7 +73,7 @@ public class ApiService {
         try {
             URL url = new URL(baseUrl + endPoint);
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestMethod(post);
             httpURLConnection.setRequestProperty(Constant.contentType, Constant.applicationJson + ";" + Constant.charsetUTF8);
             httpURLConnection.setRequestProperty(Constant.accept, Constant.applicationJson);
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
