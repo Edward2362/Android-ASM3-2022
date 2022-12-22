@@ -25,6 +25,10 @@ public class ApiData<T extends Object> {
     public static <T> ApiData<T> fromJSON(JSONObject jsonObject, Class<T> t) {
         if (t.isAssignableFrom(Customer.class)) {
             return new ApiData<T>((T) Customer.fromJSON(jsonObject));
+        } else if (t.isAssignableFrom(Category.class)) {
+            return new ApiData<T>((T) Category.fromJSON(jsonObject));
+        } else if (t.isAssignableFrom(SubCategory.class)) {
+            return new ApiData<T>((T) SubCategory.fromJSON(jsonObject));
         } else {
             return null;
         }

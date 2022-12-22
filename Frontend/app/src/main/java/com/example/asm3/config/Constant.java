@@ -5,6 +5,7 @@ public class Constant {
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
+    public static String getAllCategories = "/api/category/getAllCategories";
     public static String tokenFile = "token.txt";
 
     public static String tokenHeader = "x-access-token";
@@ -25,5 +26,7 @@ public class Constant {
 
     public static int loginActivity = 500;
     public static int registerActivity = 200;
+
+    public static String getAllCategoriesTaskType = "getAllCategories";
 
 }
