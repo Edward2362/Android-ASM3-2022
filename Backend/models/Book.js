@@ -29,12 +29,20 @@ const bookSchema = new mongoose.Schema({
       type: Schema.Types.ObjectId,
       ref: "Category"
     },
+    subCategory: {
+      type: Schema.Types.ObjectId,
+      ref: "SubCategory"
+    },
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
     }
 });
 
+
 const Book = mongoose.model("Book", bookSchema);
+
+
+
 
 module.exports = Book;

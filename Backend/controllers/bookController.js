@@ -1,4 +1,7 @@
 const Book = require("../models/Book");
+const SubCategory = require("../models/SubCategory");
+const Category = require("../models/Category");
+const CategoryRelations = require("../models/CategoryRelations");
 const Constants = require("../constants/Constants");
 
 const uploadBook = async (req, response) => {
@@ -11,6 +14,7 @@ const uploadBook = async (req, response) => {
       publishedAt: req.body.publishedAt,
       createdAt: Date.now(),
       category: req.body.category,
+      subCategory: req.body.subCategory,
       customer: req.customer.customerId
     };
 
@@ -65,10 +69,103 @@ const deleteBook = (req, response) => {
           data: []
         });
     });
+    
+};
+
+
+const getProducts = async (req, response) => {
+  const input = req.query;
+
+  let products = await Book.find({}).populate("subCategory").populate("category");
+
+  if (input.subCategory === undefined && input.category === undefined) {
+    return response.json({
+      message: "",
+      error: false,
+      data: products
+    });
+  }
+
+  let filteredProducts = [];
+
+  
+  
+  let categories = [];
+  if (input.category !== undefined) {
+    if (typeof(input.category) === "string") {
+      categories.push(input.category);
+    } else if (Array.isArray(input.category)) {
+      categories = categories.concat(input.category);
+    }
+  }
+
+  let subCategories = [];
+  if (input.subCategory !== undefined) {
+    if (typeof(input.subCategory) === "string") {
+      subCategories.push(input.subCategory);
+    } else if (Array.isArray(input.subCategory)) {
+      subCategories = subCategories.concat(input.category);
+    }
+  }
+
+  if (categories.length !== 0 && subCategories.length !== 0) {
+    for (let i = 0; i < products.length; ++i) {
+      let product = products[i];
+
+      if (categories.includes(product.category.name)) {
+        if (subCategories.includes(product.subCategory.name)) {
+          filteredProducts.push(product);
+        }
+      }
+    }
+  } else if (categories.length !== 0) {
+    for (let i = 0; i < products.length; ++i) {
+      let product = products[i];
+
+      if (categories.includes(product.category.name)) {
+        filteredProducts.push(product);
+      }
+    }
+  } else if (subCategories.length !== 0) {
+    for (let i = 0; i < products.length; ++i) {
+      let product = products[i];
+
+      if (subCategories.includes(product.subCategory.name)) {
+        filteredProducts.push(product);
+      }
+    }
+  }
+
+  return response.json({
+    message: "",
+    error: false,
+    data: filteredProducts
+  });
+};
+
+const getProduct = (req, response) => {
+  const productId = req.params.productId;
+  Book.find({_id: productId}, (error, books) => {
+    if (error) {
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+
+    response.json({
+      message: "",
+      error: false,
+      data: books
+    });
+  });
 };
 
 module.exports = {
   uploadBook,
   updateBook,
-  deleteBook
+  deleteBook,
+  getProducts,
+  getProduct
 };
