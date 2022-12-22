@@ -56,8 +56,10 @@ const orderProducts = async (req, response) => {
       orders.push(order);
     }
 
-    response.json({
-      orders: orders
+    return response.json({
+      message: "",
+      error: false,
+      data: orders
     });
   };
 

@@ -8,8 +8,19 @@ const Constants = require("../constants/Constants");
 const register = async (req, response) => {
     try {
       if (req.body.username === undefined || req.body.password === undefined) {
-        response.json({
-          message: "Error"
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
+        });
+      }
+
+      
+      if (req.body.username === "" || req.body.password === "") {
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
         });
       }
       
@@ -28,8 +39,10 @@ const register = async (req, response) => {
       });
 
       if (customers.length != 0) {
-        response.json({
-          message: "Error"
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
         });
       }
 
@@ -38,7 +51,11 @@ const register = async (req, response) => {
 
       const customer = await Customer.create(customerInput);
 
-      response.json(customer);
+      return response.json({
+        message: "",
+        error: false,
+        data: [customer]
+      });
     } catch(error) {
       console.log(error);
       process.exit(1);
@@ -49,24 +66,30 @@ const login = async (req, response) => {
     try {
       const customerInput = req.body;
       if (customerInput.username === undefined || customerInput.password === undefined) {
-        response.json({
-          message: "Error"
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
         });
       }
 
       const customers = await Customer.find({username: customerInput.username});
 
       if (customers.length == 0) {
-        response.json({
-          message: "Error"
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
         });
       }
 
       const customer = customers[0];
 
       if (!(await bcryptjs.compare(customerInput.password, customer.password))) {
-        response.json({
-          message: "Error"
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
         });
       }
 
@@ -80,8 +103,34 @@ const login = async (req, response) => {
       });
       
       customer.token = token;
+      return response.json({
+        message: "",
+        error: false,
+        data: [customer]
+      });
+    } catch(error) {
+      console.log(error);
+      process.exit(1);
+    }
+};
 
-      response.json(customer);
+const getCustomerData = async (req, response) => {
+    try {
+      const customers = await Customer.find({_id: req.customer.customerId});
+
+      if (customers.length == 0) {
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
+        });
+      }
+
+      return response.json({
+        message: "",
+        error: false,
+        data: customers
+      });
     } catch(error) {
       console.log(error);
       process.exit(1);
@@ -90,5 +139,6 @@ const login = async (req, response) => {
 
 module.exports = {
   register,
-  login
+  login,
+  getCustomerData
 };
