@@ -4,12 +4,12 @@ const authMiddleware = require("../middleware/auth");
 const bookController = require("../controllers/bookController");
 
 router.post("/uploadBook", authMiddleware.verifyToken, bookController.uploadBook);
-
 router.post("/updateBook", authMiddleware.verifyToken, bookController.updateBook);
-
 router.delete("/deleteBook/:id", authMiddleware.verifyToken, bookController.deleteBook);
 
 
+router.get("/getProducts", bookController.getProducts);
+router.get("/getProduct/:productId", bookController.getProduct);
 
 
 module.exports = router;
