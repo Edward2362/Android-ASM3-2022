@@ -100,4 +100,38 @@ public class ApiService {
 
         return json;
     }
+
+    public String postJSON(String endPoint, JSONObject jsonObject, String token) {
+        String json = "";
+        try {
+            URL url = new URL(baseUrl + endPoint);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod(post);
+            httpURLConnection.setRequestProperty(Constant.contentType, Constant.applicationJson + ";" + Constant.charsetUTF8);
+            httpURLConnection.setRequestProperty(Constant.accept, Constant.applicationJson);
+            httpURLConnection.setRequestProperty(Constant.tokenHeader, token);
+            DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
+            dataOutputStream.writeBytes(jsonObject.toString());
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            String line = "";
+            StringBuilder stringBuilder = new StringBuilder();
+            while((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            json = stringBuilder.toString();
+
+            dataOutputStream.flush();
+            dataOutputStream.close();
+        } catch(MalformedURLException malformedURLException) {
+            malformedURLException.printStackTrace();
+        } catch(ProtocolException protocolException) {
+            protocolException.printStackTrace();
+        } catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+        return json;
+    }
 }

@@ -50,7 +50,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
         getData = new GetData(context, this);
-        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData = new GetAuthenticatedData(context, this);
     }
 
     // Render functions

@@ -12,7 +12,6 @@ const uploadBook = async (req, response) => {
       price: req.body.price,
       quantity: req.body.quantity,
       publishedAt: req.body.publishedAt,
-      createdAt: Date.now(),
       category: req.body.category,
       subCategory: req.body.subCategory,
       customer: req.customer.customerId
@@ -93,18 +92,22 @@ const getProducts = async (req, response) => {
   let categories = [];
   if (input.category !== undefined) {
     if (typeof(input.category) === "string") {
-      categories.push(input.category);
+      categories.push(input.category.replace(" ","+"));
     } else if (Array.isArray(input.category)) {
-      categories = categories.concat(input.category);
+      for (let i=0;i<input.category.length;i++){
+        categories.push(input.category[i].replace(" ","+"));
+      }
     }
   }
 
   let subCategories = [];
   if (input.subCategory !== undefined) {
     if (typeof(input.subCategory) === "string") {
-      subCategories.push(input.subCategory);
+      subCategories.push(input.subCategory.replace(" ","+"));
     } else if (Array.isArray(input.subCategory)) {
-      subCategories = subCategories.concat(input.category);
+      for (let i=0;i<input.subCategory.length;i++){
+        subCategories.push(input.subCategory[i].replace(" ","+"));
+      }
     }
   }
 

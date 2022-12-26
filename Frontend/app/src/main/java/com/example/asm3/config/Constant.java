@@ -7,7 +7,9 @@ public class Constant {
     public static String getCustomerData = "/api/auth/getData";
     public static String getAllCategories = "/api/category/getAllCategories";
     public static String getSubCategories = "/api/subCategory/getSubCategories";
+    public static String uploadBook = "/api/book/uploadBook";
     public static String tokenFile = "token.txt";
+
 
     public static String tokenHeader = "x-access-token";
     public static String contentType = "Content-type";
@@ -31,5 +33,6 @@ public class Constant {
 
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";
+    public static String uploadBookTaskType = "uploadBook";
 
 }
