@@ -36,7 +36,32 @@ public class ApiList<T extends Object> {
             }
 
             return new ApiList<T>((ArrayList<T>) customers);
-        } else {
+        } else if (t.isAssignableFrom(Category.class)) {
+            ArrayList<Category> categories = new ArrayList<Category>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    categories.add(Category.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch(Exception exception) {
+                exception.printStackTrace();
+            }
+
+            return new ApiList<T>((ArrayList<T>) categories);
+        } else if (t.isAssignableFrom(SubCategory.class)) {
+            ArrayList<SubCategory> subCategories = new ArrayList<SubCategory>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    subCategories.add(SubCategory.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch(Exception exception) {
+                exception.printStackTrace();
+            }
+
+            return new ApiList<T>((ArrayList<T>) subCategories);
+        }
+        else {
             return null;
         }
     }
