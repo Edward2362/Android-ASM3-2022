@@ -115,13 +115,11 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             TextView firstName = new TextView(getContext());
             firstName.setLayoutParams(params);
             firstName.setText(customer.getFirstName());
-            firstName.setTextColor(getActivity().getResources().getColor(R.color.black));
             firstName.setTextSize(17);
 
             TextView lastName = new TextView(getContext());
             lastName.setLayoutParams(params);
             lastName.setText(customer.getLastName());
-            lastName.setTextColor(getActivity().getResources().getColor(R.color.black));
             lastName.setTextSize(17);
 
             linearLayout.addView(firstName);
