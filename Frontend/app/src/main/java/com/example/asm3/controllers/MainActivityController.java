@@ -39,6 +39,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         localFileController = new LocalFileController<String>(Constant.tokenFile, context);
         linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
         getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
     }
 
     // Render functions
