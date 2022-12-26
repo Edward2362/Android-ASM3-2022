@@ -1,8 +1,11 @@
 package com.example.asm3.controllers;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,7 +26,7 @@ import com.example.asm3.models.Customer;
 import java.util.ArrayList;
 
 public class MainActivityController extends BaseController implements AsyncTaskCallBack {
-    private LocalFileController localFileController;
+    private final LocalFileController<String> localFileController;
     private boolean isAuth = false;
     private Customer customer;
     private String token;
@@ -33,7 +36,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     public MainActivityController(Context context, Activity activity) {
         super(context, activity);
 
-        localFileController = new LocalFileController(Constant.tokenFile, context);
+        localFileController = new LocalFileController<String>(Constant.tokenFile, context);
         linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
         getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
     }
@@ -41,6 +44,17 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     // Render functions
     @Override
     public void onInit() {
+
+        LocalFileController<String> test = new LocalFileController<String>("test.txt", getContext());
+        ArrayList<String> testArr = new ArrayList<String>();
+        testArr.add("Quang");
+
+        test.writeFile(testArr);
+
+        ArrayList<String> result = test.readFile();
+
+        Log.d(TAG, "onInit: "  + result.get(0));
+
         ArrayList<String> list = new ArrayList<String>();
         list = localFileController.readFile();
 

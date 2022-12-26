@@ -2,16 +2,14 @@ package com.example.asm3.base.localStorage;
 
 import android.content.Context;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class LocalFileController {
+public class LocalFileController<T> {
     private String fileName;
     private Context context;
 
@@ -20,43 +18,37 @@ public class LocalFileController {
         this.context = context;
     }
 
+    public ArrayList<T> readFile() {
+        ObjectInputStream input;
+        ArrayList<T> object;
 
-    public ArrayList<String> readFile() {
-        FileInputStream inputStream = null;
-        ArrayList<String> lines = new ArrayList<String>();
         try {
-            inputStream = context.openFileInput(fileName);
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line;
+            FileInputStream fileInputStream = context.openFileInput(fileName);
 
-            while((line = bufferedReader.readLine()) != null) {
-                lines.add(line);
-            }
+            input = new ObjectInputStream(fileInputStream);
+            object = (ArrayList<T>) input.readObject();
 
-        } catch(FileNotFoundException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
-        } catch(IOException ioException) {
-            ioException.printStackTrace();
+            input.close();
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+            object = new ArrayList<T>();
         }
-
-        return lines;
+        return object;
     }
 
-    public void writeFile(ArrayList<String> lines) {
-        String fileContent = "";
-        FileOutputStream outputStream = null;
-
-        for (String line: lines) {
-            fileContent = fileContent + line + "\n";
-        }
+    public void writeFile(ArrayList<T> object) {
+        ObjectOutputStream out;
 
         try {
-            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            outputStream.write(fileContent.getBytes());
-            outputStream.close();
-        } catch(Exception exception) {
-            exception.printStackTrace();
+            FileOutputStream fileOutputStream = context.openFileOutput(fileName,
+                    Context.MODE_PRIVATE);
+            out = new ObjectOutputStream(fileOutputStream);
+
+            out.writeObject(object);
+
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

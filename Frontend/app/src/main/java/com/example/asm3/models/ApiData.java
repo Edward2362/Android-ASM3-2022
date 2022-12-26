@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ApiData<T extends Object> {
+public class ApiData<T> {
     private T data;
 
     public ApiData(T data) {

@@ -31,7 +31,7 @@ public class AuthenticationActivityController extends BaseController implements 
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
     private ApiService apiService;
-    private LocalFileController localFileController;
+    private LocalFileController<String> localFileController;
 
     private PostData postData;
 
@@ -44,7 +44,7 @@ public class AuthenticationActivityController extends BaseController implements 
         apiService = new ApiService(Constant.baseDomain);
         loginFragment.setController(this);
         registerFragment.setController(this);
-        localFileController = new LocalFileController(Constant.tokenFile, getContext());
+        localFileController = new LocalFileController<String>(Constant.tokenFile, getContext());
         postData = new PostData(getContext(), this);
     }
 
