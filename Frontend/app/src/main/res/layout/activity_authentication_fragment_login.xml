@@ -12,23 +12,23 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/authenticationActivity_loginFragment_usernameTitle"
+            android:id="@+id/authenticationActivity_loginFragment_emailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Username:"
+            android:text="Email:"
             android:textStyle="bold"
             android:textSize="17dp"/>
 
         <EditText
-            android:id="@+id/authenticationActivity_loginFragment_usernameInput"
+            android:id="@+id/authenticationActivity_loginFragment_emailInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="48dp"
             android:ems="10"
-            android:hint="username"
+            android:hint="email"
             android:inputType="textEmailAddress" />
     </LinearLayout>
 
