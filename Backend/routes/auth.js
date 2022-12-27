@@ -12,4 +12,9 @@ router.post("/login", authController.login);
 
 
 
+router.post("/setData", authMiddleware, authController.setCustomerData);
+
+
+
+
 module.exports = router;

@@ -136,8 +136,44 @@ const getCustomerData = async (req, response) => {
     }
 };
 
+
+
+
+
+const setCustomerData = async (req, response) => {
+  try {
+    const input = req.body;
+    const customerId = req.customer.customerId;
+    const customerData = {
+      username: input.username,
+      address: input.address,
+      ratings: input.ratings
+    };
+
+    const customer = await Customer.findOneAndUpdate({_id: customerId}, {$set: customerData}, {new: true});
+
+    if (customer === undefined || customer === null) {
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+
+    return response.json({
+      message: "",
+      error: false,
+      data: [customer]
+    });
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
 module.exports = {
   register,
   login,
-  getCustomerData
+  getCustomerData,
+  setCustomerData
 };
