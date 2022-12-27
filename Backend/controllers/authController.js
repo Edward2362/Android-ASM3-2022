@@ -4,6 +4,7 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const Constants = require("../constants/Constants");
+const { response } = require("express");
 
 const register = async (req, response) => {
     try {
@@ -146,8 +147,7 @@ const setCustomerData = async (req, response) => {
     const customerId = req.customer.customerId;
     const customerData = {
       username: input.username,
-      address: input.address,
-      ratings: input.ratings
+      address: input.address
     };
 
     const customer = await Customer.findOneAndUpdate({_id: customerId}, {$set: customerData}, {new: true});
@@ -171,9 +171,38 @@ const setCustomerData = async (req, response) => {
   }
 };
 
+
+const changePassword = async (req, response) => {
+  try {
+    const input = req.body;
+    const password = input.password;
+    const customerId = req.customer.customerId;
+    const newPassword = await bcryptjs.hash(password,10);
+    const customer = await Customer.findOneAndUpdate({_id: customerId},{$set: {password: newPassword}}, {new: true});
+    if (customer === undefined || customer === null) {
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+    
+    return response.json({
+      message: "",
+      error: false,
+      data: [customer]
+    })
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+
+};
+
 module.exports = {
   register,
   login,
   getCustomerData,
-  setCustomerData
+  setCustomerData,
+  changePassword
 };
