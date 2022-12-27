@@ -8,6 +8,8 @@ public class Constant {
     public static String getAllCategories = "/api/category/getAllCategories";
     public static String getSubCategories = "/api/subCategory/getSubCategories";
     public static String uploadBook = "/api/book/uploadBook";
+    public static String updateBook = "/api/book/updateBook";
+    public static String deleteBook = "/api/book/deleteBook";
     public static String tokenFile = "token.txt";
 
 
@@ -34,5 +36,7 @@ public class Constant {
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";
     public static String uploadBookTaskType = "uploadBook";
+    public static String updateBookTaskType = "updateBook";
+    public static String deleteBookTaskType = "deleteBook";
 
 }

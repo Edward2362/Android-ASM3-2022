@@ -7,6 +7,7 @@ import com.example.asm3.ManageBookActivity;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.DeleteAuthenticatedData;
 import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.models.Book;
@@ -17,12 +18,15 @@ public class ManageBookActivityController extends BaseController implements Asyn
 
     private Book book;
     private PostAuthenticatedData postAuthenticatedData;
+    private DeleteAuthenticatedData deleteAuthenticatedData;
+
     private final LocalFileController<String> localFileController;
     private String token;
 
     public ManageBookActivityController(Context context, Activity activity) {
         super(context, activity);
         postAuthenticatedData = new PostAuthenticatedData(context, this);
+        deleteAuthenticatedData = new DeleteAuthenticatedData(context, this);
         localFileController = new LocalFileController<String>(Constant.tokenFile,context);
     }
 
@@ -45,6 +49,20 @@ public class ManageBookActivityController extends BaseController implements Asyn
         postAuthenticatedData.setTaskType(Constant.uploadBookTaskType);
         postAuthenticatedData.setToken(token);
         postAuthenticatedData.execute(Book.toJSON(inputBook));
+    }
+
+    public void updateBook(Book inputBook) {
+        postAuthenticatedData.setEndPoint(Constant.updateBook);
+        postAuthenticatedData.setTaskType(Constant.updateBookTaskType);
+        postAuthenticatedData.setToken(token);
+        postAuthenticatedData.execute(Book.toJSON(inputBook));
+    }
+
+    public void deleteBook(String bookId) {
+        deleteAuthenticatedData.setEndPoint(Constant.deleteBook + "/" + bookId);
+        deleteAuthenticatedData.setTaskType(Constant.deleteBookTaskType);
+        deleteAuthenticatedData.setToken(token);
+        deleteAuthenticatedData.execute();
     }
 
     @Override
