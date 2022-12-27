@@ -3,7 +3,7 @@ const CategoryRelations = require("../models/CategoryRelations");
 const Category = require("../models/Category");
 
 const initSubCategories = async (req, response) => {
-  const subCategories = ["Novel", "Children Book", "Comics"];
+  const subCategories = ["Novel", "Children+Book", "Comics"];
 
   const categories = await Category.find({$or: [{name: "Foreign+Book"}, {name: "Domestic+Book"}]});
 

@@ -53,6 +53,7 @@ public class SubCategory implements Serializable {
         JSONObject jsonObject = null;
         if (subCategory != null) {
             try {
+                jsonObject = new JSONObject();
                 jsonObject.put(nameKey, subCategory.name);
                 jsonObject.put(idKey, subCategory._id);
             } catch (JSONException jsonException) {
