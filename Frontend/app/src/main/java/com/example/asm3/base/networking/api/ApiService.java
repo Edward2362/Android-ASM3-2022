@@ -20,6 +20,7 @@ public class ApiService {
 
     public static String get = "GET";
     public static String post = "POST";
+    public static String delete = "DELETE";
 
     public static String errorKey = "error";
 
@@ -132,6 +133,64 @@ public class ApiService {
             ioException.printStackTrace();
         }
 
+        return json;
+    }
+
+    public String deleteJSON(String endPoint) {
+        String json = "";
+        try {
+            URL url = new URL(baseUrl + endPoint);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod(delete);
+            httpURLConnection.setRequestProperty(Constant.contentType, Constant.applicationJson + ";" + Constant.charsetUTF8);
+            httpURLConnection.setRequestProperty(Constant.accept, Constant.applicationJson);
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+
+            String line = "";
+
+            StringBuilder stringBuilder = new StringBuilder();
+            while((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            json = stringBuilder.toString();
+        } catch(MalformedURLException malformedURLException) {
+            malformedURLException.printStackTrace();
+        } catch(ProtocolException protocolException) {
+            protocolException.printStackTrace();
+        } catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return json;
+    }
+
+    public String deleteJSON(String endPoint, String token) {
+        String json = "";
+        try {
+            URL url = new URL(baseUrl + endPoint);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod(delete);
+            httpURLConnection.setRequestProperty(Constant.contentType, Constant.applicationJson + ";" + Constant.charsetUTF8);
+            httpURLConnection.setRequestProperty(Constant.accept, Constant.applicationJson);
+            httpURLConnection.setRequestProperty(Constant.tokenHeader, token);
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            String line = "";
+            StringBuilder stringBuilder = new StringBuilder();
+            while((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+
+            json = stringBuilder.toString();
+        } catch(MalformedURLException malformedURLException) {
+            malformedURLException.printStackTrace();
+        } catch(ProtocolException protocolException) {
+            protocolException.printStackTrace();
+        } catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
         return json;
     }
 }
