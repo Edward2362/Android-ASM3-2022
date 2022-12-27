@@ -5,6 +5,8 @@ public class Constant {
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
+    public static String setCustomerData = "/api/auth/setData";
+    public static String changePassword = "/api/auth/changePassword";
     public static String getAllCategories = "/api/category/getAllCategories";
     public static String getSubCategories = "/api/subCategory/getSubCategories";
     public static String uploadBook = "/api/book/uploadBook";
@@ -40,5 +42,7 @@ public class Constant {
     public static String updateBookTaskType = "updateBook";
     public static String deleteBookTaskType = "deleteBook";
     public static String getProductTaskType = "getProduct";
+    public static String setCustomerDataTaskType = "setCustomerData";
+    public static String changePasswordTaskType = "changePassword";
 
 }
