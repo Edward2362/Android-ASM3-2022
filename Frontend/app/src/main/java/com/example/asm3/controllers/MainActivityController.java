@@ -3,14 +3,22 @@ package com.example.asm3.controllers;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentContainerView;
 
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
@@ -20,12 +28,15 @@ import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.config.Constant;
+import com.example.asm3.fragments.mainActivity.HomeFragment;
+import com.example.asm3.fragments.mainActivity.ProfileFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Customer;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
-public class MainActivityController extends BaseController implements AsyncTaskCallBack {
+public class MainActivityController extends BaseController implements AsyncTaskCallBack, NavigationBarView.OnItemSelectedListener {
     private final LocalFileController<String> localFileController;
     private boolean isAuth = false;
     private Customer customer;
@@ -33,33 +44,31 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private LinearLayout linearLayout;
     private GetAuthenticatedData getAuthenticatedData;
 
+    private NavigationBarView menu;
+    private HomeFragment homeFragment;
+    private ProfileFragment profileFragment;
+
     public MainActivityController(Context context, Activity activity) {
         super(context, activity);
 
+        homeFragment = new HomeFragment();
+        profileFragment = new ProfileFragment();
+        homeFragment.setController(this);
+
         localFileController = new LocalFileController<String>(Constant.tokenFile, context);
-        linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
         getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
     }
 
     // Render functions
     @Override
     public void onInit() {
-
-        LocalFileController<String> test = new LocalFileController<String>("test.txt", getContext());
-        ArrayList<String> testArr = new ArrayList<String>();
-        testArr.add("Quang");
-
-        test.writeFile(testArr);
-
-        ArrayList<String> result = test.readFile();
-
-        Log.d(TAG, "onInit: "  + result.get(0));
-
         ArrayList<String> list = new ArrayList<String>();
         list = localFileController.readFile();
 
+        menu = getActivity().findViewById(R.id.menu);
+        menu.setOnItemSelectedListener(this);
         if (list.isEmpty() || list.get(0).equals("")) {
-            setLoginLayout();
+//            setLoginLayout();
         } else {
             getAuthenticatedData.setEndPoint(Constant.getCustomerData);
             getAuthenticatedData.setToken(list.get(0));
@@ -70,37 +79,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     }
 
     public void setLoginLayout() {
-        linearLayout.removeAllViews();
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-
-        Button loginButton = new Button(getContext());
-        loginButton.setLayoutParams(params);
-        loginButton.setText(Constant.login);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToLogin();
-            }
-        });
-
-        Button registerButton = new Button(getContext());
-        registerButton.setLayoutParams(params);
-        registerButton.setText(Constant.register);
-
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToRegister();
-            }
-        });
-
-        linearLayout.addView(loginButton);
-        linearLayout.addView(registerButton);
     }
 
     public void setCustomerDataLayout() {
@@ -127,6 +106,15 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         }
     }
 
+    public void loadFragment(Fragment fragment) {
+        FragmentActivity activity = (FragmentActivity) getActivity();
+        FragmentManager fm = getActivity().getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.mainActivity_frameLayout, fragment);
+
+        fragmentTransaction.commit();
+    }
+
     // Helpers
 
 
@@ -134,6 +122,17 @@ public class MainActivityController extends BaseController implements AsyncTaskC
 
 
     // Start activity functions
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeNav:
+                loadFragment(homeFragment);
+                return true;
+        }
+
+        return false;
+    }
+
     public void goToRegister() {
         Intent intent = new Intent(getContext(), AuthenticationActivity.class);
         intent.putExtra(Constant.mainFragment, Constant.register);

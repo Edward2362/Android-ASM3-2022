@@ -32,7 +32,6 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.activity_authentication_fragment_login, container, false);
-
         Button submitButton = (Button) view.findViewById(R.id.authenticationActivity_loginFragment_submit);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override

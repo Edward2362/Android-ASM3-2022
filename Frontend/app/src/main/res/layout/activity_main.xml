@@ -9,10 +9,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".12"
+        android:paddingHorizontal="18dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:id="@+id/mainActivity_layout">
+        android:background="@color/md_theme_dark_onError"/>
 
-    </LinearLayout>
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainActivity_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".8"
+        android:background="@color/md_theme_dark_primary"
+        android:paddingHorizontal="18dp"
+        android:name="com.example.asm3.fragments.mainActivity.HomeFragment" />
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/bottom_navigation_menu"
+        app:labelVisibilityMode="selected" />
 </LinearLayout>

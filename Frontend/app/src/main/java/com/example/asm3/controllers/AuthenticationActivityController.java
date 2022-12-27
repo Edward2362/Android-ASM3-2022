@@ -30,7 +30,6 @@ import java.util.ArrayList;
 public class AuthenticationActivityController extends BaseController implements AsyncTaskCallBack {
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
-    private ApiService apiService;
     private LocalFileController<String> localFileController;
 
     private PostData postData;
@@ -41,9 +40,9 @@ public class AuthenticationActivityController extends BaseController implements 
 
         loginFragment = new LoginFragment();
         registerFragment = new RegisterFragment();
-        apiService = new ApiService(Constant.baseDomain);
         loginFragment.setController(this);
         registerFragment.setController(this);
+
         localFileController = new LocalFileController<String>(Constant.tokenFile, getContext());
         postData = new PostData(getContext(), this);
     }
