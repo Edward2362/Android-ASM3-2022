@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
@@ -19,9 +20,14 @@ import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
+import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.models.ApiData;
+import com.example.asm3.models.ApiList;
+import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
+import com.example.asm3.models.SubCategory;
 
 import java.util.ArrayList;
 
@@ -32,28 +38,24 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private String token;
     private LinearLayout linearLayout;
     private GetAuthenticatedData getAuthenticatedData;
+    private ArrayList<Category> categories;
+    private GetData getData;
+    private ArrayList<SubCategory> subCategories;
 
     public MainActivityController(Context context, Activity activity) {
         super(context, activity);
 
         localFileController = new LocalFileController<String>(Constant.tokenFile, context);
         linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
+        categories = new ArrayList<Category>();
+        subCategories = new ArrayList<SubCategory>();
+        getData = new GetData(context, this);
         getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
     }
 
     // Render functions
     @Override
     public void onInit() {
-
-        LocalFileController<String> test = new LocalFileController<String>("test.txt", getContext());
-        ArrayList<String> testArr = new ArrayList<String>();
-        testArr.add("Quang");
-
-        test.writeFile(testArr);
-
-        ArrayList<String> result = test.readFile();
-
-        Log.d(TAG, "onInit: "  + result.get(0));
 
         ArrayList<String> list = new ArrayList<String>();
         list = localFileController.readFile();
@@ -67,6 +69,9 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             getAuthenticatedData.setTaskType(Constant.getCustomer);
             getAuthenticatedData.execute();
         }
+
+
+        getSubCategories("Foreign+Book");
     }
 
     public void setLoginLayout() {
@@ -112,21 +117,27 @@ public class MainActivityController extends BaseController implements AsyncTaskC
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
 
-            TextView firstName = new TextView(getContext());
-            firstName.setLayoutParams(params);
-            firstName.setText(customer.getFirstName());
-            firstName.setTextSize(17);
+            TextView username = new TextView(getContext());
+            username.setLayoutParams(params);
+            username.setText(customer.getUsername());
+            username.setTextSize(17);
 
-            TextView lastName = new TextView(getContext());
-            lastName.setLayoutParams(params);
-            lastName.setText(customer.getLastName());
-            lastName.setTextSize(17);
 
-            linearLayout.addView(firstName);
-            linearLayout.addView(lastName);
+            linearLayout.addView(username);
         }
     }
 
+    public void getAllCategories(){
+        getData.setEndPoint(Constant.getAllCategories);
+        getData.setTaskType(Constant.getAllCategoriesTaskType);
+        getData.execute();
+    }
+
+    public void getSubCategories(String categoryName){
+        getData.setEndPoint(Constant.getSubCategories + Helper.getQueryEndpoint(Constant.categoryKey,categoryName));
+        getData.setTaskType(Constant.getSubCategoriesTaskType);
+        getData.execute();
+    }
     // Helpers
 
 
@@ -165,6 +176,16 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
             setCustomerDataLayout();
+        } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
+            ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message),Category.class);
+            categories = apiList.getList();
+        } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
+            ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message),SubCategory.class);
+            subCategories = apiList.getList();
+            Log.d(TAG, "onFinished: " + subCategories.size());
+            for (int i=0;i<subCategories.size();i++){
+                Toast.makeText(getContext(),subCategories.get(i).getName(),Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

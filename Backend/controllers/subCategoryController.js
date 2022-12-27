@@ -5,7 +5,7 @@ const Category = require("../models/Category");
 const initSubCategories = async (req, response) => {
   const subCategories = ["Novel", "Children Book", "Comics"];
 
-  const categories = await Category.find({$or: [{name: "Foreign Book"}, {name: "Domestic Book"}]});
+  const categories = await Category.find({$or: [{name: "Foreign+Book"}, {name: "Domestic+Book"}]});
 
   for (let i = 0; i < subCategories.length; ++i) {
     let subCategory = new SubCategory({
@@ -39,11 +39,12 @@ const getSubCategories = async (req, response) => {
     subCategories = await SubCategory.find({});
   } else {
     let categoryRelations = await CategoryRelations.find({}).populate("category").populate("subCategory");
+    let categoryName = input.category.replace(" ","+");
 
     for (let i = 0; i < categoryRelations.length; ++i) {
       let categoryRelation = categoryRelations[i];
 
-      if (categoryRelation.category.name === input.category) {
+      if (categoryRelation.category.name === categoryName) {
         subCategories.push(categoryRelation.subCategory);
       }
     }

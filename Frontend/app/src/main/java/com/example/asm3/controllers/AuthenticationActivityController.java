@@ -90,11 +90,11 @@ public class AuthenticationActivityController extends BaseController implements 
         postData.execute(Customer.toJSON(customer));
     }
 
-    public void loginCustomer(String username, String password) {
+    public void loginCustomer(String email, String password) {
         try {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Constant.username, username);
+            jsonObject.put(Constant.email, email);
             jsonObject.put(Constant.password, password);
 
             postData.setEndPoint(Constant.loginCustomer);

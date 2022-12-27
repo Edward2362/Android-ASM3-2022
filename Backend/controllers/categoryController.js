@@ -1,7 +1,7 @@
 const Category = require("../models/Category");
 
 const initCategory = async (req, response) => {
-  const categories = ["Foreign Book", "Domestic Book", "Text Book"];
+  const categories = ["Foreign+Book", "Domestic+Book", "Text+Book"];
 
   for (let i = 0; i < categories.length; ++i) {
     let category = new Category({
