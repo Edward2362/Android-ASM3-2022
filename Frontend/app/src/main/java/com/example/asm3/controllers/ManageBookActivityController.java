@@ -20,25 +20,21 @@ public class ManageBookActivityController extends BaseController implements Asyn
     private PostAuthenticatedData postAuthenticatedData;
     private DeleteAuthenticatedData deleteAuthenticatedData;
 
-    private final LocalFileController<String> localFileController;
     private String token;
 
     public ManageBookActivityController(Context context, Activity activity) {
         super(context, activity);
         postAuthenticatedData = new PostAuthenticatedData(context, this);
         deleteAuthenticatedData = new DeleteAuthenticatedData(context, this);
-        localFileController = new LocalFileController<String>(Constant.tokenFile,context);
     }
 
     @Override
     public void onInit(){
-        ArrayList<String> list = new ArrayList<String>();
-        list = localFileController.readFile();
 
-        if (list.isEmpty()) {
+        if (!isAuth()) {
 
         } else {
-            token = list.get(0);
+            token = getToken();
         }
 
         uploadBook(new Book("Harry Potter","Hai", "hahaha",100, 10, "2008",null,null,null,""));

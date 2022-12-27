@@ -32,7 +32,6 @@ import com.example.asm3.models.SubCategory;
 import java.util.ArrayList;
 
 public class MainActivityController extends BaseController implements AsyncTaskCallBack {
-    private final LocalFileController<String> localFileController;
     private boolean isAuth = false;
     private Customer customer;
     private String token;
@@ -45,7 +44,6 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     public MainActivityController(Context context, Activity activity) {
         super(context, activity);
 
-        localFileController = new LocalFileController<String>(Constant.tokenFile, context);
         linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
@@ -57,21 +55,16 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     @Override
     public void onInit() {
 
-        ArrayList<String> list = new ArrayList<String>();
-        list = localFileController.readFile();
-
-        if (list.isEmpty() || list.get(0).equals("")) {
+        if (!isAuth()) {
             setLoginLayout();
         } else {
+            token = getToken();
             getAuthenticatedData.setEndPoint(Constant.getCustomerData);
-            getAuthenticatedData.setToken(list.get(0));
+            getAuthenticatedData.setToken(token);
 
             getAuthenticatedData.setTaskType(Constant.getCustomer);
             getAuthenticatedData.execute();
         }
-
-
-        getSubCategories("Foreign+Book");
     }
 
     public void setLoginLayout() {

@@ -31,7 +31,6 @@ public class AuthenticationActivityController extends BaseController implements 
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
     private ApiService apiService;
-    private LocalFileController<String> localFileController;
 
     private PostData postData;
 
@@ -44,7 +43,6 @@ public class AuthenticationActivityController extends BaseController implements 
         apiService = new ApiService(Constant.baseDomain);
         loginFragment.setController(this);
         registerFragment.setController(this);
-        localFileController = new LocalFileController<String>(Constant.tokenFile, getContext());
         postData = new PostData(getContext(), this);
     }
 
@@ -73,7 +71,7 @@ public class AuthenticationActivityController extends BaseController implements 
     }
 
     // Helpers
-    private String getToken(JSONObject jsonObject) {
+    private String getTokenFromMessage(JSONObject jsonObject) {
         String token = "";
         try {
             token = jsonObject.getString(Customer.tokenKey);
@@ -117,8 +115,8 @@ public class AuthenticationActivityController extends BaseController implements 
 
     public void onLoginFinished(String message) {
         ArrayList<String> arrayList = new ArrayList<String>();
-        arrayList.add(getToken(ApiData.getData(message)));
-        localFileController.writeFile(arrayList);
+        arrayList.add(getTokenFromMessage(ApiData.getData(message)));
+        getLocalFileController().writeFile(arrayList);
         Intent intent = new Intent(getContext(), MainActivity.class);
         ApiData<Customer> customerData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
         intent.putExtra(Constant.customerKey, customerData.getData());

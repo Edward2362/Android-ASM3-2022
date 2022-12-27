@@ -10,6 +10,7 @@ public class Constant {
     public static String uploadBook = "/api/book/uploadBook";
     public static String updateBook = "/api/book/updateBook";
     public static String deleteBook = "/api/book/deleteBook";
+    public static String getProduct = "/api/book/getProduct";
     public static String tokenFile = "token.txt";
 
 
@@ -38,5 +39,6 @@ public class Constant {
     public static String uploadBookTaskType = "uploadBook";
     public static String updateBookTaskType = "updateBook";
     public static String deleteBookTaskType = "deleteBook";
+    public static String getProductTaskType = "getProduct";
 
 }
