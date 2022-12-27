@@ -13,6 +13,7 @@ public class Constant {
     public static String updateBook = "/api/book/updateBook";
     public static String deleteBook = "/api/book/deleteBook";
     public static String getProduct = "/api/book/getProduct";
+    public static String getNotifications = "/api/notification/getNotifications";
     public static String tokenFile = "token.txt";
 
 
@@ -44,5 +45,6 @@ public class Constant {
     public static String getProductTaskType = "getProduct";
     public static String setCustomerDataTaskType = "setCustomerData";
     public static String changePasswordTaskType = "changePassword";
+    public static String getNotificationsTaskType = "getNotifications";
 
 }

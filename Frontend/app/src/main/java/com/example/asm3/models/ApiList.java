@@ -72,6 +72,18 @@ public class ApiList<T extends Object> {
             }
 
             return new ApiList<T>((ArrayList<T>) books);
+        } else if (t.isAssignableFrom(Notification.class)) {
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    notifications.add(Notification.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
+            return new ApiList<T>((ArrayList<T>) notifications);
         } else {
             return null;
         }

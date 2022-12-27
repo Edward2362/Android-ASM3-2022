@@ -27,6 +27,7 @@ import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
+import com.example.asm3.models.Notification;
 import com.example.asm3.models.SubCategory;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private ArrayList<Category> categories;
     private GetData getData;
     private ArrayList<SubCategory> subCategories;
+    private ArrayList<Notification> notifications;
 
     public MainActivityController(Context context, Activity activity) {
         super(context, activity);
@@ -47,6 +49,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
+        notifications = new ArrayList<Notification>();
         getData = new GetData(context, this);
         getAuthenticatedData = new GetAuthenticatedData(context, this);
     }
@@ -131,6 +134,13 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         getData.setTaskType(Constant.getSubCategoriesTaskType);
         getData.execute();
     }
+
+    public void getNotification(){
+        getAuthenticatedData.setEndPoint(Constant.getNotifications);
+        getAuthenticatedData.setTaskType(Constant.getNotificationsTaskType);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.execute();
+    }
     // Helpers
 
 
@@ -179,6 +189,9 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             for (int i=0;i<subCategories.size();i++){
                 Toast.makeText(getContext(),subCategories.get(i).getName(),Toast.LENGTH_SHORT).show();
             }
+        } else if (taskType.equals(Constant.getNotificationsTaskType)) {
+            ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message),Notification.class);
+            notifications = apiList.getList();
         }
     }
 }
