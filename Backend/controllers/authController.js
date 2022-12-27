@@ -4,10 +4,11 @@ const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const Constants = require("../constants/Constants");
+const { response } = require("express");
 
 const register = async (req, response) => {
     try {
-      if (req.body.username === undefined || req.body.password === undefined) {
+      if (req.body.email === undefined || req.body.password === undefined) {
         return response.json({
           message: "Error",
           error: true,
@@ -16,7 +17,7 @@ const register = async (req, response) => {
       }
 
       
-      if (req.body.username === "" || req.body.password === "") {
+      if (req.body.email === "" || req.body.password === "") {
         return response.json({
           message: "Error",
           error: true,
@@ -25,17 +26,16 @@ const register = async (req, response) => {
       }
       
       const customerInput = {
-        username: req.body.username,
+        email: req.body.email,
         password: req.body.password,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
+        username: req.body.username,
         address: req.body.address,
         role: Constants.CUSTOMER_ROLE,
         ratings: 0
       };
 
       const customers = await Customer.find({
-        username: req.body.username
+        email: req.body.email
       });
 
       if (customers.length != 0) {
@@ -65,7 +65,7 @@ const register = async (req, response) => {
 const login = async (req, response) => {
     try {
       const customerInput = req.body;
-      if (customerInput.username === undefined || customerInput.password === undefined) {
+      if (customerInput.email === undefined || customerInput.password === undefined) {
         return response.json({
           message: "Error",
           error: true,
@@ -73,7 +73,7 @@ const login = async (req, response) => {
         });
       }
 
-      const customers = await Customer.find({username: customerInput.username});
+      const customers = await Customer.find({email: customerInput.email});
 
       if (customers.length == 0) {
         return response.json({
@@ -95,7 +95,7 @@ const login = async (req, response) => {
 
       const token = jwt.sign({
         customerId: customer._id,
-        username: customer.username
+        email: customer.email
       },
       process.env.TOKEN_KEY,
       {
@@ -137,8 +137,72 @@ const getCustomerData = async (req, response) => {
     }
 };
 
+
+
+
+
+const setCustomerData = async (req, response) => {
+  try {
+    const input = req.body;
+    const customerId = req.customer.customerId;
+    const customerData = {
+      username: input.username,
+      address: input.address
+    };
+
+    const customer = await Customer.findOneAndUpdate({_id: customerId}, {$set: customerData}, {new: true});
+
+    if (customer === undefined || customer === null) {
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+
+    return response.json({
+      message: "",
+      error: false,
+      data: [customer]
+    });
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+
+const changePassword = async (req, response) => {
+  try {
+    const input = req.body;
+    const password = input.password;
+    const customerId = req.customer.customerId;
+    const newPassword = await bcryptjs.hash(password,10);
+    const customer = await Customer.findOneAndUpdate({_id: customerId},{$set: {password: newPassword}}, {new: true});
+    if (customer === undefined || customer === null) {
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+    
+    return response.json({
+      message: "",
+      error: false,
+      data: [customer]
+    })
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+
+};
+
 module.exports = {
   register,
   login,
-  getCustomerData
+  getCustomerData,
+  setCustomerData,
+  changePassword
 };

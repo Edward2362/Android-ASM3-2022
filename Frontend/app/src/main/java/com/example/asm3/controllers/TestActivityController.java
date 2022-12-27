@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetData;
@@ -17,7 +19,7 @@ public class TestActivityController extends BaseController implements AsyncTaskC
     private ArrayList<Category> categories;
     private GetData getData;
 
-    public TestActivityController(Context context, Activity activity) {
+    public TestActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         categories = new ArrayList<Category>();
         getData = new GetData(context, this);

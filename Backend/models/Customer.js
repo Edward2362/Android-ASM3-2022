@@ -3,18 +3,14 @@ const mongoose = require("mongoose");
 const Constants = require("../constants/Constants");
 
 const customerSchema = new mongoose.Schema({
-    username: {
+    email: {
       type: String,
       unique: true
     },
     password: {
       type: String
     },
-    first_name: {
-      type: String,
-      default: ""
-    },
-    last_name: {
+    username: {
       type: String,
       default: ""
     },

@@ -20,10 +20,7 @@ const bookSchema = new mongoose.Schema({
       default: 0
     },
     publishedAt: {
-      type: Date
-    },
-    createdAt: {
-      type: Date
+      type: String,
     },
     category: {
       type: Schema.Types.ObjectId,

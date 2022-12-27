@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.asm3.MainActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
@@ -30,12 +32,10 @@ import java.util.ArrayList;
 public class AuthenticationActivityController extends BaseController implements AsyncTaskCallBack {
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
-    private LocalFileController<String> localFileController;
-
     private PostData postData;
 
 
-    public AuthenticationActivityController(Context context, Activity activity) {
+    public AuthenticationActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
 
         loginFragment = new LoginFragment();
@@ -43,7 +43,6 @@ public class AuthenticationActivityController extends BaseController implements 
         loginFragment.setController(this);
         registerFragment.setController(this);
 
-        localFileController = new LocalFileController<String>(Constant.tokenFile, getContext());
         postData = new PostData(getContext(), this);
     }
 
@@ -72,7 +71,7 @@ public class AuthenticationActivityController extends BaseController implements 
     }
 
     // Helpers
-    private String getToken(JSONObject jsonObject) {
+    private String getTokenFromMessage(JSONObject jsonObject) {
         String token = "";
         try {
             token = jsonObject.getString(Customer.tokenKey);
@@ -89,11 +88,11 @@ public class AuthenticationActivityController extends BaseController implements 
         postData.execute(Customer.toJSON(customer));
     }
 
-    public void loginCustomer(String username, String password) {
+    public void loginCustomer(String email, String password) {
         try {
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Constant.username, username);
+            jsonObject.put(Constant.email, email);
             jsonObject.put(Constant.password, password);
 
             postData.setEndPoint(Constant.loginCustomer);
@@ -116,8 +115,8 @@ public class AuthenticationActivityController extends BaseController implements 
 
     public void onLoginFinished(String message) {
         ArrayList<String> arrayList = new ArrayList<String>();
-        arrayList.add(getToken(ApiData.getData(message)));
-        localFileController.writeFile(arrayList);
+        arrayList.add(getTokenFromMessage(ApiData.getData(message)));
+        getLocalFileController().writeFile(arrayList);
         Intent intent = new Intent(getContext(), MainActivity.class);
         ApiData<Customer> customerData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
         intent.putExtra(Constant.customerKey, customerData.getData());
