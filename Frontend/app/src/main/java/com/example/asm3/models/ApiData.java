@@ -31,6 +31,8 @@ public class ApiData<T> {
             return new ApiData<T>((T) SubCategory.fromJSON(jsonObject));
         } else if (t.isAssignableFrom(Book.class)){
             return new ApiData<T>((T) Book.fromJSON(jsonObject));
+        } else if (t.isAssignableFrom(Notification.class)) {
+            return new ApiData<T>((T) Notification.fromJSON(jsonObject));
         } else {
             return null;
         }
