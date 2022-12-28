@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.example.asm3'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.asm3"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -29,7 +29,8 @@ android {
 }
 
 dependencies {
-
+    implementation "androidx.compose.material3:material3:1.0.1"
+    implementation "androidx.compose.material3:material3-window-size-class:1.0.1"
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
