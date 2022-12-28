@@ -9,6 +9,8 @@ const orderRouter = require("./routes/order");
 const categoryRouter = require("./routes/category");
 const subCategoryRouter = require("./routes/subCategory");
 const notificationRouter = require("./routes/notification");
+const reviewRouter = require("./routes/review");
+
 
 
 
@@ -32,5 +34,7 @@ app.use("/api/order", orderRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/subCategory", subCategoryRouter);
 app.use("/api/notification", notificationRouter);
+app.use("/api/review", reviewRouter);
+
 
 app.listen(9000);
