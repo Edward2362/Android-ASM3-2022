@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
     private Context context;
     ConstraintLayout constraintLayout;
     ConstraintSet constraintSet = new ConstraintSet();
+    private int viewWidth;
 
     public TopBarView(Context context) {
         super(context);
@@ -81,6 +83,12 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        viewWidth = constraintLayout.getWidth();
+    }
+
     /**
      * Set color for search view's icon
      */
@@ -101,11 +109,14 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
         }
     }
 
+    //========================== SETTING LAYOUT FUNCTIONS ==========================================
+
     /**
      * Set visibility and constraints for main pages' components
+     *
      * @param title String holds text for title
      */
-    public void setMainPage(String title){
+    public void setMainPage(String title) {
         // set visibility
         titleText.setVisibility(VISIBLE);
         cartButton.setVisibility(VISIBLE);
@@ -143,6 +154,7 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
 
     /**
      * Set visibility and constraints for search result page's components
+     *
      * @param searchQuery String holds text to be displayed in searchView
      */
     public void setSearchResultPage(String searchQuery) {
@@ -162,6 +174,7 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
 
         // set text for searchView
         searchView.setQuery(searchQuery, false);
+        Log.d(TAG, "setSearchResultPage: Width " + viewWidth);
     }
 
 }//end of class

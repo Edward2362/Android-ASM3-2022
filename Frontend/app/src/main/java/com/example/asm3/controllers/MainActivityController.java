@@ -42,7 +42,6 @@ public class MainActivityController extends BaseController implements AsyncTaskC
 //        linearLayout = (LinearLayout) getActivity().findViewById(R.id.mainActivity_layout);
 //        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
         topBar = getActivity().findViewById(R.id.topBar);
-        topBar.setSearchResultPage("Henry the goat");
     }
 
     // Render functions
