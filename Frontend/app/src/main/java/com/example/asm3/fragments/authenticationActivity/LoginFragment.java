@@ -32,7 +32,6 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.activity_authentication_fragment_login, container, false);
-
         Button submitButton = (Button) view.findViewById(R.id.authenticationActivity_loginFragment_submit);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,15 +50,15 @@ public class LoginFragment extends Fragment {
 
 
     public void onSubmit() {
-        String username = "";
+        String email = "";
         String password = "";
 
-        EditText usernameInput = (EditText) view.findViewById(R.id.authenticationActivity_loginFragment_usernameInput);
+        EditText usernameInput = (EditText) view.findViewById(R.id.authenticationActivity_loginFragment_emailInput);
         EditText passwordInput = (EditText) view.findViewById(R.id.authenticationActivity_loginFragment_passwordInput);
 
-        username = String.valueOf(usernameInput.getText());
+        email = String.valueOf(usernameInput.getText());
         password = String.valueOf(passwordInput.getText());
 
-        authenticationActivityController.loginCustomer(username, password);
+        authenticationActivityController.loginCustomer(email, password);
     }
 }

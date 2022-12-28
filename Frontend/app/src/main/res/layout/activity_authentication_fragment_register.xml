@@ -13,23 +13,23 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/authenticationActivity_registerFragment_usernameTitle"
+            android:id="@+id/authenticationActivity_registerFragment_emailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="Username:"
+            android:text="Email:"
             android:textSize="17dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/authenticationActivity_registerFragment_usernameInput"
+            android:id="@+id/authenticationActivity_registerFragment_emailInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="48dp"
             android:ems="10"
-            android:hint="username"
+            android:hint="email"
             android:inputType="textEmailAddress" />
     </LinearLayout>
 
@@ -65,51 +65,27 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/authenticationActivity_registerFragment_firstNameTitle"
+            android:id="@+id/authenticationActivity_registerFragment_usernameTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:text="First Name:"
+            android:text="Username:"
             android:textSize="17dp"
             android:textStyle="bold"/>
 
         <EditText
-            android:id="@+id/authenticationActivity_registerFragment_firstNameInput"
+            android:id="@+id/authenticationActivity_registerFragment_usernameInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="48dp"
             android:ems="10"
-            android:hint="first name"
+            android:hint="username"
             android:inputType="text" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/authenticationActivity_registerFragment_lastNameTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="Last Name:"
-            android:textSize="17dp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/authenticationActivity_registerFragment_lastNameInput"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minHeight="48dp"
-            android:ems="10"
-            android:hint="last name"
-            android:inputType="text" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -148,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Place" />
+            android:text="Submit" />
     </LinearLayout>
 
     <Button
@@ -163,6 +139,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="labeled"/>
+        app:labelVisibilityMode="selected"/>
 
 </LinearLayout>

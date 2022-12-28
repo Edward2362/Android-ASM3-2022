@@ -18,15 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".8"
+        android:background="@color/md_theme_dark_primary"
         android:paddingHorizontal="18dp"
-        android:name="com.example.asm3.fragments.mainActivity.SearchFragment"
-        tools:layout="@layout/activity_main_fragment_search" />
+        android:name="com.example.asm3.fragments.mainActivity.HomeFragment" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="selected"/>
-
+        app:labelVisibilityMode="selected" />
 </LinearLayout>

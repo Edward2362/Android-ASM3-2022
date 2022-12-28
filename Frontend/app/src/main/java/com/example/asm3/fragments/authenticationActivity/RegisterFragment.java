@@ -49,28 +49,25 @@ public class RegisterFragment extends Fragment {
     }
 
     public void onSubmit() {
-        String username = "";
+        String email = "";
         String password = "";
-        String firstName = "";
-        String lastName = "";
+        String username = "";
         String address = "";
         String role = "";
         float rating = 0F;
 
-        EditText usernameInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_usernameInput);
+        EditText emailInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_emailInput);
         EditText passwordInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_passwordInput);
-        EditText firstNameInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_firstNameInput);
-        EditText lastNameInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_lastNameInput);
+        EditText usernameInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_usernameInput);
         EditText addressInput = (EditText) view.findViewById(R.id.authenticationActivity_registerFragment_addressInput);
 
-        username = String.valueOf(usernameInput.getText());
+        email = String.valueOf(emailInput.getText());
         password = String.valueOf(passwordInput.getText());
-        firstName = String.valueOf(firstNameInput.getText());
-        lastName = String.valueOf(lastNameInput.getText());
+        username = String.valueOf(usernameInput.getText());
         address = String.valueOf(addressInput.getText());
         role = Customer.customerRole;
 
-        Customer customer = new Customer(username, password, firstName, lastName, address, role, rating);
+        Customer customer = new Customer(email, password, username, address, role, rating);
 
         authenticationActivityController.registerCustomer(customer);
     }

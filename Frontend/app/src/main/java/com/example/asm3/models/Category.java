@@ -53,6 +53,7 @@ public class Category implements Serializable {
         JSONObject jsonObject = null;
         if (category != null) {
             try {
+                jsonObject = new JSONObject();
                 jsonObject.put(nameKey, category.name);
                 jsonObject.put(idKey, category._id);
             } catch (JSONException jsonException) {

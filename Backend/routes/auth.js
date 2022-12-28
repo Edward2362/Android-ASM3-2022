@@ -12,4 +12,10 @@ router.post("/login", authController.login);
 
 
 
+router.post("/setData", authMiddleware.verifyToken, authController.setCustomerData);
+router.post("/changePassword", authMiddleware.verifyToken, authController.changePassword);
+
+
+
+
 module.exports = router;
