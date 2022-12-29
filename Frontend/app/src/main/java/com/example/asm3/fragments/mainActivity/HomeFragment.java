@@ -4,41 +4,28 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.asm3.MainActivity;
 import com.example.asm3.R;
 import com.example.asm3.controllers.MainActivityController;
 
 public class HomeFragment extends Fragment {
     private MainActivityController mainActivityController;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+    private int menuItemId;
 
     public HomeFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(int menuItemId, MainActivityController mainActivityController) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,20 +33,28 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        menuItemId = R.id.homeNav;
+
         if (getArguments() != null) {
-
-
         }
     }
 
-    public void setController(MainActivityController mainActivityController) {
-        this.mainActivityController = mainActivityController;
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d(TAG, "onCreateView: Hi home test");
+        mainActivityController.setSelectedItemId(menuItemId);
+        mainActivityController.loadMenu();
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    public void setController(MainActivityController mainActivityController) {
+        this.mainActivityController = mainActivityController;
     }
 }

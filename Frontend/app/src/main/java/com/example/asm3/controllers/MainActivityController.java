@@ -3,15 +3,11 @@ package com.example.asm3.controllers;
 import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,13 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
 
 import com.example.asm3.base.controller.BaseController;
-import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.base.networking.services.GetData;
@@ -44,7 +39,7 @@ import com.example.asm3.models.SubCategory;
 import java.util.ArrayList;
 
 
-public class MainActivityController extends BaseController implements AsyncTaskCallBack, NavigationBarView.OnItemSelectedListener {
+public class MainActivityController extends BaseController implements AsyncTaskCallBack, NavigationBarView.OnItemSelectedListener, NavigationBarView.OnItemReselectedListener {
     private boolean isAuth = false;
     private Customer customer;
     private String token;
@@ -56,6 +51,8 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private ArrayList<Notification> notifications;
 
     private NavigationBarView menu;
+    private int selectedItemId;
+    private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
     private ProfileFragment profileFragment;
 
@@ -65,6 +62,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         homeFragment = new HomeFragment();
         profileFragment = new ProfileFragment();
         homeFragment.setController(this);
+        profileFragment.setController(this);
 
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
@@ -76,8 +74,11 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     // Render functions
     @Override
     public void onInit() {
+        fragmentManager = getActivity().getSupportFragmentManager();
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
+        menu.setOnItemReselectedListener(this);
+        loadFragment(homeFragment, "home");
         if (!isAuth()) {
 //            setLoginLayout();
         } else {
@@ -113,11 +114,15 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         }
     }
 
-    public void loadFragment(Fragment fragment) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.mainActivity_frameLayout, fragment)
+    public void loadFragment(Fragment fragment, String tag) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.mainActivity_frameLayout, fragment, tag)
+                .setReorderingAllowed(true)
                 .commit();
+    }
+
+    public void loadMenu() {
+        menu.getMenu().getItem(0).setChecked(true);
     }
 
     // Helpers
@@ -148,11 +153,33 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.homeNav:
-                loadFragment(homeFragment);
+                loadFragment(homeFragment, "home");
+                return true;
+            case R.id.searchNav:
+                return true;
+            case R.id.notiNav:
+                return true;
+            case R.id.profileNav:
+                loadFragment(profileFragment, "profile");
                 return true;
         }
-
         return false;
+    }
+
+    @Override
+    public void onNavigationItemReselected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.homeNav:
+                fragmentManager.beginTransaction().detach(homeFragment).attach(homeFragment).commit();
+                break;
+            case R.id.searchNav:
+                break;
+            case R.id.notiNav:
+                break;
+            case R.id.profileNav:
+                fragmentManager.beginTransaction().detach(profileFragment).attach(profileFragment).commit();
+                break;
+        }
     }
 
     public void goToRegister() {
@@ -200,5 +227,18 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             notifications = apiList.getList();
         }
+    }
+
+    // Getter and Setter
+    public HomeFragment getHomeFragment() {
+        return homeFragment;
+    }
+
+    public int getSelectedItemId() {
+        return selectedItemId;
+    }
+
+    public void setSelectedItemId(int selectedItemId) {
+        this.selectedItemId = selectedItemId;
     }
 }

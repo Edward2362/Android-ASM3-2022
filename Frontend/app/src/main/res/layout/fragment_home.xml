@@ -11,16 +11,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello Stranger, mahhh!" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:text="Let's post a book!"
+            android:id="@+id/postBookBtn" />
 
     </LinearLayout>
 
