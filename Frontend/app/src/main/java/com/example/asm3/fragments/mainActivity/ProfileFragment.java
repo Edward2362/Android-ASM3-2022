@@ -4,9 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +43,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mainActivityController.setSelectedItemId(menuItemId);
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.activity_main_fragment_profile, container, false);
     }
 
     public void setController(MainActivityController mainActivityController) {

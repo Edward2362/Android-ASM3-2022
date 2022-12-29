@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -27,8 +28,10 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.HomeFragment;
+import com.example.asm3.fragments.mainActivity.NotificationFragment;
 import com.example.asm3.fragments.mainActivity.ProfileFragment;
 import com.example.asm3.config.Helper;
+import com.example.asm3.fragments.mainActivity.SearchFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Category;
@@ -59,16 +62,21 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private int selectedItemId;
     private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
+    private SearchFragment searchFragment;
+    private NotificationFragment notificationFragment;
     private ProfileFragment profileFragment;
 
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
 
-        topBar = getActivity().findViewById(R.id.topBar);
-
         homeFragment = new HomeFragment();
+        searchFragment = new SearchFragment();
+        notificationFragment = new NotificationFragment();
         profileFragment = new ProfileFragment();
+
         homeFragment.setController(this);
+        searchFragment.setController(this);
+        notificationFragment.setController(this);
         profileFragment.setController(this);
 
         categories = new ArrayList<Category>();
@@ -83,6 +91,10 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     @Override
     public void onInit() {
         fragmentManager = getActivity().getSupportFragmentManager();
+
+        topBar = getActivity().findViewById(R.id.topBar);
+        topBar.setMainPage("GoGoat");
+
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
@@ -164,8 +176,10 @@ public class MainActivityController extends BaseController implements AsyncTaskC
                 loadFragment(homeFragment, "home");
                 return true;
             case R.id.searchNav:
+                loadFragment(searchFragment, "search");
                 return true;
             case R.id.notiNav:
+                loadFragment(notificationFragment, "notification");
                 return true;
             case R.id.profileNav:
                 loadFragment(profileFragment, "profile");
@@ -181,8 +195,10 @@ public class MainActivityController extends BaseController implements AsyncTaskC
                 fragmentManager.beginTransaction().detach(homeFragment).attach(homeFragment).commit();
                 break;
             case R.id.searchNav:
+                fragmentManager.beginTransaction().detach(searchFragment).attach(searchFragment).commit();
                 break;
             case R.id.notiNav:
+                fragmentManager.beginTransaction().detach(notificationFragment).attach(notificationFragment).commit();
                 break;
             case R.id.profileNav:
                 fragmentManager.beginTransaction().detach(profileFragment).attach(profileFragment).commit();
@@ -244,6 +260,10 @@ public class MainActivityController extends BaseController implements AsyncTaskC
 
     public int getSelectedItemId() {
         return selectedItemId;
+    }
+
+    public TopBarView getTopBar() {
+        return topBar;
     }
 
     public void setSelectedItemId(int selectedItemId) {

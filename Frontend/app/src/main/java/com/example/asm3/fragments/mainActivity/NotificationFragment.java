@@ -11,15 +11,17 @@ import android.view.ViewGroup;
 import com.example.asm3.R;
 import com.example.asm3.controllers.MainActivityController;
 
-public class HomeFragment extends Fragment {
+
+public class NotificationFragment extends Fragment {
     private MainActivityController mainActivityController;
     private int menuItemId;
 
-    public HomeFragment() {
+    public NotificationFragment() {
+        // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(int menuItemId, MainActivityController mainActivityController) {
-        HomeFragment fragment = new HomeFragment();
+    public static NotificationFragment newInstance(String param1, String param2) {
+        NotificationFragment fragment = new NotificationFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -29,15 +31,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        menuItemId = R.id.homeNav;
+        menuItemId = R.id.notiNav;
 
         if (getArguments() != null) {
-        }
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        }
     }
 
     @Override
@@ -45,8 +43,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mainActivityController.setSelectedItemId(menuItemId);
-        mainActivityController.loadMenu();
-        return inflater.inflate(R.layout.activity_main_fragment_home, container, false);
+
+        return inflater.inflate(R.layout.activity_main_fragment_notification, container, false);
     }
 
     public void setController(MainActivityController mainActivityController) {

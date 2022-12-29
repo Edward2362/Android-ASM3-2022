@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
+import androidx.compose.foundation.interaction.DragInteraction;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
@@ -23,13 +26,12 @@ import com.example.asm3.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
-public class TopBarView extends ConstraintLayout implements View.OnClickListener {
+public class TopBarView extends LinearLayout implements View.OnClickListener {
     private MaterialButton cartButton, backButton;
     private TextView titleText;
     private SearchView searchView;
     private Context context;
-    ConstraintLayout constraintLayout;
-    ConstraintSet constraintSet = new ConstraintSet();
+    LinearLayout linearLayout;
     private int viewWidth;
 
     public TopBarView(Context context) {
@@ -39,15 +41,14 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
     public TopBarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        constraintLayout = findViewById(this.getId());
+        linearLayout = findViewById(this.getId());
+        // settings for layout
+        setOrientation(HORIZONTAL);
+        setGravity(Gravity.CENTER_VERTICAL);
 
+        // inflate layout
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.top_bar, this, true);
-
-//        final int count = getChildCount();
-//        for(int i = 0; i < count; i++){
-//            Log.d(TAG, "TopBarView: Child #" + i + " " + getChildAt(i));
-//        }
 
         // find views and attach to vars
         backButton = (MaterialButton) getChildAt(0);
@@ -81,12 +82,6 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
                 Log.d(TAG, "onClick: Cart button was clicked!");
                 break;
         }
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        viewWidth = constraintLayout.getWidth();
     }
 
     /**
@@ -123,14 +118,9 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
         backButton.setVisibility(GONE);
         searchView.setVisibility(GONE);
 
-        // set constraints
-        constraintSet.clone(constraintLayout);
-        constraintSet.connect(R.id.titleText, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-        constraintSet.connect(R.id.cartButton, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-        constraintSet.connect(R.id.titleText, ConstraintSet.END, R.id.cartButton, ConstraintSet.START);
-
         // set title
         titleText.setText(title);
+        titleText.setTextAlignment(TEXT_ALIGNMENT_VIEW_START);
     }
 
     /**
@@ -143,38 +133,50 @@ public class TopBarView extends ConstraintLayout implements View.OnClickListener
         cartButton.setVisibility(GONE);
         titleText.setVisibility(GONE);
 
-        // set constraints
-        constraintSet.clone(constraintLayout);
-        constraintSet.connect(R.id.searchView, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-        constraintSet.connect(R.id.searchView, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-
         // set hint
         searchView.setQueryHint("What to eat, maaah?");
     }
 
     /**
      * Set visibility and constraints for search result page's components
-     *
-     * @param searchQuery String holds text to be displayed in searchView
      */
-    public void setSearchResultPage(String searchQuery) {
+    public void setSearchResultPage() {
         // set visibility
         searchView.setVisibility(VISIBLE);
         backButton.setVisibility(VISIBLE);
         cartButton.setVisibility(VISIBLE);
         titleText.setVisibility(GONE);
         searchView.setIconified(false);
+    }
 
-        // set constraints
-        constraintSet.clone(constraintLayout);
-        constraintSet.connect(R.id.backButton, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-        constraintSet.connect(R.id.cartButton, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-        constraintSet.connect(R.id.searchView, ConstraintSet.START, R.id.backButton, ConstraintSet.END);
-        constraintSet.connect(R.id.searchView, ConstraintSet.END, R.id.cartButton, ConstraintSet.START);
+    /**
+     * Set visibility and constraints for login and register page's components
+     */
+    public void setAuthPage() {
+        // set visibility
+        searchView.setVisibility(GONE);
+        backButton.setVisibility(VISIBLE);
+        cartButton.setVisibility(GONE);
+        titleText.setVisibility(GONE);
+    }
 
-        // set text for searchView
-        searchView.setQuery(searchQuery, false);
-        Log.d(TAG, "setSearchResultPage: Width " + viewWidth);
+    /**
+     * Set visibility and constraints for cart, user info, post book page's components
+     */
+    public void setSubPage(String title) {
+        // set visibility
+        searchView.setVisibility(GONE);
+        backButton.setVisibility(VISIBLE);
+        cartButton.setVisibility(INVISIBLE);
+        titleText.setVisibility(VISIBLE);
+
+        titleText.setText(title);
+        titleText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+    }
+
+    // setters
+    public void setSearchQuery(String query) {
+        searchView.setQuery(query, false);
     }
 
 }//end of class
