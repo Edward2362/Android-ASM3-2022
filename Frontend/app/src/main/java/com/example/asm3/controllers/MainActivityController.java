@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,8 +66,6 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
 
-        topBar = getActivity().findViewById(R.id.topBar);
-
         homeFragment = new HomeFragment();
         profileFragment = new ProfileFragment();
         homeFragment.setController(this);
@@ -81,7 +80,8 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     // Render functions
     @Override
     public void onInit() {
-
+        topBar = getActivity().findViewById(R.id.topBar);
+        topBar.setMainPage("GoGoat");
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         if (!isAuth()) {
@@ -206,5 +206,11 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             notifications = apiList.getList();
         }
+    }
+
+    // Getters
+
+    public TopBarView getTopBar() {
+        return topBar;
     }
 }
