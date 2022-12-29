@@ -33,6 +33,10 @@ public class ApiData<T> {
             return new ApiData<T>((T) Book.fromJSON(jsonObject));
         } else if (t.isAssignableFrom(Notification.class)) {
             return new ApiData<T>((T) Notification.fromJSON(jsonObject));
+        } else if (t.isAssignableFrom(Order.class)) {
+            return new ApiData<T>((T) Order.fromJSON(jsonObject));
+        } else if (t.isAssignableFrom(OrderDetail.class)) {
+            return new ApiData<T>((T) OrderDetail.fromJSON(jsonObject));
         } else {
             return null;
         }

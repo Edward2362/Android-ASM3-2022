@@ -33,6 +33,7 @@ import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
+import com.example.asm3.models.Order;
 import com.google.android.material.navigation.NavigationBarView;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.SubCategory;
@@ -52,6 +53,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private GetData getData;
     private ArrayList<SubCategory> subCategories;
     private ArrayList<Notification> notifications;
+    private ArrayList<Order> orders;
 
     private NavigationBarView menu;
     private int selectedItemId;
@@ -72,6 +74,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
         notifications = new ArrayList<Notification>();
+        orders = new ArrayList<Order>();
         getData = new GetData(context, this);
         getAuthenticatedData = new GetAuthenticatedData(context, this);
     }

@@ -31,7 +31,8 @@ const orderProducts = async (req, response) => {
     for (let i = 0; i < customerIdArray.length; ++i) {
       const order = new Order({
         seller: customerIdArray[i]._id,
-        customer: req.customer.customerId
+        customer: req.customer.customerId,
+        status: ""
       });
 
       await order.save();
