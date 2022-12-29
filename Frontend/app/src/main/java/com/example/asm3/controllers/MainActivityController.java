@@ -25,6 +25,7 @@ import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
+import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.HomeFragment;
 import com.example.asm3.fragments.mainActivity.ProfileFragment;
 import com.example.asm3.config.Helper;
@@ -45,6 +46,8 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     private String token;
     private LinearLayout linearLayout;
     private GetAuthenticatedData getAuthenticatedData;
+    private TopBarView topBar;
+
     private ArrayList<Category> categories;
     private GetData getData;
     private ArrayList<SubCategory> subCategories;
@@ -58,6 +61,8 @@ public class MainActivityController extends BaseController implements AsyncTaskC
 
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
+
+        topBar = getActivity().findViewById(R.id.topBar);
 
         homeFragment = new HomeFragment();
         profileFragment = new ProfileFragment();
@@ -196,15 +201,15 @@ public class MainActivityController extends BaseController implements AsyncTaskC
 
     // Callback functions
     public void onActivityFinished(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == Constant.loginActivity) {
-                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
-                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
-
-                    setCustomerDataLayout();
-                }
-            }
-        }
+//        if (resultCode == Activity.RESULT_OK) {
+//            if (requestCode == Constant.loginActivity) {
+//                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
+//                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
+//
+//                    setCustomerDataLayout();
+//                }
+//            }
+//        }
     }
 
     @Override

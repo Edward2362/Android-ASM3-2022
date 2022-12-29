@@ -8,18 +8,11 @@
     android:theme="@style/Theme.Material3.Light"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <com.example.asm3.custom.components.TopBarView
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:paddingHorizontal="18dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:background="@color/md_theme_dark_onError">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="adsasd"/>
-    </LinearLayout>
+        android:layout_height="0dp"
+        android:layout_weight=".12"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainActivity_frameLayout"
