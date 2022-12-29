@@ -84,6 +84,30 @@ public class ApiList<T extends Object> {
             }
 
             return new ApiList<T>((ArrayList<T>) notifications);
+        } else if (t.isAssignableFrom(Order.class)) {
+            ArrayList<Order> orders = new ArrayList<Order>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    orders.add(Order.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
+            return new ApiList<T>((ArrayList<T>) orders);
+        } else if (t.isAssignableFrom(OrderDetail.class)) {
+            ArrayList<OrderDetail> orderDetails = new ArrayList<OrderDetail>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    orderDetails.add(OrderDetail.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+
+            return new ApiList<T>((ArrayList<T>) orderDetails);
         } else {
             return null;
         }

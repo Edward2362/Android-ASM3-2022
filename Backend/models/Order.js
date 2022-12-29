@@ -10,6 +10,9 @@ const orderSchema = new mongoose.Schema({
       type: Schema.Types.ObjectId,
       ref: "Customer"
     },
+    status: {
+      type: String
+    },
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
