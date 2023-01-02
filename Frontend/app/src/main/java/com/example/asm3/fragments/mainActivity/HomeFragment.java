@@ -2,8 +2,11 @@ package com.example.asm3.fragments.mainActivity;
 
 import android.os.Bundle;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,6 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         menuItemId = R.id.homeNav;
-
         if (getArguments() != null) {
         }
     }
@@ -44,9 +46,11 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View home = inflater.inflate(R.layout.activity_main_fragment_home, container, false);
         mainActivityController.setSelectedItemId(menuItemId);
         mainActivityController.loadMenu();
-        return inflater.inflate(R.layout.activity_main_fragment_home, container, false);
+        mainActivityController.onInitFragment(home);
+        return home;
     }
 
     public void setController(MainActivityController mainActivityController) {

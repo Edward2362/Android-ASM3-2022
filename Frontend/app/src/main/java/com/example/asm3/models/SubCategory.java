@@ -8,9 +8,10 @@ import java.io.Serializable;
 public class SubCategory implements Serializable {
     private String name;
     private String _id;
+    private boolean isChosen = false;
 
-    public static String nameKey="name";
-    public static String idKey="_id";
+    public static String nameKey = "name";
+    public static String idKey = "_id";
 
     public SubCategory(String name, String _id) {
         this.name = name;
@@ -25,12 +26,20 @@ public class SubCategory implements Serializable {
         return _id;
     }
 
+    public boolean isChosen() {
+        return isChosen;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public void setChosen(boolean chosen) {
+        isChosen = chosen;
     }
 
     public static SubCategory fromJSON(JSONObject jsonObject) {

@@ -46,7 +46,7 @@ public class AuthenticationActivityController extends BaseController implements 
         postData = new PostData(getContext(), this);
     }
 
-    // Render functions
+    // Render activity functions
     @Override
     public void onInit() {
         Intent intent = getActivity().getIntent();
@@ -69,6 +69,8 @@ public class AuthenticationActivityController extends BaseController implements 
 
         fragmentTransaction.commit();
     }
+
+    // Render fragment functions
 
     // Helpers
     private String getTokenFromMessage(JSONObject jsonObject) {
