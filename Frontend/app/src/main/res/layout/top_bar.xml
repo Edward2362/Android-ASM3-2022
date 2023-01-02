@@ -23,11 +23,11 @@
         app:iconifiedByDefault="false" />
 
     <TextView
-        android:paddingStart="15dp"
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:paddingStart="15dp"
         android:text="@string/app_name"
         android:textAlignment="viewStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"

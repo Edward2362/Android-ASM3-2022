@@ -11,21 +11,21 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingHorizontal="5dp"
-        android:layout_weight=".12"/>
+        android:layout_weight=".12"
+        android:paddingHorizontal="5dp" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainActivity_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="20dp" />
+        android:layout_marginHorizontal="20dp"
+        android:layout_weight="1" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="selected" />
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/bottom_navigation_menu" />
 </LinearLayout>
