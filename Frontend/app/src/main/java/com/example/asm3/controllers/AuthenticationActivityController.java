@@ -103,7 +103,7 @@ public class AuthenticationActivityController extends BaseController implements 
         }
     }
 
-    // Start activity functions
+    // Navigation functions
 
 
     // Callback functions

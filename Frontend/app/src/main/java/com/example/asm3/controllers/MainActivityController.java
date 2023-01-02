@@ -168,7 +168,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         getAuthenticatedData.execute();
     }
 
-    // Start activity functions
+    // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
