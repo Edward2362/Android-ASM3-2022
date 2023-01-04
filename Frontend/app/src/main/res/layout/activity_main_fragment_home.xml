@@ -12,28 +12,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        android:text="Hello Stranger, mahhh!" />
+        android:text="Hello Stranger, mahhh!"
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5" />
 
     <Button
         android:id="@+id/postBookBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        android:text="Let's post a book!" />
+        android:layout_marginVertical="20dp"
+        android:text="Let's post a book!"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/loginNavBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginVertical="20dp"
+        android:text="Login to post a book!" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        android:text="Find some books" />
+        android:text="Find some books"
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5" />
 
 
     <com.google.android.material.card.MaterialCardView
         style="?attr/materialCardViewElevatedStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="2dp"
-        app:contentPadding="15dp">
+        android:layout_marginVertical="20dp"
+        android:layout_weight="1"
+        app:contentPadding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +62,7 @@
                 app:singleSelection="true">
 
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/foreignCateBtn"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -56,7 +70,7 @@
                     android:text="Foreign" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/domesticCateBtn"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -65,7 +79,7 @@
                     android:text="Domestic" />
 
                 <Button
-                    android:id="@+id/button3"
+                    android:id="@+id/textCateBtn"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -73,10 +87,49 @@
                     android:text="Text" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/subCateRecView"
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/subCateTopDivider"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/subCateRecView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/cateNotifyTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                    android:text="Choose a category, mahhh!" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/subCateBotDivider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/findBookBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="Find"
+                android:visibility="gone" />
 
         </LinearLayout>
 

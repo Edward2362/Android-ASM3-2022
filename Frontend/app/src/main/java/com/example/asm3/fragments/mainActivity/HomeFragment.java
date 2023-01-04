@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
         View home = inflater.inflate(R.layout.activity_main_fragment_home, container, false);
         mainActivityController.setSelectedItemId(menuItemId);
         mainActivityController.loadMenu();
-        mainActivityController.onInitFragment(home);
+        mainActivityController.onInitHomeFragment(home);
         return home;
     }
 

@@ -31,7 +31,7 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder implements View.O
 
     @Override
     public void onClick(View view) {
-        onSelectListener.onItemClick(getAdapterPosition(), view, subCateCheckBox);
+        onSelectListener.onSubCateClick(getAdapterPosition(), view, subCateCheckBox);
     }
 
     public TextView getSubCateTxt() {
