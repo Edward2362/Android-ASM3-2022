@@ -5,14 +5,12 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +43,9 @@ import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.navigation.NavigationBarView;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.SubCategory;
@@ -53,24 +53,38 @@ import com.example.asm3.models.SubCategory;
 import java.util.ArrayList;
 
 
-public class MainActivityController extends BaseController implements AsyncTaskCallBack, NavigationBarView.OnItemSelectedListener, NavigationBarView.OnItemReselectedListener, OnSelectListener {
+public class MainActivityController extends BaseController implements
+        AsyncTaskCallBack,
+        NavigationBarView.OnItemSelectedListener,
+        NavigationBarView.OnItemReselectedListener,
+        OnSelectListener,
+        MaterialButtonToggleGroup.OnButtonCheckedListener {
     private boolean isAuth = false;
     private Customer customer;
     private String token;
-    private LinearLayout linearLayout;
-    private GetAuthenticatedData getAuthenticatedData;
+
     private TopBarView topBar;
     private RecyclerView subCateRecView;
     private GenericAdapter<SubCategory> adapter;
+    private NavigationBarView menu;
+    private int selectedItemId;
+    private MaterialButtonToggleGroup categoriesBtnGrp;
+    private TextView cateNotifyTxt, helloTxt;
+    private Button postBookBtn, findBookBtn;
+    private View subCateTopDivider, subCateBotDivider;
 
     private GetData getData;
+    private GetAuthenticatedData getAuthenticatedData;
     private ArrayList<Category> categories;
     private ArrayList<SubCategory> subCategories;
     private ArrayList<Notification> notifications;
     private ArrayList<Order> orders;
 
-    private NavigationBarView menu;
-    private int selectedItemId;
+    private ArrayList<SubCategory> foreign = new ArrayList<>();
+    private ArrayList<SubCategory> domestic = new ArrayList<>();
+    private ArrayList<SubCategory> text = new ArrayList<>();
+    private ArrayList<SubCategory> displayList = new ArrayList<>();
+
     private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
     private SearchFragment searchFragment;
@@ -110,13 +124,27 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
         loadFragment(homeFragment, "home");
-        Log.d(TAG, "onInit: test loaded home " + homeFragment);
 
         // For testing
-        subCategories.add(new SubCategory("hello", "test"));
-        subCategories.add(new SubCategory("hi", "test"));
-        subCategories.add(new SubCategory("asd", "test"));
-        subCategories.add(new SubCategory("test", "test"));
+
+        foreign.add(new SubCategory("hello", "test"));
+        foreign.add(new SubCategory("hi", "test"));
+        foreign.add(new SubCategory("asd", "test"));
+        foreign.add(new SubCategory("test", "test"));
+
+        domestic.add(new SubCategory("domestic", "test"));
+        domestic.add(new SubCategory("domestic", "test"));
+        domestic.add(new SubCategory("domestic", "test"));
+        domestic.add(new SubCategory("domestic", "test"));
+        domestic.add(new SubCategory("domestic", "test"));
+        domestic.add(new SubCategory("domestic", "test"));
+        domestic.add(new SubCategory("domestic", "test"));
+
+        text.add(new SubCategory("text hehe", "test"));
+        text.add(new SubCategory("text hehe", "test"));
+        text.add(new SubCategory("text hehe", "test"));
+        text.add(new SubCategory("text hehe", "test"));
+        text.add(new SubCategory("text hehe", "test"));
         // End for testing
 
         if (!isAuth()) {
@@ -157,44 +185,81 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     }
 
     // Render fragment functions
-    public void onInitFragment(View view) {
+    public void onInitHomeFragment(View view) {
+        helloTxt = view.findViewById(R.id.helloTxt);
+        postBookBtn = view.findViewById(R.id.postBookBtn);
+        findBookBtn = view.findViewById(R.id.findBookBtn);
+        categoriesBtnGrp = view.findViewById(R.id.categoriesBtnGrp);
         subCateRecView = view.findViewById(R.id.subCateRecView);
-        Log.d(TAG, "onInitFragment: test recview " + subCateRecView);
-        adapter = generateAdapter();
-        Log.d(TAG, "onInitFragment: test");
+        cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
+        subCateTopDivider = view.findViewById(R.id.subCateTopDivider);
+        subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
+        adapter = generateSubCateAdapter();
+
+        categoriesBtnGrp.addOnButtonCheckedListener(this);
         subCateRecView.setAdapter(adapter);
         subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
-    public void onItemClick(int position, View view, MaterialCheckBox subCateCheckBox) {
-        boolean newStatus;
+    public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+        subCateTopDivider.setVisibility(View.VISIBLE);
+        cateNotifyTxt.setVisibility(View.GONE);
+        subCateRecView.setVisibility(View.VISIBLE);
+        findBookBtn.setVisibility(View.VISIBLE);
+        subCateBotDivider.setVisibility(View.VISIBLE);
+        switch (group.getCheckedButtonId()) {
+            case R.id.foreignCateBtn:
+                displayList.clear();
+                displayList.addAll(foreign);
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.domesticCateBtn:
+                displayList.clear();
+                displayList.addAll(domestic);
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.textCateBtn:
+                displayList.clear();
+                displayList.addAll(text);
+                adapter.notifyDataSetChanged();
+                break;
+        }
+        if (group.getCheckedButtonId() == -1) {
+            subCateTopDivider.setVisibility(View.GONE);
+            cateNotifyTxt.setVisibility(View.VISIBLE);
+            subCateRecView.setVisibility(View.GONE);
+            findBookBtn.setVisibility(View.GONE);
+            subCateBotDivider.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox) {
+        boolean newStatus = false;
         switch (view.getId()) {
             case R.id.subCateBody:
                 newStatus = !subCateCheckBox.isChecked();
                 subCateCheckBox.setChecked(newStatus);
-                subCategories.get(position).setChosen(newStatus);
                 break;
             case R.id.subCateCheckBox:
                 newStatus = subCateCheckBox.isChecked();
-                subCategories.get(position).setChosen(newStatus);
                 break;
         }
+        displayList.get(position).setChosen(newStatus);
     }
 
     // Helpers
-    private GenericAdapter<SubCategory> generateAdapter() {
-        return new GenericAdapter<SubCategory>(subCategories, this) {
+    private GenericAdapter<SubCategory> generateSubCateAdapter() {
+        return new GenericAdapter<SubCategory>(displayList) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
-                Log.d(TAG, "setViewHolder: test");
                 final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_category_item, parent, false);
                 return new SubCategoryHolder(view, MainActivityController.this);
             }
 
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, SubCategory item) {
-                Log.d(TAG, "onBindData: test " + item.getName());
                 SubCategoryHolder subCategoryHolder = (SubCategoryHolder) holder;
                 subCategoryHolder.getSubCateTxt().setText(item.getName());
                 subCategoryHolder.getSubCateCheckBox().setChecked(item.isChosen());
@@ -289,7 +354,6 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
-            setCustomerDataLayout();
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
             categories = apiList.getList();

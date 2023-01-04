@@ -13,11 +13,9 @@ import java.util.ArrayList;
 public abstract class GenericAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<T> items;
-    private OnSelectListener onSelectListener;
 
-    public GenericAdapter(ArrayList<T> items, OnSelectListener onSelectListener) {
+    public GenericAdapter(ArrayList<T> items) {
         this.items = items;
-        this.onSelectListener = onSelectListener;
     }
 
     public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);
