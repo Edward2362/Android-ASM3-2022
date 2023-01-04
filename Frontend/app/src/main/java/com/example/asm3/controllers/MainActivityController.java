@@ -129,6 +129,12 @@ public class MainActivityController extends BaseController implements AsyncTaskC
             getAuthenticatedData.setTaskType(Constant.getCustomer);
             getAuthenticatedData.execute();
         }
+
+
+
+
+
+        getAllCategories();
     }
 
     public void setLoginLayout() {
@@ -287,6 +293,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
             categories = apiList.getList();
+            Toast.makeText(getContext(), categories.get(0).getName(), Toast.LENGTH_SHORT).show();
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();
