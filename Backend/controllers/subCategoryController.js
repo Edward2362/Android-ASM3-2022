@@ -1,11 +1,8 @@
 const SubCategory = require("../models/SubCategory");
-const CategoryRelations = require("../models/CategoryRelations");
 const Category = require("../models/Category");
 
 const initSubCategories = async (req, response) => {
   const subCategories = ["Novel", "Children+Book", "Comics"];
-
-  const categories = await Category.find({$or: [{name: "Foreign+Book"}, {name: "Domestic+Book"}]});
 
   for (let i = 0; i < subCategories.length; ++i) {
     let subCategory = new SubCategory({
@@ -13,15 +10,6 @@ const initSubCategories = async (req, response) => {
     });
 
     await subCategory.save();
-
-    for (let index = 0; index < categories.length; ++index) {
-      let categoryRelation = new CategoryRelations({
-        category: categories[index]._id,
-        subCategory: subCategory._id
-      });
-
-      await categoryRelation.save();
-    }
   }
 
   return response.json({
@@ -38,26 +26,28 @@ const getSubCategories = async (req, response) => {
   if (input.category === undefined) {
     subCategories = await SubCategory.find({});
   } else {
-    let categoryRelations = await CategoryRelations.find({}).populate("category").populate("subCategory");
     let categoryName = input.category.replace(" ","+");
 
-    for (let i = 0; i < categoryRelations.length; ++i) {
-      let categoryRelation = categoryRelations[i];
+    let categories = await Category.find({name: categoryName}).populate("subCategories");
 
-      if (categoryRelation.category.name === categoryName) {
-        subCategories.push(categoryRelation.subCategory);
-      }
+    if (categories.length !== 0) {
+      subCategories = categories[0].subCategories;
     }
   }
 
-  
-  
   return response.json({
     message: "",
     error: false,
     data: subCategories
   });
 };
+
+
+
+
+
+
+
 
 module.exports = {
   initSubCategories,

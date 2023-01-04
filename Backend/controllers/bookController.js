@@ -1,7 +1,4 @@
 const Book = require("../models/Book");
-const SubCategory = require("../models/SubCategory");
-const Category = require("../models/Category");
-const CategoryRelations = require("../models/CategoryRelations");
 const Constants = require("../constants/Constants");
 
 const uploadBook = async (req, response) => {
