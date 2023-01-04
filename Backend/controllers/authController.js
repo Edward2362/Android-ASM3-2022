@@ -31,7 +31,9 @@ const register = async (req, response) => {
         username: req.body.username,
         address: req.body.address,
         role: Constants.CUSTOMER_ROLE,
-        ratings: 0
+        ratings: 0,
+        cart: [],
+        token: ""
       };
 
       const customers = await Customer.find({
@@ -136,9 +138,6 @@ const getCustomerData = async (req, response) => {
       process.exit(1);
     }
 };
-
-
-
 
 
 const setCustomerData = async (req, response) => {

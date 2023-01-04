@@ -136,22 +136,7 @@ public class MainActivityController extends BaseController implements AsyncTaskC
     }
 
     public void setCustomerDataLayout() {
-        if (customer != null) {
-            linearLayout.removeAllViews();
 
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            );
-
-            TextView username = new TextView(getContext());
-            username.setLayoutParams(params);
-            username.setText(customer.getUsername());
-            username.setTextSize(17);
-
-
-            linearLayout.addView(username);
-        }
     }
 
     public void loadFragment(Fragment fragment, String tag) {
@@ -284,15 +269,13 @@ public class MainActivityController extends BaseController implements AsyncTaskC
 
     // Callback functions
     public void onActivityFinished(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == Constant.loginActivity) {
-//                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
-//                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
-//
-//                    setCustomerDataLayout();
-//                }
-//            }
-//        }
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.loginActivity) {
+                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
+                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
+                }
+            }
+        }
     }
 
     @Override

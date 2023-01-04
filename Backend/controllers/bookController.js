@@ -146,6 +146,24 @@ const getProducts = async (req, response) => {
   });
 };
 
+
+const getUploadedProducts = async (req, response) => {
+  try {
+    const customerId = req.customer.customerId;
+
+    const products = await Book.find({customer: customerId});
+
+    return response.json({
+      message: "",
+      error: false,
+      data: products
+    });
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
 const getProduct = (req, response) => {
   const productId = req.params.productId;
   Book.find({_id: productId}, (error, books) => {
@@ -170,5 +188,6 @@ module.exports = {
   updateBook,
   deleteBook,
   getProducts,
-  getProduct
+  getProduct,
+  getUploadedProducts
 };
