@@ -10,6 +10,8 @@ router.delete("/deleteBook/:id", authMiddleware.verifyToken, bookController.dele
 
 router.get("/getProducts", bookController.getProducts);
 router.get("/getProduct/:productId", bookController.getProduct);
+router.get("/getUploadedProducts", authMiddleware.verifyToken, bookController.getUploadedProducts);
+
 
 
 module.exports = router;

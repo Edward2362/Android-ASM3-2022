@@ -333,15 +333,13 @@ public class MainActivityController extends BaseController implements
 
     // Callback functions
     public void onActivityFinished(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == Activity.RESULT_OK) {
-//            if (requestCode == Constant.loginActivity) {
-//                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
-//                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
-//
-//                    setCustomerDataLayout();
-//                }
-//            }
-//        }
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constant.loginActivity) {
+                if (data.getExtras().getSerializable(Constant.customerKey) != null) {
+                    customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
+                }
+            }
+        }
     }
 
     @Override
