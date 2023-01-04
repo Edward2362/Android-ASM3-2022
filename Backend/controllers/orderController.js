@@ -1,13 +1,24 @@
 const Order = require("../models/Order");
 const Book = require("../models/Book");
 const OrderDetail = require("../models/OrderDetail");
+const Customer = require("../models/Customer");
 
 const orderProducts = async (req, response) => {
-    let productIdArray = [];
-    let bookArrayInput = req.body.books;
-    let customerIdArray = [];
+    const customers = await Customer.find({_id: req.customer.customerId});
 
+    let productIdArray = [];
+    let bookArrayInput = [];
+    let customerIdArray = [];
     let orders = [];
+    
+    
+    bookArrayInput = bookArrayInput.concat(customers[0].cart);
+    
+    
+    
+    
+    
+    
     
     for (let i = 0; i < bookArrayInput.length; ++i) {
       let productId = {};
@@ -57,6 +68,9 @@ const orderProducts = async (req, response) => {
       orders.push(order);
     }
 
+    customers[0].cart = [];
+    await customers[0].save();
+    
     return response.json({
       message: "",
       error: false,

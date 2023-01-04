@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const Constants = require("../constants/Constants");
 
@@ -26,6 +27,13 @@ const customerSchema = new mongoose.Schema({
       type: Number,
       default: null
     },
+    cart: [{
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: "Book"
+      },
+      quantity: Number
+    }],
     token: {
       type: String
     }
