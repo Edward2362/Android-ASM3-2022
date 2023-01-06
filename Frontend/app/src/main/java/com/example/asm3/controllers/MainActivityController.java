@@ -158,10 +158,6 @@ public class MainActivityController extends BaseController implements
             getAuthenticatedData.execute();
         }
 
-
-
-
-
         getAllCategories();
     }
 
@@ -199,6 +195,10 @@ public class MainActivityController extends BaseController implements
         categoriesBtnGrp.addOnButtonCheckedListener(this);
         subCateRecView.setAdapter(adapter);
         subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    public void onInitProfileFragment(View view) {
+
     }
 
     @Override

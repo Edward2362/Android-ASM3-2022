@@ -33,7 +33,6 @@ public class Constant {
     public static String categoryKey = "category";
     public static String customerKey = "customerData";
 
-
     public static int loginActivity = 500;
     public static int registerActivity = 200;
 
@@ -47,4 +46,10 @@ public class Constant {
     public static String changePasswordTaskType = "changePassword";
     public static String getNotificationsTaskType = "getNotifications";
 
+
+
+
+
+    public static int cameraPermissionCode = 105;
+    public static int cameraRequest = 1005;
 }
