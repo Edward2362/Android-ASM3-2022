@@ -132,6 +132,7 @@ public class TopBarView extends LinearLayout implements View.OnClickListener {
         backButton.setVisibility(GONE);
         cartButton.setVisibility(GONE);
         titleText.setVisibility(GONE);
+        searchView.requestFocus();
 
         // set hint
         searchView.setQueryHint("What to eat, maaah?");
@@ -147,6 +148,7 @@ public class TopBarView extends LinearLayout implements View.OnClickListener {
         cartButton.setVisibility(VISIBLE);
         titleText.setVisibility(GONE);
         searchView.setIconified(false);
+        searchView.clearFocus();
     }
 
     /**
@@ -172,6 +174,11 @@ public class TopBarView extends LinearLayout implements View.OnClickListener {
 
         titleText.setText(title);
         titleText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+    }
+
+    // getters
+    public SearchView getSearchView() {
+        return searchView;
     }
 
     // setters

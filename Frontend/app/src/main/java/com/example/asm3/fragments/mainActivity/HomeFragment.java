@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View home = inflater.inflate(R.layout.activity_main_fragment_home, container, false);
+        Log.d(TAG, "onCreateView: test " + mainActivityController);
         mainActivityController.setSelectedItemId(menuItemId);
         mainActivityController.loadMenu();
         mainActivityController.onInitHomeFragment(home);

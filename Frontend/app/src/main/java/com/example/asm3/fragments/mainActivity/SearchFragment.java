@@ -41,10 +41,11 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View search = inflater.inflate(R.layout.activity_main_fragment_search, container, false);
         // Inflate the layout for this fragment
         mainActivityController.setSelectedItemId(menuItemId);
-
-        return inflater.inflate(R.layout.activity_main_fragment_search, container, false);
+        mainActivityController.onInitSearchFragment(search);
+        return search;
     }
 
     public void setController(MainActivityController mainActivityController) {

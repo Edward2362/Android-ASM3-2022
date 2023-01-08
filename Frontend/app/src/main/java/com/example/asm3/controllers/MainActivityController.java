@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -26,6 +28,7 @@ import com.example.asm3.R;
 
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.OnSelectListener;
+import com.example.asm3.base.adapter.viewHolder.SearchSuggestionHolder;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
@@ -49,6 +52,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.navigation.NavigationBarView;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.SubCategory;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 
@@ -58,20 +62,25 @@ public class MainActivityController extends BaseController implements
         NavigationBarView.OnItemSelectedListener,
         NavigationBarView.OnItemReselectedListener,
         OnSelectListener,
-        MaterialButtonToggleGroup.OnButtonCheckedListener {
+        MaterialButtonToggleGroup.OnButtonCheckedListener,
+        SearchView.OnQueryTextListener {
     private boolean isAuth = false;
     private Customer customer;
     private String token;
 
     private TopBarView topBar;
     private RecyclerView subCateRecView;
+    private RecyclerView searchSuggestionRecView;
     private GenericAdapter<SubCategory> adapter;
+
     private NavigationBarView menu;
     private int selectedItemId;
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TextView cateNotifyTxt, helloTxt;
     private Button postBookBtn, findBookBtn;
     private View subCateTopDivider, subCateBotDivider;
+    private GenericAdapter<String> searchAdapter;
+    private LinearProgressIndicator progressBar;
 
     private GetData getData;
     private GetAuthenticatedData getAuthenticatedData;
@@ -79,6 +88,7 @@ public class MainActivityController extends BaseController implements
     private ArrayList<SubCategory> subCategories;
     private ArrayList<Notification> notifications;
     private ArrayList<Order> orders;
+    private ArrayList<String> searchSuggestions;
 
     private ArrayList<SubCategory> foreign = new ArrayList<>();
     private ArrayList<SubCategory> domestic = new ArrayList<>();
@@ -90,6 +100,9 @@ public class MainActivityController extends BaseController implements
     private SearchFragment searchFragment;
     private NotificationFragment notificationFragment;
     private ProfileFragment profileFragment;
+
+    private long lastTextEdit = 0;
+    private Handler handler = new Handler();
 
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
@@ -106,6 +119,7 @@ public class MainActivityController extends BaseController implements
 
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
+        searchSuggestions = new ArrayList<>();
         notifications = new ArrayList<Notification>();
         orders = new ArrayList<Order>();
         getData = new GetData(context, this);
@@ -200,6 +214,26 @@ public class MainActivityController extends BaseController implements
         subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+    public void onInitSearchFragment(View view) {
+        topBar.setSearchPage();
+        searchSuggestionRecView = view.findViewById(R.id.searchSuggestionRecView);
+        progressBar = view.findViewById(R.id.progressBar);
+        searchSuggestionRecView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        topBar.getSearchView().setOnQueryTextListener(this);
+        // for test
+        searchSuggestions.add("lord of the rings");
+        searchSuggestions.add("lord of the rings j. r. r. tolkien");
+        searchSuggestions.add("lord of the rings fellowship of the rings");
+        searchSuggestions.add("lord of the rings the return of the king");
+        searchSuggestions.add("lord of the rings the two towers");
+        searchSuggestions.add("lord of the rings set");
+        // oki no more testing
+        searchAdapter = generateSearchAdapter();
+        searchSuggestionRecView.setAdapter(searchAdapter);
+        searchSuggestionRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
     @Override
     public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
         subCateTopDivider.setVisibility(View.VISIBLE);
@@ -248,6 +282,46 @@ public class MainActivityController extends BaseController implements
         displayList.get(position).setChosen(newStatus);
     }
 
+    @Override
+    public void onSearchSuggestionClick(int position, View view, String suggestionText) {
+        // TODO: get text and go to search result
+        Log.d(TAG, "onSearchSuggestionClick: clicked!");
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        //TODO: go to search result activity
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.d(TAG, "onQueryTextChange: text out " + newText);
+        if (!newText.isEmpty()) {
+            Log.d(TAG, "onQueryTextChange: text " + newText);
+            progressBar.setVisibility(View.VISIBLE);
+            searchSuggestionRecView.setVisibility(View.GONE);
+            lastTextEdit = System.currentTimeMillis();
+            // TODO: implement function fetching
+            //getSuggestions();
+            handler.removeCallbacksAndMessages(null);
+            do {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // TODO: put these 2 lines in onFinished, a fetching function will be called here
+                        progressBar.setVisibility(View.GONE);
+                        searchSuggestionRecView.setVisibility(View.VISIBLE);
+                    }
+                }, 1000);
+            } while (searchSuggestions.isEmpty());
+        } else {
+            progressBar.setVisibility(View.GONE);
+            searchSuggestionRecView.setVisibility(View.GONE);
+        }
+        return false;
+    }
+
     // Helpers
     private GenericAdapter<SubCategory> generateSubCateAdapter() {
         return new GenericAdapter<SubCategory>(displayList) {
@@ -266,6 +340,21 @@ public class MainActivityController extends BaseController implements
         };
     }
 
+    private GenericAdapter<String> generateSearchAdapter() {
+        return new GenericAdapter<String>(searchSuggestions) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_suggestion_item, parent, false);
+                return new SearchSuggestionHolder(view, MainActivityController.this);
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, String suggest) {
+                SearchSuggestionHolder searchSuggestionHolder = (SearchSuggestionHolder) holder;
+                searchSuggestionHolder.getSuggestionText().setText(suggest);
+            }
+        };
+    }// end generateSearchAdapter
 
     // Request functions
     public void getAllCategories() {
