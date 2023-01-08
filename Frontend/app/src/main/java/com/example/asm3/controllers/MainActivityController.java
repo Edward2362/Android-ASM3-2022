@@ -123,7 +123,6 @@ public class MainActivityController extends BaseController implements
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
-        loadFragment(homeFragment, "home");
 
         // For testing
 
@@ -158,10 +157,6 @@ public class MainActivityController extends BaseController implements
             getAuthenticatedData.execute();
         }
 
-
-
-
-
         getAllCategories();
     }
 
@@ -186,6 +181,10 @@ public class MainActivityController extends BaseController implements
 
     // Render fragment functions
     public void onInitHomeFragment(View view) {
+        foreign = categories.get(0).getSubCategories();
+        domestic = categories.get(1).getSubCategories();
+        text = categories.get(2).getSubCategories();
+
         helloTxt = view.findViewById(R.id.helloTxt);
         postBookBtn = view.findViewById(R.id.postBookBtn);
         findBookBtn = view.findViewById(R.id.findBookBtn);
@@ -358,6 +357,7 @@ public class MainActivityController extends BaseController implements
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
             categories = apiList.getList();
             Toast.makeText(getContext(), categories.get(0).getName(), Toast.LENGTH_SHORT).show();
+            loadFragment(homeFragment, "home");
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();
