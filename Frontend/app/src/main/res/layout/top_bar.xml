@@ -20,9 +20,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:backgroundTint="@color/md_theme_light_primary"
+        android:background="@drawable/searchview_bg"
         android:visibility="visible"
-        app:iconifiedByDefault="false" />
+        app:iconifiedByDefault="false"
+        android:layout_marginHorizontal="17dp"/>
 
     <TextView
         android:id="@+id/titleText"
