@@ -42,8 +42,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View profile = inflater.inflate(R.layout.activity_main_fragment_profile, container, false);
         mainActivityController.setSelectedItemId(menuItemId);
-        return inflater.inflate(R.layout.activity_main_fragment_profile, container, false);
+        mainActivityController.onInitProfileFragment(profile);
+        return profile;
     }
 
     public void setController(MainActivityController mainActivityController) {

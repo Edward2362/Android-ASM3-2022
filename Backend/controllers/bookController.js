@@ -1,4 +1,6 @@
 const Book = require("../models/Book");
+
+const Customer = require("../models/Customer");
 const Constants = require("../constants/Constants");
 
 const uploadBook = async (req, response) => {
@@ -180,11 +182,38 @@ const getProduct = (req, response) => {
   });
 };
 
+
+const saveProduct = async (req, response) => {
+  try {
+    const customerId = req.customer.customerId;
+    const input = req.body;
+
+    const customers = await Customer.find({_id: customerId});
+    customers[0].cart.push({
+      product: input.product,
+      quantity: input.quantity
+    });
+
+    return response.json({
+      message: "",
+      error: false,
+      data: []
+    });
+
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
+
+
+
 module.exports = {
   uploadBook,
   updateBook,
   deleteBook,
   getProducts,
   getProduct,
-  getUploadedProducts
+  getUploadedProducts,
+  saveProduct
 };
