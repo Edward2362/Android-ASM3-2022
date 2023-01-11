@@ -2,7 +2,7 @@ const SubCategory = require("../models/SubCategory");
 const Category = require("../models/Category");
 
 const initSubCategories = async (req, response) => {
-  const subCategories = ["Novel", "Children+Book", "Comics"];
+  const subCategories = ["Children", "Young+adult", "Fiction","Nonfiction","Economic","Dictionary","Skill","Poetry","Literature","Math","Science","Physics","Chemistry","Biology","Ethics","Geography","History","Foreign+Languages","Computing"];
 
   for (let i = 0; i < subCategories.length; ++i) {
     let subCategory = new SubCategory({

@@ -303,7 +303,7 @@ public class MainActivityController extends BaseController implements
             searchSuggestionRecView.setVisibility(View.GONE);
             lastTextEdit = System.currentTimeMillis();
             // TODO: implement function fetching
-            //getSuggestions();
+//            getSuggestions();
             handler.removeCallbacksAndMessages(null);
             do {
                 handler.postDelayed(new Runnable() {
@@ -447,6 +447,10 @@ public class MainActivityController extends BaseController implements
             categories = apiList.getList();
             Toast.makeText(getContext(), categories.get(0).getName(), Toast.LENGTH_SHORT).show();
             loadFragment(homeFragment, "home");
+            for (SubCategory category : categories.get(0).getSubCategories()
+            ) {
+                Log.d(TAG, "onFinished: test " + category.getName());
+            }
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();
