@@ -48,7 +48,6 @@ import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.navigation.NavigationBarView;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.SubCategory;
@@ -64,26 +63,38 @@ public class MainActivityController extends BaseController implements
         OnSelectListener,
         MaterialButtonToggleGroup.OnButtonCheckedListener,
         SearchView.OnQueryTextListener {
-    private boolean isAuth = false;
-    private Customer customer;
-    private String token;
 
+    // API
+    private GetData getData;
+    private GetAuthenticatedData getAuthenticatedData;
+
+    // main activity view
     private TopBarView topBar;
-    private RecyclerView subCateRecView;
-    private RecyclerView searchSuggestionRecView;
-    private GenericAdapter<SubCategory> adapter;
-
     private NavigationBarView menu;
     private int selectedItemId;
+
+    // homepage fragment view
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TextView cateNotifyTxt, helloTxt;
     private Button postBookBtn, findBookBtn;
     private View subCateTopDivider, subCateBotDivider;
-    private GenericAdapter<String> searchAdapter;
-    private LinearProgressIndicator progressBar;
 
-    private GetData getData;
-    private GetAuthenticatedData getAuthenticatedData;
+    // search fragment view
+    private LinearProgressIndicator progressBar;
+    private GenericAdapter<String> searchAdapter;
+
+
+    // notification fragment view
+
+
+    // profile fragment view
+
+
+    // main activity data
+    private boolean isAuth = false;
+    private Customer customer;
+    private String token;
+
     private ArrayList<Category> categories;
     private ArrayList<SubCategory> subCategories;
     private ArrayList<Notification> notifications;
@@ -100,6 +111,10 @@ public class MainActivityController extends BaseController implements
     private SearchFragment searchFragment;
     private NotificationFragment notificationFragment;
     private ProfileFragment profileFragment;
+
+    private RecyclerView subCateRecView;
+    private RecyclerView searchSuggestionRecView;
+    private GenericAdapter<SubCategory> subCateAdapter;
 
     private long lastTextEdit = 0;
     private Handler handler = new Handler();
@@ -207,10 +222,10 @@ public class MainActivityController extends BaseController implements
         cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
         subCateTopDivider = view.findViewById(R.id.subCateTopDivider);
         subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
-        adapter = generateSubCateAdapter();
+        subCateAdapter = generateSubCateAdapter();
 
         categoriesBtnGrp.addOnButtonCheckedListener(this);
-        subCateRecView.setAdapter(adapter);
+        subCateRecView.setAdapter(subCateAdapter);
         subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
@@ -245,17 +260,17 @@ public class MainActivityController extends BaseController implements
             case R.id.foreignCateBtn:
                 displayList.clear();
                 displayList.addAll(foreign);
-                adapter.notifyDataSetChanged();
+                subCateAdapter.notifyDataSetChanged();
                 break;
             case R.id.domesticCateBtn:
                 displayList.clear();
                 displayList.addAll(domestic);
-                adapter.notifyDataSetChanged();
+                subCateAdapter.notifyDataSetChanged();
                 break;
             case R.id.textCateBtn:
                 displayList.clear();
                 displayList.addAll(text);
-                adapter.notifyDataSetChanged();
+                subCateAdapter.notifyDataSetChanged();
                 break;
         }
         if (group.getCheckedButtonId() == -1) {
