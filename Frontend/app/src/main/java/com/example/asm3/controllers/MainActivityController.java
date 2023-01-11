@@ -72,17 +72,24 @@ public class MainActivityController extends BaseController implements
     private TopBarView topBar;
     private NavigationBarView menu;
     private int selectedItemId;
+    private FragmentManager fragmentManager;
+    private HomeFragment homeFragment;
+    private SearchFragment searchFragment;
+    private NotificationFragment notificationFragment;
+    private ProfileFragment profileFragment;
 
     // homepage fragment view
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TextView cateNotifyTxt, helloTxt;
     private Button postBookBtn, findBookBtn;
     private View subCateTopDivider, subCateBotDivider;
+    private GenericAdapter<SubCategory> subCateAdapter;
+    private RecyclerView subCateRecView;
 
     // search fragment view
     private LinearProgressIndicator progressBar;
     private GenericAdapter<String> searchAdapter;
-
+    private RecyclerView searchSuggestionRecView;
 
     // notification fragment view
 
@@ -94,30 +101,26 @@ public class MainActivityController extends BaseController implements
     private boolean isAuth = false;
     private Customer customer;
     private String token;
+    private ArrayList<Order> orders;
 
+    // homepage fragment data
     private ArrayList<Category> categories;
     private ArrayList<SubCategory> subCategories;
-    private ArrayList<Notification> notifications;
-    private ArrayList<Order> orders;
-    private ArrayList<String> searchSuggestions;
-
     private ArrayList<SubCategory> foreign = new ArrayList<>();
     private ArrayList<SubCategory> domestic = new ArrayList<>();
     private ArrayList<SubCategory> text = new ArrayList<>();
     private ArrayList<SubCategory> displayList = new ArrayList<>();
 
-    private FragmentManager fragmentManager;
-    private HomeFragment homeFragment;
-    private SearchFragment searchFragment;
-    private NotificationFragment notificationFragment;
-    private ProfileFragment profileFragment;
-
-    private RecyclerView subCateRecView;
-    private RecyclerView searchSuggestionRecView;
-    private GenericAdapter<SubCategory> subCateAdapter;
-
+    // search fragment data
     private long lastTextEdit = 0;
     private Handler handler = new Handler();
+
+    // notification fragment data
+    private ArrayList<Notification> notifications;
+    private ArrayList<String> searchSuggestions;
+
+    // profile fragment data
+
 
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
@@ -462,17 +465,10 @@ public class MainActivityController extends BaseController implements
             categories = apiList.getList();
             Toast.makeText(getContext(), categories.get(0).getName(), Toast.LENGTH_SHORT).show();
             loadFragment(homeFragment, "home");
-            for (SubCategory category : categories.get(0).getSubCategories()
-            ) {
-                Log.d(TAG, "onFinished: test " + category.getName());
-            }
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();
             Log.d(TAG, "onFinished: " + subCategories.size());
-            for (int i = 0; i < subCategories.size(); i++) {
-                Toast.makeText(getContext(), subCategories.get(i).getName(), Toast.LENGTH_SHORT).show();
-            }
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             notifications = apiList.getList();
