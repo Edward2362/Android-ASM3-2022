@@ -1,7 +1,7 @@
 package com.example.asm3.config;
 
 public class Constant {
-    public static String baseDomain = "http://192.168.1.3:9000";
+    public static String baseDomain = "http://10.247.217.81:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -33,8 +33,8 @@ public class Constant {
     public static String categoryKey = "category";
     public static String customerKey = "customerData";
 
-    public static int loginActivity = 500;
-    public static int registerActivity = 200;
+    public static final int loginActivity = 500;
+    public static final int registerActivity = 200;
 
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";
@@ -50,6 +50,8 @@ public class Constant {
 
 
 
-    public static int cameraPermissionCode = 105;
-    public static int cameraRequest = 1005;
+    public static final int cameraPermissionCode = 105;
+    public static final int cameraRequest = 1005;
+    public static final int galleryPermissionCode = 205;
+    public static final int galleryRequest = 2005;
 }
