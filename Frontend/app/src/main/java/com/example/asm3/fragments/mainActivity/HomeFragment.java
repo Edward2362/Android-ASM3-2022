@@ -57,4 +57,8 @@ public class HomeFragment extends Fragment {
     public void setController(MainActivityController mainActivityController) {
         this.mainActivityController = mainActivityController;
     }
+
+    public MainActivityController getMainActivityController() {
+        return mainActivityController;
+    }
 }

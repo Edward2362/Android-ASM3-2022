@@ -134,6 +134,7 @@ public class MainActivityController extends BaseController implements
         searchFragment.setController(this);
         notificationFragment.setController(this);
         profileFragment.setController(this);
+        Log.d(TAG, "in constructor: test " + homeFragment.getMainActivityController());
 
         categories = new ArrayList<Category>();
         subCategories = new ArrayList<SubCategory>();
@@ -148,10 +149,9 @@ public class MainActivityController extends BaseController implements
     @Override
     public void onInit() {
         fragmentManager = getActivity().getSupportFragmentManager();
-
         topBar = getActivity().findViewById(R.id.topBar);
         topBar.setMainPage("GoGoat");
-
+        Log.d(TAG, "in onInit: test");
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
