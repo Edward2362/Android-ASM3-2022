@@ -41,4 +41,8 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder implements View.O
     public MaterialCheckBox getSubCateCheckBox() {
         return subCateCheckBox;
     }
+
+    public interface OnSelectListener {
+        void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox);
+    }
 }

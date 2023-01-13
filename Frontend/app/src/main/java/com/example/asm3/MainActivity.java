@@ -2,6 +2,7 @@ package com.example.asm3;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import com.example.asm3.config.Constant;
 import com.example.asm3.controllers.MainActivityController;
+import com.example.asm3.fragments.mainActivity.MainViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,18 +29,24 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityController mainActivityController;
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "before onInit: mainActivity test");
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        Log.d(TAG, "before onInit: mainActivity test " + String.valueOf(savedInstanceState == null));
         setContentView(R.layout.activity_main);
         onInit();
+//        mainViewModel.selectController(mainActivityController);
+        if (savedInstanceState == null) {
+            mainActivityController.loadFragment(mainActivityController.getHomeFragment(), "home");
+        }
         Log.d(TAG, "after onInit: mainActivity test");
     }
 
     public void onInit() {
-        mainActivityController = new MainActivityController(MainActivity.this, this);
+        mainActivityController = new MainActivityController(getApplicationContext(), this);
         mainActivityController.onInit();
 //        mainActivityController.setSelectedItemId(R.id.profileNav);
 //        mainActivityController.loadMenu();

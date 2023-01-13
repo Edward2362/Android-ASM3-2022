@@ -21,7 +21,7 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     public void onInit() {
-        authenticationActivityController = new AuthenticationActivityController(AuthenticationActivity.this, this);
+        authenticationActivityController = new AuthenticationActivityController(getApplicationContext(), this);
         authenticationActivityController.onInit();
     }
 }

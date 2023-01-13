@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +41,7 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.HomeFragment;
+import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.fragments.mainActivity.NotificationFragment;
 import com.example.asm3.fragments.mainActivity.ProfileFragment;
 import com.example.asm3.config.Helper;
@@ -61,7 +66,6 @@ public class MainActivityController extends BaseController implements
         NavigationBarView.OnItemSelectedListener,
         NavigationBarView.OnItemReselectedListener,
         OnSelectListener,
-        MaterialButtonToggleGroup.OnButtonCheckedListener,
         SearchView.OnQueryTextListener {
 
     // API
@@ -71,7 +75,7 @@ public class MainActivityController extends BaseController implements
     // main activity view
     private TopBarView topBar;
     private NavigationBarView menu;
-    private int selectedItemId;
+    private LiveData<Integer> selectedItemId;
     private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
     private SearchFragment searchFragment;
@@ -79,12 +83,12 @@ public class MainActivityController extends BaseController implements
     private ProfileFragment profileFragment;
 
     // homepage fragment view
-    private MaterialButtonToggleGroup categoriesBtnGrp;
-    private TextView cateNotifyTxt, helloTxt;
-    private Button postBookBtn, findBookBtn;
-    private View subCateTopDivider, subCateBotDivider;
-    private GenericAdapter<SubCategory> subCateAdapter;
-    private RecyclerView subCateRecView;
+//    private MaterialButtonToggleGroup categoriesBtnGrp;
+//    private TextView cateNotifyTxt, helloTxt;
+//    private Button postBookBtn, findBookBtn;
+//    private View subCateTopDivider, subCateBotDivider;
+//    private GenericAdapter<SubCategory> subCateAdapter;
+//    private RecyclerView subCateRecView;
 
     // search fragment view
     private LinearProgressIndicator progressBar;
@@ -104,12 +108,12 @@ public class MainActivityController extends BaseController implements
     private ArrayList<Order> orders;
 
     // homepage fragment data
-    private ArrayList<Category> categories;
+//    private LiveData<ArrayList<Category>> categories;
     private ArrayList<SubCategory> subCategories;
-    private ArrayList<SubCategory> foreign = new ArrayList<>();
-    private ArrayList<SubCategory> domestic = new ArrayList<>();
-    private ArrayList<SubCategory> text = new ArrayList<>();
-    private ArrayList<SubCategory> displayList = new ArrayList<>();
+//    private ArrayList<SubCategory> foreign = new ArrayList<>();
+//    private ArrayList<SubCategory> domestic = new ArrayList<>();
+//    private ArrayList<SubCategory> text = new ArrayList<>();
+//    private ArrayList<SubCategory> displayList = new ArrayList<>();
 
     // search fragment data
     private long lastTextEdit = 0;
@@ -121,23 +125,26 @@ public class MainActivityController extends BaseController implements
 
     // profile fragment data
 
+    // test
+    private MainViewModel mainViewModel;
 
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
+        mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+        selectedItemId = mainViewModel.getSelectedItemId();
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationFragment();
         profileFragment = new ProfileFragment();
 
-        homeFragment.setController(this);
+//        homeFragment.setController(this);
         searchFragment.setController(this);
         notificationFragment.setController(this);
         profileFragment.setController(this);
-        Log.d(TAG, "in constructor: test " + homeFragment.getMainActivityController());
-
-        categories = new ArrayList<Category>();
-        subCategories = new ArrayList<SubCategory>();
+        Log.d(TAG, "MainActivityController constructor: test " + homeFragment);
+//        categories = mainViewModel.getCateArray();;
+//        subCategories = new ArrayList<SubCategory>();
         searchSuggestions = new ArrayList<>();
         notifications = new ArrayList<Notification>();
         orders = new ArrayList<Order>();
@@ -155,27 +162,27 @@ public class MainActivityController extends BaseController implements
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
-
         // For testing
 
-        foreign.add(new SubCategory("hello", "test"));
-        foreign.add(new SubCategory("hi", "test"));
-        foreign.add(new SubCategory("asd", "test"));
-        foreign.add(new SubCategory("test", "test"));
+//        foreign.add(new SubCategory("hello", "test"));
+//        foreign.add(new SubCategory("hi", "test"));
+//        foreign.add(new SubCategory("asd", "test"));
+//        foreign.add(new SubCategory("test", "test"));
+//
+//        domestic.add(new SubCategory("domestic", "test"));
+//        domestic.add(new SubCategory("domestic", "test"));
+//        domestic.add(new SubCategory("domestic", "test"));
+//        domestic.add(new SubCategory("domestic", "test"));
+//        domestic.add(new SubCategory("domestic", "test"));
+//        domestic.add(new SubCategory("domestic", "test"));
+//        domestic.add(new SubCategory("domestic", "test"));
+//
+//        text.add(new SubCategory("text hehe", "test"));
+//        text.add(new SubCategory("text hehe", "test"));
+//        text.add(new SubCategory("text hehe", "test"));
+//        text.add(new SubCategory("text hehe", "test"));
+//        text.add(new SubCategory("text hehe", "test"));
 
-        domestic.add(new SubCategory("domestic", "test"));
-        domestic.add(new SubCategory("domestic", "test"));
-        domestic.add(new SubCategory("domestic", "test"));
-        domestic.add(new SubCategory("domestic", "test"));
-        domestic.add(new SubCategory("domestic", "test"));
-        domestic.add(new SubCategory("domestic", "test"));
-        domestic.add(new SubCategory("domestic", "test"));
-
-        text.add(new SubCategory("text hehe", "test"));
-        text.add(new SubCategory("text hehe", "test"));
-        text.add(new SubCategory("text hehe", "test"));
-        text.add(new SubCategory("text hehe", "test"));
-        text.add(new SubCategory("text hehe", "test"));
         // End for testing
 
         if (!isAuth()) {
@@ -188,8 +195,10 @@ public class MainActivityController extends BaseController implements
             getAuthenticatedData.setTaskType(Constant.getCustomer);
             getAuthenticatedData.execute();
         }
-
+        Log.d(TAG, "onInit: test before get SUbcate");
         getAllCategories();
+//        loadFragment(homeFragment, "home");
+        Log.d(TAG, "onInit: test after get SUbcate");
     }
 
     public void setLoginLayout() {
@@ -213,23 +222,29 @@ public class MainActivityController extends BaseController implements
 
     // Render fragment functions
     public void onInitHomeFragment(View view) {
-        foreign = categories.get(0).getSubCategories();
-        domestic = categories.get(1).getSubCategories();
-        text = categories.get(2).getSubCategories();
-
-        helloTxt = view.findViewById(R.id.helloTxt);
-        postBookBtn = view.findViewById(R.id.postBookBtn);
-        findBookBtn = view.findViewById(R.id.findBookBtn);
-        categoriesBtnGrp = view.findViewById(R.id.categoriesBtnGrp);
-        subCateRecView = view.findViewById(R.id.subCateRecView);
-        cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
-        subCateTopDivider = view.findViewById(R.id.subCateTopDivider);
-        subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
-        subCateAdapter = generateSubCateAdapter();
-
-        categoriesBtnGrp.addOnButtonCheckedListener(this);
-        subCateRecView.setAdapter(subCateAdapter);
-        subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        categories.observe(getActivity(), new Observer<ArrayList<Category>>() {
+//            @Override
+//            public void onChanged(ArrayList<Category> categories) {
+//                Log.d(TAG, "onChanged controller: test " + categories);
+//                foreign = categories.get(0).getSubCategories();
+//                domestic = categories.get(1).getSubCategories();
+//                text = categories.get(2).getSubCategories();
+//            }
+//        });
+//
+//        helloTxt = view.findViewById(R.id.helloTxt);
+//        postBookBtn = view.findViewById(R.id.postBookBtn);
+//        findBookBtn = view.findViewById(R.id.findBookBtn);
+//        categoriesBtnGrp = view.findViewById(R.id.categoriesBtnGrp);
+//        subCateRecView = view.findViewById(R.id.subCateRecView);
+//        cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
+//        subCateTopDivider = view.findViewById(R.id.subCateTopDivider);
+//        subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
+//        subCateAdapter = generateSubCateAdapter();
+//
+//        categoriesBtnGrp.addOnButtonCheckedListener(this);
+//        subCateRecView.setAdapter(subCateAdapter);
+//        subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     public void onInitSearchFragment(View view) {
@@ -252,53 +267,53 @@ public class MainActivityController extends BaseController implements
         searchSuggestionRecView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    @Override
-    public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
-        subCateTopDivider.setVisibility(View.VISIBLE);
-        cateNotifyTxt.setVisibility(View.GONE);
-        subCateRecView.setVisibility(View.VISIBLE);
-        findBookBtn.setVisibility(View.VISIBLE);
-        subCateBotDivider.setVisibility(View.VISIBLE);
-        switch (group.getCheckedButtonId()) {
-            case R.id.foreignCateBtn:
-                displayList.clear();
-                displayList.addAll(foreign);
-                subCateAdapter.notifyDataSetChanged();
-                break;
-            case R.id.domesticCateBtn:
-                displayList.clear();
-                displayList.addAll(domestic);
-                subCateAdapter.notifyDataSetChanged();
-                break;
-            case R.id.textCateBtn:
-                displayList.clear();
-                displayList.addAll(text);
-                subCateAdapter.notifyDataSetChanged();
-                break;
-        }
-        if (group.getCheckedButtonId() == -1) {
-            subCateTopDivider.setVisibility(View.GONE);
-            cateNotifyTxt.setVisibility(View.VISIBLE);
-            subCateRecView.setVisibility(View.GONE);
-            findBookBtn.setVisibility(View.GONE);
-            subCateBotDivider.setVisibility(View.GONE);
-        }
-    }
+//    @Override
+//    public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+//        subCateTopDivider.setVisibility(View.VISIBLE);
+//        cateNotifyTxt.setVisibility(View.GONE);
+//        subCateRecView.setVisibility(View.VISIBLE);
+//        findBookBtn.setVisibility(View.VISIBLE);
+//        subCateBotDivider.setVisibility(View.VISIBLE);
+//        switch (group.getCheckedButtonId()) {
+//            case R.id.foreignCateBtn:
+//                displayList.clear();
+//                displayList.addAll(foreign);
+//                subCateAdapter.notifyDataSetChanged();
+//                break;
+//            case R.id.domesticCateBtn:
+//                displayList.clear();
+//                displayList.addAll(domestic);
+//                subCateAdapter.notifyDataSetChanged();
+//                break;
+//            case R.id.textCateBtn:
+//                displayList.clear();
+//                displayList.addAll(text);
+//                subCateAdapter.notifyDataSetChanged();
+//                break;
+//        }
+//        if (group.getCheckedButtonId() == -1) {
+//            subCateTopDivider.setVisibility(View.GONE);
+//            cateNotifyTxt.setVisibility(View.VISIBLE);
+//            subCateRecView.setVisibility(View.GONE);
+//            findBookBtn.setVisibility(View.GONE);
+//            subCateBotDivider.setVisibility(View.GONE);
+//        }
+//    }
 
-    @Override
-    public void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox) {
-        boolean newStatus = false;
-        switch (view.getId()) {
-            case R.id.subCateBody:
-                newStatus = !subCateCheckBox.isChecked();
-                subCateCheckBox.setChecked(newStatus);
-                break;
-            case R.id.subCateCheckBox:
-                newStatus = subCateCheckBox.isChecked();
-                break;
-        }
-        displayList.get(position).setChosen(newStatus);
-    }
+//    @Override
+//    public void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox) {
+//        boolean newStatus = false;
+//        switch (view.getId()) {
+//            case R.id.subCateBody:
+//                newStatus = !subCateCheckBox.isChecked();
+//                subCateCheckBox.setChecked(newStatus);
+//                break;
+//            case R.id.subCateCheckBox:
+//                newStatus = subCateCheckBox.isChecked();
+//                break;
+//        }
+//        displayList.get(position).setChosen(newStatus);
+//    }
 
     @Override
     public void onSearchSuggestionClick(int position, View view, String suggestionText) {
@@ -341,22 +356,22 @@ public class MainActivityController extends BaseController implements
     }
 
     // Helpers
-    private GenericAdapter<SubCategory> generateSubCateAdapter() {
-        return new GenericAdapter<SubCategory>(displayList) {
-            @Override
-            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
-                final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_category_item, parent, false);
-                return new SubCategoryHolder(view, MainActivityController.this);
-            }
-
-            @Override
-            public void onBindData(RecyclerView.ViewHolder holder, SubCategory item) {
-                SubCategoryHolder subCategoryHolder = (SubCategoryHolder) holder;
-                subCategoryHolder.getSubCateTxt().setText(item.getName());
-                subCategoryHolder.getSubCateCheckBox().setChecked(item.isChosen());
-            }
-        };
-    }
+//    private GenericAdapter<SubCategory> generateSubCateAdapter() {
+//        return new GenericAdapter<SubCategory>(displayList) {
+//            @Override
+//            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+//                final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_category_item, parent, false);
+//                return new SubCategoryHolder(view, MainActivityController.this);
+//            }
+//
+//            @Override
+//            public void onBindData(RecyclerView.ViewHolder holder, SubCategory item) {
+//                SubCategoryHolder subCategoryHolder = (SubCategoryHolder) holder;
+//                subCategoryHolder.getSubCateTxt().setText(item.getName());
+//                subCategoryHolder.getSubCateCheckBox().setChecked(item.isChosen());
+//            }
+//        };
+//    }
 
     private GenericAdapter<String> generateSearchAdapter() {
         return new GenericAdapter<String>(searchSuggestions) {
@@ -376,9 +391,12 @@ public class MainActivityController extends BaseController implements
 
     // Request functions
     public void getAllCategories() {
+        Log.d(TAG, "getAllCategories: test " + homeFragment);
         getData.setEndPoint(Constant.getAllCategories);
         getData.setTaskType(Constant.getAllCategoriesTaskType);
         getData.execute();
+//        Log.d(TAG, "getAllCategories: test " + getData.getStatus().name());
+        Log.d(TAG, "getAllCategories: test " + getData.getEndPoint() + " " + getData.getTaskType());
     }
 
     public void getSubCategories(String categoryName) {
@@ -400,6 +418,7 @@ public class MainActivityController extends BaseController implements
         switch (item.getItemId()) {
             case R.id.homeNav:
                 loadFragment(homeFragment, "home");
+                Log.d(TAG, "onNavigationItemSelected: test ");
                 return true;
             case R.id.searchNav:
                 loadFragment(searchFragment, "search");
@@ -457,14 +476,16 @@ public class MainActivityController extends BaseController implements
 
     @Override
     public void onFinished(String message, String taskType) {
+        Log.d(TAG, "onFinished: test " + homeFragment);
         if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
-            categories = apiList.getList();
-            Toast.makeText(getContext(), categories.get(0).getName(), Toast.LENGTH_SHORT).show();
-            loadFragment(homeFragment, "home");
+//            categories = apiList.getList();
+            mainViewModel.setCateArray(apiList.getList());
+//            Toast.makeText(getContext(), categories.getValue().get(0).getName(), Toast.LENGTH_SHORT).show();
+//            Log.d(TAG, "onFinished: test " + homeFragment);
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();
@@ -481,7 +502,7 @@ public class MainActivityController extends BaseController implements
     }
 
     public int getSelectedItemId() {
-        return selectedItemId;
+        return mainViewModel.getSelectedItemId().getValue();
     }
 
     public TopBarView getTopBar() {

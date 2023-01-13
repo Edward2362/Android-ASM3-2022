@@ -1,7 +1,10 @@
 package com.example.asm3.base.networking.services;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.asm3.base.networking.api.ApiService;
 import com.example.asm3.config.Constant;
@@ -32,14 +35,25 @@ public class GetData extends AsyncTask<JSONObject, String, String> {
         this.taskType = taskType;
     }
 
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
     @Override
     protected String doInBackground(JSONObject... data) {
+        Log.d(TAG, "doInBackground: test " + data);
         String message = apiService.getJSON(endPoint);
+        Log.d(TAG, "doInBackground: test " + message);
         return message;
     }
 
     @Override
     protected void onPostExecute(String message) {
+        Log.d(TAG, "onPostExecute: test " + message);
         AsyncTaskCallBack.verifyMessage(context, message, taskType, callBack);
     }
 }
