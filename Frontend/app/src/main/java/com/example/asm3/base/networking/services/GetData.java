@@ -45,15 +45,12 @@ public class GetData extends AsyncTask<JSONObject, String, String> {
 
     @Override
     protected String doInBackground(JSONObject... data) {
-        Log.d(TAG, "doInBackground: test " + data);
         String message = apiService.getJSON(endPoint);
-        Log.d(TAG, "doInBackground: test " + message);
         return message;
     }
 
     @Override
     protected void onPostExecute(String message) {
-        Log.d(TAG, "onPostExecute: test " + message);
         AsyncTaskCallBack.verifyMessage(context, message, taskType, callBack);
     }
 }

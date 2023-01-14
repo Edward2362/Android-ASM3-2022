@@ -36,10 +36,11 @@ public class HomeFragmentController extends BaseController implements
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TextView cateNotifyTxt, helloTxt;
     private Button postBookBtn, findBookBtn;
-    private View subCateTopDivider, subCateBotDivider;
+    private View view, subCateTopDivider, subCateBotDivider;
     private GenericAdapter<SubCategory> subCateAdapter;
     private RecyclerView subCateRecView;
 
+    private MainViewModel mainViewModel;
     private LiveData<ArrayList<Category>> categories;
     private ArrayList<SubCategory> subCategories;
     private ArrayList<SubCategory> foreign = new ArrayList<>();
@@ -47,16 +48,16 @@ public class HomeFragmentController extends BaseController implements
     private ArrayList<SubCategory> text = new ArrayList<>();
     private ArrayList<SubCategory> displayList = new ArrayList<>();
 
-    private MainViewModel mainViewModel;
-    private View view;
-
     public HomeFragmentController(Context context, FragmentActivity activity, View view) {
         super(context, activity);
+        this.view = view;
         mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
         categories = mainViewModel.getCateArray();
+        Log.d(TAG, "HomeFragmentController: test " + categories.getValue());
         subCategories = new ArrayList<SubCategory>();
     }
 
+    // Render functions
     @Override
     public void onInit() {
         categories.observe(getActivity(), new Observer<ArrayList<Category>>() {
@@ -132,6 +133,7 @@ public class HomeFragmentController extends BaseController implements
         displayList.get(position).setChosen(newStatus);
     }
 
+    // Helpers
     private GenericAdapter<SubCategory> generateSubCateAdapter() {
         return new GenericAdapter<SubCategory>(displayList) {
             @Override
@@ -148,4 +150,15 @@ public class HomeFragmentController extends BaseController implements
             }
         };
     }
+
+    // Request functions
+
+
+    // Navigation functions
+
+
+    // Callback functions
+
+
+    // Getter and Setter
 }

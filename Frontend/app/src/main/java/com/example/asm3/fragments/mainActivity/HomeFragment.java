@@ -47,38 +47,18 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View home = inflater.inflate(R.layout.activity_main_fragment_home, container, false);
         menuItemId = R.id.homeNav;
-
-
-
-//        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
-//        mainActivityController = mainViewModel.getSelectedController().getValue();
-
-        Log.d(TAG, "onCreateView home this: test " + this);
-        Log.d(TAG, "onCreateView home: test " + mainActivityController);
         mainViewModel.setSelectedItemId(menuItemId);
-        mainActivityController.loadMenu();
-        Log.d(TAG, "onCreateView: test ");
+        onInit(home);
         return home;
     }
 
     public void onInit(View view) {
         homeFragmentController = new HomeFragmentController(requireContext(), requireActivity(), view);
         homeFragmentController.onInit();
-//        mainActivityController.setSelectedItemId(R.id.profileNav);
-//        mainActivityController.loadMenu();
-    }
-
-    public void setController(MainActivityController mainActivityController) {
-        this.mainActivityController = mainActivityController;
     }
 }

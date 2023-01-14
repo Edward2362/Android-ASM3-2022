@@ -3,6 +3,7 @@ package com.example.asm3.fragments.mainActivity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.example.asm3.controllers.MainActivityController;
 
 public class NotificationFragment extends Fragment {
     private MainActivityController mainActivityController;
+    private MainViewModel mainViewModel;
     private int menuItemId;
 
     public NotificationFragment() {
@@ -31,8 +33,7 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        menuItemId = R.id.notiNav;
-
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         if (getArguments() != null) {
 
         }
@@ -42,7 +43,8 @@ public class NotificationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mainActivityController.setSelectedItemId(menuItemId);
+        menuItemId = R.id.notiNav;
+        mainViewModel.setSelectedItemId(menuItemId);
 
         return inflater.inflate(R.layout.activity_main_fragment_notification, container, false);
     }

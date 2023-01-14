@@ -3,6 +3,7 @@ package com.example.asm3.fragments.mainActivity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.example.asm3.controllers.MainActivityController;
 
 public class SearchFragment extends Fragment {
     private MainActivityController mainActivityController;
+    private MainViewModel mainViewModel;
     private int menuItemId;
 
     public SearchFragment() {
@@ -31,8 +33,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        menuItemId = R.id.searchNav;
-
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         if (getArguments() != null) {
 
         }
@@ -42,8 +43,9 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View search = inflater.inflate(R.layout.activity_main_fragment_search, container, false);
+        menuItemId = R.id.searchNav;
         // Inflate the layout for this fragment
-        mainActivityController.setSelectedItemId(menuItemId);
+        mainViewModel.setSelectedItemId(menuItemId);
         mainActivityController.onInitSearchFragment(search);
         return search;
     }

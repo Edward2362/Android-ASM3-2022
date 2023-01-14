@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     public void onInit() {
         mainActivityController = new MainActivityController(getApplicationContext(), this);
         mainActivityController.onInit();
-//        mainActivityController.setSelectedItemId(R.id.profileNav);
-//        mainActivityController.loadMenu();
     }
 
     @Override
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         if (mainActivityController.getSelectedItemId() != R.id.homeNav) {
             Fragment homeFragment = mainActivityController.getHomeFragment();
             mainActivityController.loadFragment(homeFragment, "home");
+            mainActivityController.loadMenu();
         } else {
             super.onBackPressed();
         }

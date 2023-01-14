@@ -1,7 +1,7 @@
 package com.example.asm3.config;
 
 public class Constant {
-    public static String baseDomain = "http://192.168.1.3:9000"; //
+    public static String baseDomain = "http://10.247.220.156:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -45,9 +45,6 @@ public class Constant {
     public static String setCustomerDataTaskType = "setCustomerData";
     public static String changePasswordTaskType = "changePassword";
     public static String getNotificationsTaskType = "getNotifications";
-
-
-
 
 
     public static final int cameraPermissionCode = 105;
