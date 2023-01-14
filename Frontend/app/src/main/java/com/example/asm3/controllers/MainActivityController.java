@@ -80,7 +80,9 @@ public class MainActivityController extends BaseController implements
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+        mainViewModel.setTopBarView(getActivity().findViewById(R.id.topBar));
         selectedItemId = mainViewModel.getSelectedItemId();
+        topBar = mainViewModel.getTopBarView().getValue();
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
@@ -97,8 +99,6 @@ public class MainActivityController extends BaseController implements
     @Override
     public void onInit() {
         fragmentManager = getActivity().getSupportFragmentManager();
-        mainViewModel.setTopBarView(getActivity().findViewById(R.id.topBar));
-        topBar = mainViewModel.getTopBarView().getValue();
         topBar.setMainPage("GoGoat");
         menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
