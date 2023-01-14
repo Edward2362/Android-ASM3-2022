@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment homeFragment = mainActivityController.getHomeFragment();
             mainActivityController.loadFragment(homeFragment, "home");
             mainActivityController.loadMenu();
+            mainActivityController.getTopBar().setMainPage("GoGoat");
         } else {
             super.onBackPressed();
         }

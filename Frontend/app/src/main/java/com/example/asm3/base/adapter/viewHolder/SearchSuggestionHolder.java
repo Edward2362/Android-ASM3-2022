@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.R;
-import com.example.asm3.base.adapter.OnSelectListener;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 public class SearchSuggestionHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private LinearLayout searchSuggestionBody;
@@ -31,5 +31,9 @@ public class SearchSuggestionHolder extends RecyclerView.ViewHolder implements V
 
     public TextView getSuggestionText() {
         return suggestionText;
+    }
+
+    public interface OnSelectListener {
+        void onSearchSuggestionClick(int position, View view, String suggestionText);
     }
 }

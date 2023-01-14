@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.R;
-import com.example.asm3.base.adapter.OnSelectListener;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 public class SubCategoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

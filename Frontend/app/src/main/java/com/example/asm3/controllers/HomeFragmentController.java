@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,10 +49,11 @@ public class HomeFragmentController extends BaseController implements
     private ArrayList<SubCategory> text = new ArrayList<>();
     private ArrayList<SubCategory> displayList = new ArrayList<>();
 
-    public HomeFragmentController(Context context, FragmentActivity activity, View view) {
+    public HomeFragmentController(Context context, FragmentActivity activity, View view, ViewModel viewModel) {
         super(context, activity);
         this.view = view;
-        mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+        this.mainViewModel = (MainViewModel) viewModel;
+
         categories = mainViewModel.getCateArray();
         Log.d(TAG, "HomeFragmentController: test " + categories.getValue());
         subCategories = new ArrayList<SubCategory>();
