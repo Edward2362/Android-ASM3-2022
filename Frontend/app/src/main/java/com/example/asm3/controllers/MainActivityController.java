@@ -175,7 +175,7 @@ public class MainActivityController extends BaseController implements
                 Helper.loadFragment(fragmentManager, notificationFragment, "notification", mainLayoutId);
                 return true;
             case R.id.profileNav:
-                if (!isAuth) {
+                if (!isAuth()) {
                     Timer timer = new Timer();
                     timer.schedule(new TimerTask() {
                         @Override
