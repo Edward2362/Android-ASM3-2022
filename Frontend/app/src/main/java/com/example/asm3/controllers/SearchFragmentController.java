@@ -19,6 +19,7 @@ import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SearchSuggestionHolder;
 import com.example.asm3.base.controller.BaseController;
+import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -26,7 +27,9 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import java.util.ArrayList;
 
 public class SearchFragmentController extends BaseController implements
-        SearchView.OnQueryTextListener, SearchSuggestionHolder.OnSelectListener {
+        SearchView.OnQueryTextListener,
+        SearchSuggestionHolder.OnSelectListener,
+        AsyncTaskCallBack {
 
     private LinearProgressIndicator progressBar;
     private GenericAdapter<String> searchAdapter;
@@ -131,7 +134,10 @@ public class SearchFragmentController extends BaseController implements
 
 
     // Callback functions
+    @Override
+    public void onFinished(String message, String taskType) {
 
+    }
 
     // Getter and Setter
 }
