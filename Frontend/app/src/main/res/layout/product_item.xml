@@ -5,6 +5,8 @@
     style="?attr/materialCardViewFilledStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_rowWeight="1"
+    android:layout_columnWeight="1"
     android:layout_marginHorizontal="2dp">
 
     <LinearLayout
@@ -27,26 +29,28 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/bookNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Book name"
-                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
+                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline4" />
 
             <TextView
+                android:id="@+id/bookConditionTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="test"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:text="Condition: "
+                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2" />
 
             <TextView
+                android:id="@+id/bookPriceTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="test"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textSize="20sp"
+                android:text="100.000 đ"
+                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2" />
 
         </LinearLayout>
 
