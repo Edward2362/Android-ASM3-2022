@@ -3,7 +3,7 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-    public static String baseDomain = "http://10.247.195.144:9000"; //
+    public static String baseDomain = "http://10.0.2.2:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -16,6 +16,8 @@ public class Constant {
     public static String deleteBook = "/api/book/deleteBook";
     public static String getProduct = "/api/book/getProduct";
     public static String getNotifications = "/api/notification/getNotifications";
+    public static String suggestProduct = "/api/book/suggestProduct";
+    public static String searchProduct = "/api/book/searchProduct";
     public static String tokenFile = "token.txt";
 
     public static final Pattern emailPattern =
@@ -59,6 +61,8 @@ public class Constant {
     public static String setCustomerDataTaskType = "setCustomerData";
     public static String changePasswordTaskType = "changePassword";
     public static String getNotificationsTaskType = "getNotifications";
+    public static String suggestProductTaskType = "suggestProduct";
+    public static String searchProductTaskType = "searchProduct";
 
 
     public static final int cameraPermissionCode = 105;

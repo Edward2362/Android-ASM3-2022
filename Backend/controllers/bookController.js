@@ -2,6 +2,7 @@ const Book = require("../models/Book");
 
 const Customer = require("../models/Customer");
 const Constants = require("../constants/Constants");
+const { response } = require("express");
 
 const uploadBook = async (req, response) => {
     const bookInput = {
@@ -206,6 +207,60 @@ const saveProduct = async (req, response) => {
   }
 };
 
+const suggestProduct = async (req, response) => {
+  try {
+    const input = req.query;
+    if (input.queryInput === undefined || input.queryInput === ""){
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+    let products = await Book.find({name: {$regex: input.queryInput}});
+    products = removeDuplicate(products);
+    return response.json({
+      message: "",
+      error: false,
+      data: products
+    });
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+const searchProduct = async (req, response) => {
+  try {
+    const input = req.query;
+    if (input.queryInput === undefined || input.queryInput === ""){
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+    let products = await Book.find({name: {$regex: input.queryInput}});
+    return response.json({
+      message: "",
+      error: false,
+      data: products
+    });
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+const removeDuplicate = (array) => {
+  let products = [];
+  for (let i=0;i<array.length;i++){
+    if (products.findIndex((element) => {
+      return element.name === array[i].name; } ) === -1 ) {
+        products.push(array[i]);
+      }
+  }
+  return products;
+}
 
 
 module.exports = {
@@ -215,5 +270,7 @@ module.exports = {
   getProducts,
   getProduct,
   getUploadedProducts,
-  saveProduct
+  saveProduct,
+  suggestProduct,
+  searchProduct
 };
