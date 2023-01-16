@@ -101,7 +101,7 @@ public class RegisterFragmentController extends BaseController implements
         float rating = 0F;
 
         if (validated()) {
-            Customer newCustomer = new Customer(email, inputUsername, password, address, role, rating);
+            Customer newCustomer = new Customer(email, password, inputUsername, address, role, rating);
             registerCustomer(newCustomer);
         }
     }

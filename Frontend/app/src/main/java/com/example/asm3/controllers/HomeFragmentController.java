@@ -78,6 +78,17 @@ public class HomeFragmentController extends BaseController implements
             }
         });
 
+        helloTxt = view.findViewById(R.id.helloTxt);
+        postBookBtn = view.findViewById(R.id.postBookBtn);
+        findBookBtn = view.findViewById(R.id.findBookBtn);
+        loginNavBtn = view.findViewById(R.id.loginNavBtn);
+        categoriesBtnGrp = view.findViewById(R.id.categoriesBtnGrp);
+        subCateRecView = view.findViewById(R.id.subCateRecView);
+        cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
+        subCateTopDivider = view.findViewById(R.id.subCateTopDivider);
+        subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
+        subCateAdapter = generateSubCateAdapter();
+
         authCustomer.observe(getActivity(), new Observer<Customer>() {
             @Override
             public void onChanged(Customer customer) {
@@ -92,17 +103,6 @@ public class HomeFragmentController extends BaseController implements
                 }
             }
         });
-
-        helloTxt = view.findViewById(R.id.helloTxt);
-        postBookBtn = view.findViewById(R.id.postBookBtn);
-        findBookBtn = view.findViewById(R.id.findBookBtn);
-        loginNavBtn = view.findViewById(R.id.loginNavBtn);
-        categoriesBtnGrp = view.findViewById(R.id.categoriesBtnGrp);
-        subCateRecView = view.findViewById(R.id.subCateRecView);
-        cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
-        subCateTopDivider = view.findViewById(R.id.subCateTopDivider);
-        subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
-        subCateAdapter = generateSubCateAdapter();
 
         categoriesBtnGrp.addOnButtonCheckedListener(this);
         subCateRecView.setAdapter(subCateAdapter);

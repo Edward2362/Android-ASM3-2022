@@ -26,9 +26,9 @@ public class ProfileFragmentController extends BaseController {
     // Render functions
     @Override
     public void onInit() {
-        if (!isAuth()) {
-            goToLogin();
-        }
+//        if (!isAuth()) {
+//            goToLogin();
+//        }
     }
 
     // Helpers
