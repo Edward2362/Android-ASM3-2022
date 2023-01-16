@@ -26,6 +26,7 @@ import com.example.asm3.fragments.authenticationActivity.AuthViewModel;
 import com.example.asm3.fragments.authenticationActivity.LoginFragment;
 import com.example.asm3.models.Customer;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class RegisterFragmentController extends BaseController implements
         AsyncTaskCallBack,
@@ -36,6 +37,7 @@ public class RegisterFragmentController extends BaseController implements
     private View view;
     private FragmentManager fragmentManager;
     private LoginFragment loginFragment;
+    private TextInputLayout emailRegisLayout, usernameRegisLayout, pwRegisLayout;
     private TextInputEditText emailRegisEt, usernameRegisEt, pwRegisEt;
     private TextView loginNavTxt;
     private Button registerBtn;
@@ -58,6 +60,9 @@ public class RegisterFragmentController extends BaseController implements
     // Render functions
     @Override
     public void onInit() {
+        emailRegisLayout = view.findViewById(R.id.emailRegisLayout);
+        usernameRegisLayout = view.findViewById(R.id.usernameRegisLayout);
+        pwRegisLayout = view.findViewById(R.id.pwRegisLayout);
         emailRegisEt = view.findViewById(R.id.emailRegisEt);
         usernameRegisEt = view.findViewById(R.id.usernameRegisEt);
         pwRegisEt = view.findViewById(R.id.pwRegisEt);
@@ -95,9 +100,17 @@ public class RegisterFragmentController extends BaseController implements
         String role = "";
         float rating = 0F;
 
-        Customer newCustomer = new Customer(email, inputUsername, password, address, role, rating);
+        if (validated()) {
+            Customer newCustomer = new Customer(email, inputUsername, password, address, role, rating);
+            registerCustomer(newCustomer);
+        }
+    }
 
-        registerCustomer(newCustomer);
+    private boolean validated() {
+        return Helper.inputChecked(emailRegisEt, emailRegisLayout, Constant.emailPattern, Constant.emailError) +
+                Helper.inputChecked(usernameRegisEt, usernameRegisLayout, null, null) +
+                Helper.inputChecked(pwRegisEt, pwRegisLayout, Constant.pwPattern, Constant.pwError)
+                == 3;
     }
 
     // Request functions

@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
@@ -23,6 +25,7 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
+import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
 import com.example.asm3.fragments.mainActivity.HomeFragment;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.fragments.mainActivity.NotificationFragment;
@@ -38,6 +41,8 @@ import com.example.asm3.models.SubCategory;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivityController extends BaseController implements
@@ -115,6 +120,12 @@ public class MainActivityController extends BaseController implements
         getAllCategories();
     }
 
+    public void onResume() {
+        if (getFragmentManager().findFragmentByTag("home") instanceof HomeFragment) {
+            loadMenu();
+        }
+    }
+
     public void loadMenu() {
         menu.getMenu().getItem(0).setChecked(true);
     }
@@ -143,6 +154,11 @@ public class MainActivityController extends BaseController implements
     }
 
     // Navigation functions
+    public void goToLogin() {
+        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
+        getActivity().startActivityForResult(intent, Constant.authActivityCode);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -159,8 +175,18 @@ public class MainActivityController extends BaseController implements
                 Helper.loadFragment(fragmentManager, notificationFragment, "notification", mainLayoutId);
                 return true;
             case R.id.profileNav:
-                topBar.setMainPage("Profile");
-                Helper.loadFragment(fragmentManager, profileFragment, "profile", mainLayoutId);
+                if (!isAuth) {
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            goToLogin();
+                        }
+                    }, 250);
+                } else {
+                    topBar.setMainPage("Profile");
+                    Helper.loadFragment(fragmentManager, profileFragment, "profile", mainLayoutId);
+                }
                 return true;
         }
         return false;

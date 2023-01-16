@@ -1,32 +1,15 @@
 package com.example.asm3;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.controllers.MainActivityController;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityController mainActivityController;
@@ -41,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             Helper.loadFragment(mainActivityController.getFragmentManager(), mainActivityController.getHomeFragment(), "home", mainActivityController.getMainLayoutId());
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mainActivityController.onResume();
     }
 
     public void onInit() {

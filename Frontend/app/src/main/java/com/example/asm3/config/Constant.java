@@ -1,5 +1,7 @@
 package com.example.asm3.config;
 
+import java.util.regex.Pattern;
+
 public class Constant {
     public static String baseDomain = "http://10.247.195.144:9000"; //
     public static String loginCustomer = "/api/auth/login";
@@ -16,6 +18,12 @@ public class Constant {
     public static String getNotifications = "/api/notification/getNotifications";
     public static String tokenFile = "token.txt";
 
+    public static final Pattern emailPattern =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+    public static final Pattern pwPattern =
+            Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&_])[A-Za-z\\d@$!%*?&_]{8,}$", Pattern.CASE_INSENSITIVE);
+    public static String emailError = "Invalid email!";
+    public static String pwError = "Require at least 8 characters with uppercase, lowercase, number and symbol";
 
     public static String tokenHeader = "x-access-token";
     public static String contentType = "Content-type";
