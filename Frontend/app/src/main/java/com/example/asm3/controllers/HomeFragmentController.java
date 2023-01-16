@@ -78,6 +78,7 @@ public class HomeFragmentController extends BaseController implements
             }
         });
 
+        // put this observe after find view by id
         authCustomer.observe(getActivity(), new Observer<Customer>() {
             @Override
             public void onChanged(Customer customer) {

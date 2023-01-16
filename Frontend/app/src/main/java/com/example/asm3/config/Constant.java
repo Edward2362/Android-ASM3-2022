@@ -1,7 +1,7 @@
 package com.example.asm3.config;
 
 public class Constant {
-    public static String baseDomain = "http://10.247.195.144:9000"; //
+    public static String baseDomain = "http://10.247.195.171:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
