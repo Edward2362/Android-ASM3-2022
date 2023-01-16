@@ -1,76 +1,69 @@
 package com.example.asm3.controllers;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.asm3.MainActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
-import com.example.asm3.base.localStorage.LocalFileController;
-import com.example.asm3.base.networking.api.ApiService;
-import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.PostData;
-import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
+import com.example.asm3.custom.components.TopBarView;
+import com.example.asm3.fragments.authenticationActivity.AuthViewModel;
 import com.example.asm3.fragments.authenticationActivity.LoginFragment;
 import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
-import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Customer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+public class AuthenticationActivityController extends BaseController implements
+        View.OnClickListener {
 
-public class AuthenticationActivityController extends BaseController implements AsyncTaskCallBack {
+    // auth activity view
+    private TopBarView topBar;
+    private FragmentManager fragmentManager;
     private LoginFragment loginFragment;
     private RegisterFragment registerFragment;
-    private PostData postData;
+    private Button backBtn;
+    private int authLayoutId = R.id.authenticationActivity_fragmentContainerView;
 
+    private AuthViewModel authViewModel;
 
     public AuthenticationActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
+        authViewModel = new ViewModelProvider(getActivity()).get(AuthViewModel.class);
 
         loginFragment = new LoginFragment();
         registerFragment = new RegisterFragment();
-        loginFragment.setController(this);
-        registerFragment.setController(this);
-
-        postData = new PostData(getContext(), this);
     }
 
-    // Render activity functions
+    // Render functions
     @Override
     public void onInit() {
-        Intent intent = getActivity().getIntent();
-        String mainFragment = "";
-        if (intent.getExtras().get(Constant.mainFragment) != null) {
-            mainFragment = (String) intent.getExtras().get(Constant.mainFragment);
-        }
-
-        if (mainFragment.equals(Constant.register)) {
-            loadFragment(registerFragment);
-        } else if (mainFragment.equals(Constant.login)) {
-            loadFragment(loginFragment);
-        }
+        topBar = getActivity().findViewById(R.id.authTopBar);
+        fragmentManager = getActivity().getSupportFragmentManager();
+        authViewModel.setFragmentManager(fragmentManager);
+        authViewModel.setLoginFragment(loginFragment);
+        authViewModel.setRegisterFragment(registerFragment);
+        topBar.setAuthPage();
+        backBtn = topBar.getBackButton();
+        backBtn.setOnClickListener(this);
+        Helper.loadFragment(fragmentManager, loginFragment, "login", authLayoutId);
     }
 
-    public void loadFragment(Fragment fragment) {
-        FragmentManager fm = getActivity().getFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.authenticationActivity_frameLayout, fragment);
-
-        fragmentTransaction.commit();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.backButton:
+                getActivity().finish();
+                break;
+        }
     }
-
-    // Render fragment functions
 
     // Helpers
     private String getTokenFromMessage(JSONObject jsonObject) {
@@ -84,54 +77,24 @@ public class AuthenticationActivityController extends BaseController implements 
     }
 
     // Request functions
-    public void registerCustomer(Customer customer) {
-        postData.setEndPoint(Constant.registerCustomer);
-        postData.setTaskType(Constant.register);
-        postData.execute(Customer.toJSON(customer));
-    }
 
-    public void loginCustomer(String email, String password) {
-        try {
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Constant.email, email);
-            jsonObject.put(Constant.password, password);
-
-            postData.setEndPoint(Constant.loginCustomer);
-            postData.setTaskType(Constant.login);
-            postData.execute(jsonObject);
-        } catch (JSONException jsonException) {
-            jsonException.printStackTrace();
-        }
-    }
 
     // Navigation functions
 
 
     // Callback functions
-    public void onRegisterFinished() {
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+
+
+    // Getter and Setter
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
     }
 
-    public void onLoginFinished(String message) {
-        ArrayList<String> arrayList = new ArrayList<String>();
-        arrayList.add(getTokenFromMessage(ApiData.getData(message)));
-        getLocalFileController().writeFile(arrayList);
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        ApiData<Customer> customerData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
-        intent.putExtra(Constant.customerKey, customerData.getData());
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+    public LoginFragment getLoginFragment() {
+        return loginFragment;
     }
 
-    @Override
-    public void onFinished(String message, String taskType) {
-        if (taskType.equals(Constant.register)) {
-            onRegisterFinished();
-        } else if (taskType.equals(Constant.login)) {
-            onLoginFinished(message);
-        }
+    public int getAuthLayoutId() {
+        return authLayoutId;
     }
 }

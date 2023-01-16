@@ -14,6 +14,7 @@ import android.widget.Toast;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.controllers.MainActivityController;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 
@@ -35,14 +36,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        Log.d(TAG, "before onInit: mainActivity test " + String.valueOf(savedInstanceState == null));
         setContentView(R.layout.activity_main);
         onInit();
-//        mainViewModel.selectController(mainActivityController);
         if (savedInstanceState == null) {
-            mainActivityController.loadFragment(mainActivityController.getHomeFragment(), "home");
+            Helper.loadFragment(mainActivityController.getFragmentManager(), mainActivityController.getHomeFragment(), "home", mainActivityController.getMainLayoutId());
         }
-        Log.d(TAG, "after onInit: mainActivity test");
     }
 
     public void onInit() {
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         mainActivityController.onActivityFinished(requestCode, resultCode, data);
     }
 
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (mainActivityController.getSelectedItemId() != R.id.homeNav) {
             Fragment homeFragment = mainActivityController.getHomeFragment();
-            mainActivityController.loadFragment(homeFragment, "home");
+            Helper.loadFragment(mainActivityController.getFragmentManager(), homeFragment, "home", mainActivityController.getMainLayoutId());
             mainActivityController.loadMenu();
             mainActivityController.getTopBar().setMainPage("GoGoat");
         } else {

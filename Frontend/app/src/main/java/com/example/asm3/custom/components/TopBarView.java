@@ -26,7 +26,7 @@ import com.example.asm3.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
-public class TopBarView extends LinearLayout implements View.OnClickListener {
+public class TopBarView extends LinearLayout {
     private MaterialButton cartButton, backButton;
     private TextView titleText;
     private SearchView searchView;
@@ -56,33 +56,29 @@ public class TopBarView extends LinearLayout implements View.OnClickListener {
         titleText = (MaterialTextView) getChildAt(2);
         cartButton = (MaterialButton) getChildAt(3);
 
-        // set onClickListener
-        backButton.setOnClickListener(this);
-        cartButton.setOnClickListener(this);
-
         // change color of search view
         setSearchViewColor();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.backButton:       // BACK BUTTON
-                Log.d(TAG, "onClick: Back button was clicked!");
-                break;
-            case R.id.searchView:       // SEARCH VIEW
-                if (searchView.isIconified()) {
-                    // go back to search fragment
-                } else {
-
-                }
-                break;
-            case R.id.cartButton:       // CART BUTTON
-                Log.d(TAG, "onClick: Cart button was clicked!");
-                break;
-        }
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    @Override
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.backButton:       // BACK BUTTON
+//                Log.d(TAG, "onClick: test Back button was clicked!");
+//                break;
+//            case R.id.searchView:       // SEARCH VIEW
+//                if (searchView.isIconified()) {
+//                    // go back to search fragment
+//                } else {
+//
+//                }
+//                break;
+//            case R.id.cartButton:       // CART BUTTON
+//                Log.d(TAG, "onClick: Cart button was clicked!");
+//                break;
+//        }
+//    }
 
     /**
      * Set color for search view's icon
@@ -179,6 +175,14 @@ public class TopBarView extends LinearLayout implements View.OnClickListener {
     // getters
     public SearchView getSearchView() {
         return searchView;
+    }
+
+    public MaterialButton getBackButton() {
+        return backButton;
+    }
+
+    public MaterialButton getCartButton() {
+        return cartButton;
     }
 
     // setters

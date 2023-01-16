@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
@@ -59,6 +58,7 @@ public class MainActivityController extends BaseController implements
     private SearchFragment searchFragment;
     private NotificationFragment notificationFragment;
     private ProfileFragment profileFragment;
+    private int mainLayoutId = R.id.mainActivity_fragmentContainerView;
 
     // main activity data
     private MainViewModel mainViewModel;
@@ -80,7 +80,7 @@ public class MainActivityController extends BaseController implements
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-        mainViewModel.setTopBarView(getActivity().findViewById(R.id.topBar));
+        mainViewModel.setTopBarView(getActivity().findViewById(R.id.mainTopBar));
         selectedItemId = mainViewModel.getSelectedItemId();
         topBar = mainViewModel.getTopBarView().getValue();
 
@@ -104,9 +104,7 @@ public class MainActivityController extends BaseController implements
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
 
-        if (!isAuth()) {
-//            setLoginLayout();
-        } else {
+        if (isAuth()) {
             token = getToken();
             getAuthenticatedData.setEndPoint(Constant.getCustomerData);
             getAuthenticatedData.setToken(token);
@@ -115,13 +113,6 @@ public class MainActivityController extends BaseController implements
             getAuthenticatedData.execute();
         }
         getAllCategories();
-    }
-
-    public void loadFragment(Fragment fragment, String tag) {
-        fragmentManager.beginTransaction()
-                .replace(R.id.mainActivity_frameLayout, fragment, tag)
-                .setReorderingAllowed(true)
-                .commit();
     }
 
     public void loadMenu() {
@@ -157,19 +148,19 @@ public class MainActivityController extends BaseController implements
         switch (item.getItemId()) {
             case R.id.homeNav:
                 topBar.setMainPage("GoGoat");
-                loadFragment(homeFragment, "home");
+                Helper.loadFragment(fragmentManager, homeFragment, "home", mainLayoutId);
                 return true;
             case R.id.searchNav:
                 topBar.setSearchPage();
-                loadFragment(searchFragment, "search");
+                Helper.loadFragment(fragmentManager, searchFragment, "search", mainLayoutId);
                 return true;
             case R.id.notiNav:
                 topBar.setMainPage("Notification");
-                loadFragment(notificationFragment, "notification");
+                Helper.loadFragment(fragmentManager, notificationFragment, "notification", mainLayoutId);
                 return true;
             case R.id.profileNav:
                 topBar.setMainPage("Profile");
-                loadFragment(profileFragment, "profile");
+                Helper.loadFragment(fragmentManager, profileFragment, "profile", mainLayoutId);
                 return true;
         }
         return false;
@@ -193,24 +184,13 @@ public class MainActivityController extends BaseController implements
         }
     }
 
-    public void goToRegister() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        intent.putExtra(Constant.mainFragment, Constant.register);
-        getActivity().startActivityForResult(intent, Constant.registerActivity);
-    }
-
-    public void goToLogin() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        intent.putExtra(Constant.mainFragment, Constant.login);
-        getActivity().startActivityForResult(intent, Constant.loginActivity);
-    }
-
     // Callback functions
     public void onActivityFinished(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == Constant.loginActivity) {
+            if (requestCode == Constant.authActivityCode) {
                 if (data.getExtras().getSerializable(Constant.customerKey) != null) {
                     customer = (Customer) data.getExtras().getSerializable(Constant.customerKey);
+                    mainViewModel.setAuthCustomer(customer);
                 }
             }
         }
@@ -222,6 +202,7 @@ public class MainActivityController extends BaseController implements
         if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
+            mainViewModel.setAuthCustomer(customer);
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
 //            categories = apiList.getList();
@@ -241,6 +222,14 @@ public class MainActivityController extends BaseController implements
     // Getter and Setter
     public HomeFragment getHomeFragment() {
         return homeFragment;
+    }
+
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
+    }
+
+    public int getMainLayoutId() {
+        return mainLayoutId;
     }
 
     public int getSelectedItemId() {

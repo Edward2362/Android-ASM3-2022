@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.asm3.R;
-import com.example.asm3.controllers.MainActivityController;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.Category;
+import com.example.asm3.models.Customer;
 
 import java.util.ArrayList;
 
@@ -15,6 +15,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Category>> categories = new MutableLiveData<>();
     private final MutableLiveData<Integer> selectedItemId = new MutableLiveData<>(R.id.homeNav);
     private final MutableLiveData<TopBarView> topBar = new MutableLiveData<>();
+    private final MutableLiveData<Customer> authCustomer = new MutableLiveData<>();
 
     public MainViewModel() {
     }
@@ -31,6 +32,8 @@ public class MainViewModel extends ViewModel {
         return topBar;
     }
 
+    public LiveData<Customer> getAuthCustomer() {return authCustomer;}
+
     public void setCateArray(ArrayList<Category> newCate) {
         categories.setValue(newCate);
     }
@@ -42,4 +45,7 @@ public class MainViewModel extends ViewModel {
     public void setTopBarView(TopBarView newTopBar) {
         topBar.setValue(newTopBar);
     }
+
+    public void setAuthCustomer(Customer newAuthCustomer) {
+        authCustomer.setValue(newAuthCustomer);}
 }

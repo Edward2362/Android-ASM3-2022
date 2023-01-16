@@ -1,7 +1,7 @@
 package com.example.asm3.config;
 
 public class Constant {
-    public static String baseDomain = "http://192.168.1.3:9000"; //
+    public static String baseDomain = "http://10.247.195.144:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -33,8 +33,14 @@ public class Constant {
     public static String categoryKey = "category";
     public static String customerKey = "customerData";
 
-    public static final int loginActivity = 500;
-    public static final int registerActivity = 200;
+    public static final int mainActivityCode = 000;
+    public static final int authActivityCode = 100;
+    public static final int accSettingActivityCode = 200;
+    public static final int manageBookActivityCode = 300;
+    public static final int searchResultActivityCode = 400;
+    public static final int productDetailActivityCode = 500;
+    public static final int cartActivityCode = 600;
+    public static final int checkoutActivityCode = 70;
 
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";

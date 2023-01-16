@@ -3,6 +3,7 @@ package com.example.asm3.controllers;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +19,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
 import com.example.asm3.base.controller.BaseController;
+import com.example.asm3.config.Constant;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.models.Category;
+import com.example.asm3.models.Customer;
 import com.example.asm3.models.SubCategory;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -32,17 +36,19 @@ import java.util.ArrayList;
 
 public class HomeFragmentController extends BaseController implements
         MaterialButtonToggleGroup.OnButtonCheckedListener,
-        SubCategoryHolder.OnSelectListener {
+        SubCategoryHolder.OnSelectListener,
+        View.OnClickListener {
 
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TextView cateNotifyTxt, helloTxt;
-    private Button postBookBtn, findBookBtn;
+    private Button postBookBtn, findBookBtn, loginNavBtn;
     private View view, subCateTopDivider, subCateBotDivider;
     private GenericAdapter<SubCategory> subCateAdapter;
     private RecyclerView subCateRecView;
 
     private MainViewModel mainViewModel;
     private LiveData<ArrayList<Category>> categories;
+    private LiveData<Customer> authCustomer;
     private ArrayList<SubCategory> subCategories;
     private ArrayList<SubCategory> foreign = new ArrayList<>();
     private ArrayList<SubCategory> domestic = new ArrayList<>();
@@ -55,7 +61,7 @@ public class HomeFragmentController extends BaseController implements
         this.mainViewModel = (MainViewModel) viewModel;
 
         categories = mainViewModel.getCateArray();
-        Log.d(TAG, "HomeFragmentController: test " + categories.getValue());
+        authCustomer = mainViewModel.getAuthCustomer();
         subCategories = new ArrayList<SubCategory>();
     }
 
@@ -72,9 +78,25 @@ public class HomeFragmentController extends BaseController implements
             }
         });
 
+        authCustomer.observe(getActivity(), new Observer<Customer>() {
+            @Override
+            public void onChanged(Customer customer) {
+                if (customer != null) {
+                    helloTxt.setText("Hello " + customer.getUsername() + ", mahhh!");
+                    loginNavBtn.setVisibility(View.GONE);
+                    postBookBtn.setVisibility(View.VISIBLE);
+                } else {
+                    helloTxt.setText("Hello Stranger, mahhh!");
+                    loginNavBtn.setVisibility(View.VISIBLE);
+                    postBookBtn.setVisibility(View.GONE);
+                }
+            }
+        });
+
         helloTxt = view.findViewById(R.id.helloTxt);
         postBookBtn = view.findViewById(R.id.postBookBtn);
         findBookBtn = view.findViewById(R.id.findBookBtn);
+        loginNavBtn = view.findViewById(R.id.loginNavBtn);
         categoriesBtnGrp = view.findViewById(R.id.categoriesBtnGrp);
         subCateRecView = view.findViewById(R.id.subCateRecView);
         cateNotifyTxt = view.findViewById(R.id.cateNotifyTxt);
@@ -85,6 +107,9 @@ public class HomeFragmentController extends BaseController implements
         categoriesBtnGrp.addOnButtonCheckedListener(this);
         subCateRecView.setAdapter(subCateAdapter);
         subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+        postBookBtn.setOnClickListener(this);
+        findBookBtn.setOnClickListener(this);
+        loginNavBtn.setOnClickListener(this);
     }
 
     @Override
@@ -153,11 +178,27 @@ public class HomeFragmentController extends BaseController implements
         };
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.loginNavBtn:
+                goToLogin();
+                break;
+            case R.id.postBookBtn:
+                break;
+            case R.id.findBookBtn:
+                break;
+        }
+    }
+
     // Request functions
 
 
     // Navigation functions
-
+    public void goToLogin() {
+        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
+        getActivity().startActivityForResult(intent, Constant.authActivityCode);
+    }
 
     // Callback functions
 
