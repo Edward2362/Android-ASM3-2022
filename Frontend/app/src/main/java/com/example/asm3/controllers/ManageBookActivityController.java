@@ -38,8 +38,6 @@ public class ManageBookActivityController extends BaseController implements Asyn
         } else {
             token = getToken();
         }
-
-        uploadBook(new Book("Harry Potter","Hai", "hahaha",100, 10, "2008",null,null,null,""));
     }
 
     public void uploadBook(Book inputBook){

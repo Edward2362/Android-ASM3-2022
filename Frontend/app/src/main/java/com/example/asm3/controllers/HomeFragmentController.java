@@ -107,6 +107,7 @@ public class HomeFragmentController extends BaseController implements
         categoriesBtnGrp.addOnButtonCheckedListener(this);
         subCateRecView.setAdapter(subCateAdapter);
         subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         postBookBtn.setOnClickListener(this);
         findBookBtn.setOnClickListener(this);
         loginNavBtn.setOnClickListener(this);

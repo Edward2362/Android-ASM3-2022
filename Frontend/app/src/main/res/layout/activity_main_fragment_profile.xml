@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        app:cardElevation="2dp"
         android:layout_marginVertical="20dp"
+        app:cardElevation="2dp"
         app:contentPadding="20dp">
 
         <LinearLayout
@@ -32,11 +32,11 @@
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
                     app:cardBackgroundColor="@color/md_theme_dark_background"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
                     app:strokeWidth="0dp">
 
@@ -80,13 +80,13 @@
                     android:stepSize="0.1" />
 
                 <Button
+                    android:id="@+id/settingProfileBtn"
                     style="@style/Widget.Material3.Button.Icon"
-                    android:id="@+id/settingProfileNav"
-                    app:icon="@drawable/ic_setting"
-                    app:iconGravity="textStart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Setting" />
+                    android:text="Setting"
+                    app:icon="@drawable/ic_setting"
+                    app:iconGravity="textStart" />
 
             </LinearLayout>
 
@@ -95,11 +95,12 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/categoriesBtnGrp"
+        android:id="@+id/profileDataBtnGrp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="2dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginBottom="20dp"
         app:singleSelection="true">
 
         <Button
@@ -126,6 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Feedback" />
+
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <androidx.recyclerview.widget.RecyclerView
