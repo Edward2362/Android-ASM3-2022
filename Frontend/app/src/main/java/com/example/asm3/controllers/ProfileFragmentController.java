@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.asm3.AccountSettingActivity;
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
@@ -128,6 +129,11 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.settingProfileBtn:
+                goToSetting();
+                break;
+        }
 
     }
 
@@ -157,6 +163,11 @@ public class ProfileFragmentController extends BaseController implements
     public void goToLogin() {
         Intent intent = new Intent(getContext(), AuthenticationActivity.class);
         getActivity().startActivityForResult(intent, Constant.authActivityCode);
+    }
+
+    public void goToSetting(){
+        Intent intent =  new Intent(getContext(), AccountSettingActivity.class);
+        getActivity().startActivityForResult(intent, Constant.accSettingActivityCode);
     }
 
     // Callback functions
