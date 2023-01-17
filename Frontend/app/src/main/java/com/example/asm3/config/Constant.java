@@ -42,6 +42,7 @@ public class Constant {
 
     public static String categoryKey = "category";
     public static String customerKey = "customerData";
+    public static String isUploadKey = "isUpload";
 
     public static final int mainActivityCode = 000;
     public static final int authActivityCode = 100;
@@ -51,6 +52,8 @@ public class Constant {
     public static final int productDetailActivityCode = 500;
     public static final int cartActivityCode = 600;
     public static final int checkoutActivityCode = 70;
+
+    public static final int uploadCode = 700;
 
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";

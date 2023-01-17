@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.AuthenticationActivity;
+import com.example.asm3.ManageBookActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
@@ -190,6 +191,7 @@ public class HomeFragmentController extends BaseController implements
                 Helper.goToLogin(getContext(), getActivity());
                 break;
             case R.id.postBookBtn:
+                goToManageBook();
                 break;
             case R.id.findBookBtn:
                 break;
@@ -200,7 +202,11 @@ public class HomeFragmentController extends BaseController implements
 
 
     // Navigation functions
-
+    public void goToManageBook() {
+        Intent intent = new Intent(getContext(), ManageBookActivity.class);
+        intent.putExtra(Constant.isUploadKey, Constant.uploadCode);
+        getActivity().startActivityForResult(intent, Constant.manageBookActivityCode);
+    }
 
     // Callback functions
 

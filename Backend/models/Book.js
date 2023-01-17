@@ -26,10 +26,10 @@ const bookSchema = new mongoose.Schema({
       type: Schema.Types.ObjectId,
       ref: "Category"
     },
-    subCategory: {
+    subCategory: [{
       type: Schema.Types.ObjectId,
       ref: "SubCategory"
-    },
+    }],
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
