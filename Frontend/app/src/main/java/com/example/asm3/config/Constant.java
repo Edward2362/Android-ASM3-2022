@@ -16,6 +16,8 @@ public class Constant {
     public static String deleteBook = "/api/book/deleteBook";
     public static String getProduct = "/api/book/getProduct";
     public static String getNotifications = "/api/notification/getNotifications";
+    public static String suggestProduct = "/api/book/suggestProduct";
+    public static String searchProduct = "/api/book/searchProduct";
     public static String tokenFile = "token.txt";
 
     public static final Pattern emailPattern =
@@ -59,6 +61,8 @@ public class Constant {
     public static String setCustomerDataTaskType = "setCustomerData";
     public static String changePasswordTaskType = "changePassword";
     public static String getNotificationsTaskType = "getNotifications";
+    public static String suggestProductTaskType = "suggestProduct";
+    public static String searchProductTaskType = "searchProduct";
 
 
     public static final int cameraPermissionCode = 105;
