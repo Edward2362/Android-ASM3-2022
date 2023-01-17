@@ -30,6 +30,7 @@ import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Customer;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,8 +46,9 @@ public class LoginFragmentController extends BaseController implements
     private View view;
     private FragmentManager fragmentManager;
     private RegisterFragment registerFragment;
+    TextInputLayout emailLoginLayout, pwLoginLayout;
     private TextInputEditText emailLoginEt, pwLoginEt;
-    private TextView forgetPwTxt, registerNavTxt;
+    private TextView forgetPwTxt, registerNavTxt, loginFailTxt;
     private Button loginBtn;
     private int authLayoutId = R.id.authenticationActivity_fragmentContainerView;
 
@@ -69,8 +71,11 @@ public class LoginFragmentController extends BaseController implements
     // Render functions
     @Override
     public void onInit() {
+        emailLoginLayout = view.findViewById(R.id.emailLoginLayout);
+        pwLoginLayout = view.findViewById(R.id.pwLoginLayout);
         emailLoginEt = view.findViewById(R.id.emailLoginEt);
         pwLoginEt = view.findViewById(R.id.pwLoginEt);
+        loginFailTxt = view.findViewById(R.id.loginFailTxt);
         forgetPwTxt = view.findViewById(R.id.forgetPwTxt);
         registerNavTxt = view.findViewById(R.id.registerNavTxt);
         loginBtn = view.findViewById(R.id.loginBtn);
@@ -140,7 +145,7 @@ public class LoginFragmentController extends BaseController implements
 
     // Callback functions
     public void onLoginFinished(String message) {
-        Log.d(TAG, "onLoginFinished: test " + message);
+        loginFailTxt.setVisibility(View.GONE);
         ArrayList<String> arrayList = new ArrayList<String>();
         arrayList.add(getTokenFromMessage(ApiData.getData(message)));
         getLocalFileController().writeFile(arrayList);
@@ -162,7 +167,7 @@ public class LoginFragmentController extends BaseController implements
     @Override
     public void onError(String taskType) {
         if(taskType.equals(Constant.login)) {
-            Toast.makeText(getContext(), "fail nha ma", Toast.LENGTH_SHORT).show();
+            loginFailTxt.setVisibility(View.VISIBLE);
         }
     }
 

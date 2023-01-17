@@ -19,7 +19,6 @@ public interface AsyncTaskCallBack {
             JSONObject jsonObject = new JSONObject(message);
             if (jsonObject.getBoolean(ApiService.errorKey)) {
                 callBack.onError(taskType);
-                Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
             } else {
                 callBack.onFinished(message, taskType);
             }

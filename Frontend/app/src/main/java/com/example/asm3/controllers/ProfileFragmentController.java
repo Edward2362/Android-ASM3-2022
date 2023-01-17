@@ -105,9 +105,9 @@ public class ProfileFragmentController extends BaseController implements
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                     super.getItemOffsets(outRect, view, parent, state);
                     if (parent.getChildLayoutPosition(view) % 2 == 0) {
-                        outRect.set(0, 0, 20, 0);
+                        outRect.set(0, 0, 10, 20);
                     } else {
-                        outRect.set(20, 0, 0, 0);
+                        outRect.set(10, 0, 0, 20);
                     }
                 }
             });
