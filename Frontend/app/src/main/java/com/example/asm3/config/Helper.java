@@ -1,6 +1,9 @@
 package com.example.asm3.config;
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
+import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.models.Notification;
@@ -66,5 +70,10 @@ public class Helper {
             notifBadge.setVisible(false);
             notifBadge.clearNumber();
         }
+    }
+
+    public static void goToLogin(Context context, Activity activity) {
+        Intent intent = new Intent(context, AuthenticationActivity.class);
+        activity.startActivityForResult(intent, Constant.authActivityCode);
     }
 }

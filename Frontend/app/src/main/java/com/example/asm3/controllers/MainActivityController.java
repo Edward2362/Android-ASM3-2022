@@ -166,11 +166,6 @@ public class MainActivityController extends BaseController implements
     }
 
     // Navigation functions
-    public void goToLogin() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        getActivity().startActivityForResult(intent, Constant.authActivityCode);
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -192,7 +187,7 @@ public class MainActivityController extends BaseController implements
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            goToLogin();
+                            Helper.goToLogin(getContext(), getActivity());
                         }
                     }, 250);
                 } else {

@@ -25,6 +25,7 @@ import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
@@ -186,7 +187,7 @@ public class HomeFragmentController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loginNavBtn:
-                goToLogin();
+                Helper.goToLogin(getContext(), getActivity());
                 break;
             case R.id.postBookBtn:
                 break;
@@ -199,10 +200,7 @@ public class HomeFragmentController extends BaseController implements
 
 
     // Navigation functions
-    public void goToLogin() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        getActivity().startActivityForResult(intent, Constant.authActivityCode);
-    }
+
 
     // Callback functions
 
