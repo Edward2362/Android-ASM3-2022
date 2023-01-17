@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/productBody"
+    android:id="@+id/purchasedProductBody"
     style="?attr/materialCardViewElevatedStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="15dp"
-    android:layout_margin="2dp">
+    android:layout_marginHorizontal="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/bookImg"
@@ -33,34 +33,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/bookNameTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Book name"
-                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
-
-            <TextView
-                android:id="@+id/bookConditionTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Condition: "
-                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2" />
-
-            <TextView
-                android:id="@+id/bookPriceTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="100.000 đ"
-                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
-                android:textSize="20sp" />
+                android:text="Lord of the ring" />
 
         </LinearLayout>
 

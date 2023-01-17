@@ -7,14 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.AuthenticationActivity;
@@ -26,7 +24,6 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
-import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
 import com.example.asm3.fragments.mainActivity.HomeFragment;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.fragments.mainActivity.NotificationFragment;
@@ -39,6 +36,7 @@ import com.example.asm3.models.Customer;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.Order;
 import com.example.asm3.models.SubCategory;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
@@ -59,6 +57,7 @@ public class MainActivityController extends BaseController implements
     private TopBarView topBar;
     private NavigationBarView menu;
     private LiveData<Integer> selectedItemId;
+    private LiveData<ArrayList<Notification>> notifications;
     private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
     private SearchFragment searchFragment;
@@ -79,7 +78,6 @@ public class MainActivityController extends BaseController implements
     // search fragment data
 
     // notification fragment data
-    private ArrayList<Notification> notifications;
 
     // profile fragment data
 
@@ -87,16 +85,20 @@ public class MainActivityController extends BaseController implements
         super(context, activity);
         mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
         mainViewModel.setTopBarView(getActivity().findViewById(R.id.mainTopBar));
+        mainViewModel.setMenu(getActivity().findViewById(R.id.menu));
         selectedItemId = mainViewModel.getSelectedItemId();
+        notifications = mainViewModel.getNotifications();
         topBar = mainViewModel.getTopBarView().getValue();
+        menu = mainViewModel.getMenu().getValue();
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationFragment();
         profileFragment = new ProfileFragment();
 
-        notifications = new ArrayList<Notification>();
         orders = new ArrayList<Order>();
+        getData = new GetData(context, this);
+        getAuthenticatedData = new GetAuthenticatedData(context, this);
     }
 
     // Render functions
@@ -104,18 +106,18 @@ public class MainActivityController extends BaseController implements
     public void onInit() {
         fragmentManager = getActivity().getSupportFragmentManager();
         topBar.setMainPage("GoGoat");
-        menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
 
+        notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
+            @Override
+            public void onChanged(ArrayList<Notification> notifications) {
+                Helper.setBadge(notifications, mainViewModel);
+            }
+        });
         if (isAuth()) {
-            token = getToken();
-            getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
-            getAuthenticatedData.setEndPoint(Constant.getCustomerData);
-            getAuthenticatedData.setToken(token);
-
-            getAuthenticatedData.setTaskType(Constant.getCustomer);
-            getAuthenticatedData.execute();
+            getAuthCustomer();
+            getNotification();
         }
         getAllCategories();
     }
@@ -129,8 +131,6 @@ public class MainActivityController extends BaseController implements
     public void loadMenu() {
         menu.getMenu().getItem(0).setChecked(true);
     }
-
-    // Helpers
 
     // Request functions
     public void getAllCategories() {
@@ -156,12 +156,16 @@ public class MainActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
-    // Navigation functions
-    public void goToLogin() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        getActivity().startActivityForResult(intent, Constant.authActivityCode);
+    public void getAuthCustomer() {
+        token = getToken();
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getCustomerData);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.setTaskType(Constant.getCustomer);
+        getAuthenticatedData.execute();
     }
 
+    // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -183,7 +187,7 @@ public class MainActivityController extends BaseController implements
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            goToLogin();
+                            Helper.goToLogin(getContext(), getActivity());
                         }
                     }, 250);
                 } else {
@@ -243,7 +247,7 @@ public class MainActivityController extends BaseController implements
             Log.d(TAG, "onFinished: " + subCategories.size());
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
-            notifications = apiList.getList();
+            mainViewModel.setNotifications(apiList.getList());
         }
     }
 

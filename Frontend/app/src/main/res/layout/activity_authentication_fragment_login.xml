@@ -65,6 +65,7 @@
                 android:id="@+id/emailLoginEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:lines="1"
                 android:singleLine="true"
@@ -77,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:layout_marginBottom="5dp"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -92,10 +94,20 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/loginFailTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Invalid Login Credentials"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
+            android:textColor="@color/md_theme_light_error" />
+
+        <TextView
             android:id="@+id/forgetPwTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
+            android:layout_marginBottom="5dp"
             android:text="Forget your password?"
             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
             android:textColor="@color/md_theme_light_primary" />

@@ -26,6 +26,7 @@ import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
@@ -73,9 +74,11 @@ public class HomeFragmentController extends BaseController implements
             @Override
             public void onChanged(ArrayList<Category> categories) {
                 Log.d(TAG, "onChanged controller: test " + categories);
-                foreign = categories.get(0).getSubCategories();
-                domestic = categories.get(1).getSubCategories();
-                text = categories.get(2).getSubCategories();
+                if (!categories.isEmpty()) {
+                    foreign = categories.get(0).getSubCategories();
+                    domestic = categories.get(1).getSubCategories();
+                    text = categories.get(2).getSubCategories();
+                }
             }
         });
 
@@ -90,6 +93,7 @@ public class HomeFragmentController extends BaseController implements
         subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
         subCateAdapter = generateSubCateAdapter();
 
+        // put this observe after find view by id
         authCustomer.observe(getActivity(), new Observer<Customer>() {
             @Override
             public void onChanged(Customer customer) {
@@ -184,7 +188,7 @@ public class HomeFragmentController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loginNavBtn:
-                goToLogin();
+                Helper.goToLogin(getContext(), getActivity());
                 break;
             case R.id.postBookBtn:
                 goToManageBook();
@@ -198,11 +202,6 @@ public class HomeFragmentController extends BaseController implements
 
 
     // Navigation functions
-    public void goToLogin() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        getActivity().startActivityForResult(intent, Constant.authActivityCode);
-    };
-
     public void goToManageBook() {
         Intent intent = new Intent(getContext(), ManageBookActivity.class);
         intent.putExtra(Constant.isUploadKey, Constant.uploadCode);

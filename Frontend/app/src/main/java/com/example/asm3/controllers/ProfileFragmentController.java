@@ -28,6 +28,7 @@ import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.BookHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Customer;
@@ -66,7 +67,7 @@ public class ProfileFragmentController extends BaseController implements
     @Override
     public void onInit() {
         if (!isAuth()) {
-            goToLogin();
+            Helper.goToLogin(getContext(), getActivity());
         } else {
             // for testing
 
@@ -105,9 +106,9 @@ public class ProfileFragmentController extends BaseController implements
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                     super.getItemOffsets(outRect, view, parent, state);
                     if (parent.getChildLayoutPosition(view) % 2 == 0) {
-                        outRect.set(0, 0, 20, 0);
+                        outRect.set(0, 0, 10, 20);
                     } else {
-                        outRect.set(20, 0, 0, 0);
+                        outRect.set(10, 0, 0, 20);
                     }
                 }
             });
@@ -129,7 +130,7 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.settingProfileBtn:
                 goToSetting();
                 break;
@@ -160,13 +161,8 @@ public class ProfileFragmentController extends BaseController implements
 
 
     // Navigation functions
-    public void goToLogin() {
-        Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-        getActivity().startActivityForResult(intent, Constant.authActivityCode);
-    }
-
-    public void goToSetting(){
-        Intent intent =  new Intent(getContext(), AccountSettingActivity.class);
+    public void goToSetting() {
+        Intent intent = new Intent(getContext(), AccountSettingActivity.class);
         getActivity().startActivityForResult(intent, Constant.accSettingActivityCode);
     }
 
