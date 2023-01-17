@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -47,7 +49,8 @@ import java.util.TimerTask;
 public class MainActivityController extends BaseController implements
         AsyncTaskCallBack,
         NavigationBarView.OnItemSelectedListener,
-        NavigationBarView.OnItemReselectedListener {
+        NavigationBarView.OnItemReselectedListener,
+        View.OnClickListener {
 
     // API
     private GetData getData;
@@ -56,14 +59,14 @@ public class MainActivityController extends BaseController implements
     // main activity view
     private TopBarView topBar;
     private NavigationBarView menu;
-    private LiveData<Integer> selectedItemId;
-    private LiveData<ArrayList<Notification>> notifications;
     private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
     private SearchFragment searchFragment;
     private NotificationFragment notificationFragment;
     private ProfileFragment profileFragment;
     private int mainLayoutId = R.id.mainActivity_fragmentContainerView;
+    private Button cartBtn;
+
 
     // main activity data
     private MainViewModel mainViewModel;
@@ -71,15 +74,11 @@ public class MainActivityController extends BaseController implements
     private Customer customer;
     private String token;
     private ArrayList<Order> orders;
+    private LiveData<Integer> selectedItemId;
+    private LiveData<ArrayList<Notification>> notifications;
 
     // homepage fragment data
     private ArrayList<SubCategory> subCategories;
-
-    // search fragment data
-
-    // notification fragment data
-
-    // profile fragment data
 
     public MainActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
@@ -90,6 +89,8 @@ public class MainActivityController extends BaseController implements
         notifications = mainViewModel.getNotifications();
         topBar = mainViewModel.getTopBarView().getValue();
         menu = mainViewModel.getMenu().getValue();
+        fragmentManager = getActivity().getSupportFragmentManager();
+        topBar.setMainPage("GoGoat");
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
@@ -104,8 +105,8 @@ public class MainActivityController extends BaseController implements
     // Render functions
     @Override
     public void onInit() {
-        fragmentManager = getActivity().getSupportFragmentManager();
-        topBar.setMainPage("GoGoat");
+        cartBtn = topBar.getCartButton();
+        cartBtn.setOnClickListener(this);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
 
@@ -128,6 +129,18 @@ public class MainActivityController extends BaseController implements
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.cartButton:
+                if (!isAuth()) {
+                    Helper.goToLogin(getContext(),getActivity());
+                }
+                break;
+        }
+    }
+
+    // Helper
     public void loadMenu() {
         menu.getMenu().getItem(0).setChecked(true);
     }
@@ -178,8 +191,18 @@ public class MainActivityController extends BaseController implements
                 Helper.loadFragment(fragmentManager, searchFragment, "search", mainLayoutId);
                 return true;
             case R.id.notiNav:
-                topBar.setMainPage("Notification");
-                Helper.loadFragment(fragmentManager, notificationFragment, "notification", mainLayoutId);
+                if (!isAuth()) {
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            Helper.goToLogin(getContext(), getActivity());
+                        }
+                    }, 230);
+                } else {
+                    topBar.setMainPage("Notification");
+                    Helper.loadFragment(fragmentManager, notificationFragment, "notification", mainLayoutId);
+                }
                 return true;
             case R.id.profileNav:
                 if (!isAuth()) {
@@ -189,7 +212,7 @@ public class MainActivityController extends BaseController implements
                         public void run() {
                             Helper.goToLogin(getContext(), getActivity());
                         }
-                    }, 250);
+                    }, 230);
                 } else {
                     topBar.setMainPage("Profile");
                     Helper.loadFragment(fragmentManager, profileFragment, "profile", mainLayoutId);

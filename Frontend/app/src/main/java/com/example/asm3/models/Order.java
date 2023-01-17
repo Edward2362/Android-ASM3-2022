@@ -20,6 +20,9 @@ public class Order implements Serializable {
         this.customer = customer;
     }
 
+    public Order() {
+    }
+
     public String getTimestamp() {
         return timestamp;
     }

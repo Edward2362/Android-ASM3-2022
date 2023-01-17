@@ -32,6 +32,10 @@ public class Customer implements Serializable {
         this.rating = rating;
     }
 
+    public Customer(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
     }

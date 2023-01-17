@@ -101,6 +101,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="2dp"
         android:layout_marginBottom="20dp"
+        app:selectionRequired="true"
         app:singleSelection="true">
 
         <Button
@@ -131,9 +132,24 @@
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/profileRecView"
+        android:id="@+id/sellingRecView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="gone"
+        android:layout_weight="1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/purchasedRecView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:layout_weight="1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feedbackRecView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
         android:layout_weight="1" />
 
 </LinearLayout>

@@ -37,20 +37,21 @@ public class AuthenticationActivityController extends BaseController implements
     public AuthenticationActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         authViewModel = new ViewModelProvider(getActivity()).get(AuthViewModel.class);
+        topBar = getActivity().findViewById(R.id.authTopBar);
+        fragmentManager = getActivity().getSupportFragmentManager();
+        topBar.setAuthPage();
 
         loginFragment = new LoginFragment();
         registerFragment = new RegisterFragment();
+
+        authViewModel.setFragmentManager(fragmentManager);
+        authViewModel.setLoginFragment(loginFragment);
+        authViewModel.setRegisterFragment(registerFragment);
     }
 
     // Render functions
     @Override
     public void onInit() {
-        topBar = getActivity().findViewById(R.id.authTopBar);
-        fragmentManager = getActivity().getSupportFragmentManager();
-        authViewModel.setFragmentManager(fragmentManager);
-        authViewModel.setLoginFragment(loginFragment);
-        authViewModel.setRegisterFragment(registerFragment);
-        topBar.setAuthPage();
         backBtn = topBar.getBackButton();
         backBtn.setOnClickListener(this);
         Helper.loadFragment(fragmentManager, loginFragment, "login", authLayoutId);
