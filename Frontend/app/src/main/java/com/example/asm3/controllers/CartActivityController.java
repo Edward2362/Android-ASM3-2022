@@ -22,4 +22,9 @@ public class CartActivityController extends BaseController implements AsyncTaskC
     public void onFinished(String message, String taskType){
 
     }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
 }

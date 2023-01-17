@@ -139,6 +139,11 @@ public class RegisterFragmentController extends BaseController implements
         }
     }
 
+    @Override
+    public void onError(String taskType) {
+
+    }
+
     // Getter and Setter
 
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -224,7 +225,6 @@ public class MainActivityController extends BaseController implements
 
     @Override
     public void onFinished(String message, String taskType) {
-        Log.d(TAG, "onFinished: test " + homeFragment);
         if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
@@ -242,6 +242,13 @@ public class MainActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             notifications = apiList.getList();
+        }
+    }
+
+    @Override
+    public void onError(String taskType) {
+        if (taskType.equals(Constant.getCustomer)) {
+
         }
     }
 

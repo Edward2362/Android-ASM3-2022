@@ -3,7 +3,7 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-    public static String baseDomain = "http://172.25.48.1:9000"; //
+    public static String baseDomain = "http://192.168.18.28:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";

@@ -160,5 +160,10 @@ public class SearchFragmentController extends BaseController implements
         }
     }
 
+    @Override
+    public void onError(String taskType) {
+
+    }
+
     // Getter and Setter
 }

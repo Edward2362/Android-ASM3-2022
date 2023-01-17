@@ -23,4 +23,9 @@ public class CheckoutActivityController extends BaseController implements AsyncT
     public void onFinished(String message, String taskType){
         
     }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
 }

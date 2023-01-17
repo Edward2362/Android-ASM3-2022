@@ -170,4 +170,9 @@ public class AccountSettingActivityController extends BaseController implements 
         }
 
     }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
 }

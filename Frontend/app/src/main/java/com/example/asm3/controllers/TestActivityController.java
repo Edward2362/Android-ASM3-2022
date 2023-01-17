@@ -45,4 +45,9 @@ public class TestActivityController extends BaseController implements AsyncTaskC
             }
         }
     }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
 }

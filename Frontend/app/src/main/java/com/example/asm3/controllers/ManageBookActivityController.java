@@ -68,4 +68,9 @@ public class ManageBookActivityController extends BaseController implements Asyn
         }
     }
 
+    @Override
+    public void onError(String taskType) {
+
+    }
+
 }

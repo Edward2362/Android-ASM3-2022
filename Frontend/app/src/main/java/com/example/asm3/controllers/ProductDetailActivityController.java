@@ -39,4 +39,9 @@ public class ProductDetailActivityController extends BaseController implements A
             book = apiData.getData();
         }
     }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
 }

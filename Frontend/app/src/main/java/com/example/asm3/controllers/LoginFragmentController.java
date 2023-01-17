@@ -123,6 +123,7 @@ public class LoginFragmentController extends BaseController implements
             jsonObject.put(Constant.email, email);
             jsonObject.put(Constant.password, password);
 
+            postData = new PostData(getContext(), this);
             postData.setEndPoint(Constant.loginCustomer);
             postData.setTaskType(Constant.login);
             postData.execute(jsonObject);
@@ -155,6 +156,13 @@ public class LoginFragmentController extends BaseController implements
         Log.d(TAG, "onFinished: test " + message);
         if (taskType.equals(Constant.login)) {
             onLoginFinished(message);
+        }
+    }
+
+    @Override
+    public void onError(String taskType) {
+        if(taskType.equals(Constant.login)) {
+            Toast.makeText(getContext(), "fail nha ma", Toast.LENGTH_SHORT).show();
         }
     }
 
