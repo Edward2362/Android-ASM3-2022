@@ -14,7 +14,9 @@ const uploadBook = async (req, response) => {
       publishedAt: req.body.publishedAt,
       category: req.body.category,
       subCategory: req.body.subCategory,
-      customer: req.customer.customerId
+      customer: req.customer.customerId,
+      isNew: req.body.isNew,
+      image: req.body.image
     };
 
     const book = await Book.create(bookInput);

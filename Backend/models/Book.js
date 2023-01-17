@@ -33,6 +33,12 @@ const bookSchema = new mongoose.Schema({
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
+    },
+    isNew: {
+      type: Boolean,
+    },
+    image: {
+      type: String
     }
 });
 
