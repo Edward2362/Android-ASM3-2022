@@ -26,8 +26,6 @@ public class ManageBookActivityController extends BaseController implements Asyn
 
     public ManageBookActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
-        postAuthenticatedData = new PostAuthenticatedData(context, this);
-        deleteAuthenticatedData = new DeleteAuthenticatedData(context, this);
     }
 
     @Override
@@ -41,6 +39,7 @@ public class ManageBookActivityController extends BaseController implements Asyn
     }
 
     public void uploadBook(Book inputBook){
+        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
         postAuthenticatedData.setEndPoint(Constant.uploadBook);
         postAuthenticatedData.setTaskType(Constant.uploadBookTaskType);
         postAuthenticatedData.setToken(token);
@@ -48,6 +47,7 @@ public class ManageBookActivityController extends BaseController implements Asyn
     }
 
     public void updateBook(Book inputBook) {
+        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
         postAuthenticatedData.setEndPoint(Constant.updateBook);
         postAuthenticatedData.setTaskType(Constant.updateBookTaskType);
         postAuthenticatedData.setToken(token);
@@ -55,6 +55,7 @@ public class ManageBookActivityController extends BaseController implements Asyn
     }
 
     public void deleteBook(String bookId) {
+        deleteAuthenticatedData = new DeleteAuthenticatedData(getContext(), this);
         deleteAuthenticatedData.setEndPoint(Constant.deleteBook + "/" + bookId);
         deleteAuthenticatedData.setTaskType(Constant.deleteBookTaskType);
         deleteAuthenticatedData.setToken(token);

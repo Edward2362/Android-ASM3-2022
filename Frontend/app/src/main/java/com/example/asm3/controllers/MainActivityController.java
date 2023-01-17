@@ -97,8 +97,6 @@ public class MainActivityController extends BaseController implements
 
         notifications = new ArrayList<Notification>();
         orders = new ArrayList<Order>();
-        getData = new GetData(context, this);
-        getAuthenticatedData = new GetAuthenticatedData(context, this);
     }
 
     // Render functions
@@ -112,6 +110,7 @@ public class MainActivityController extends BaseController implements
 
         if (isAuth()) {
             token = getToken();
+            getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
             getAuthenticatedData.setEndPoint(Constant.getCustomerData);
             getAuthenticatedData.setToken(token);
 
@@ -136,18 +135,21 @@ public class MainActivityController extends BaseController implements
     // Request functions
     public void getAllCategories() {
         Log.d(TAG, "getAllCategories: test " + homeFragment);
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getAllCategories);
         getData.setTaskType(Constant.getAllCategoriesTaskType);
         getData.execute();
     }
 
     public void getSubCategories(String categoryName) {
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getSubCategories + Helper.getQueryEndpoint(Constant.categoryKey, categoryName));
         getData.setTaskType(Constant.getSubCategoriesTaskType);
         getData.execute();
     }
 
     public void getNotification() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
         getAuthenticatedData.setEndPoint(Constant.getNotifications);
         getAuthenticatedData.setTaskType(Constant.getNotificationsTaskType);
         getAuthenticatedData.setToken(token);

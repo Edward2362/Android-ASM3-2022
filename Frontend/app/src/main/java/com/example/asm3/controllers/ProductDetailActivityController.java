@@ -17,8 +17,6 @@ public class ProductDetailActivityController extends BaseController implements A
     private Book book;
     public ProductDetailActivityController(Context context, FragmentActivity activity) {
         super(context,activity);
-        getData = new GetData(context,this);
-
     }
 
     @Override
@@ -27,6 +25,7 @@ public class ProductDetailActivityController extends BaseController implements A
     }
 
     public void getProduct(String productId){
+        getData = new GetData(getContext(),this);
         getData.setEndPoint(Constant.getProduct+"/"+productId);
         getData.setTaskType(Constant.getProductTaskType);
         getData.execute();

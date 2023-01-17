@@ -22,10 +22,11 @@ public class TestActivityController extends BaseController implements AsyncTaskC
     public TestActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         categories = new ArrayList<Category>();
-        getData = new GetData(context, this);
+
     }
 
     public void getAllCategories(){
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getAllCategories);
         getData.setTaskType(Constant.getAllCategoriesTaskType);
         getData.execute();

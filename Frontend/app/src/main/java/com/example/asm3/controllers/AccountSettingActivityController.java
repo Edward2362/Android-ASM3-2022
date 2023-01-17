@@ -41,8 +41,6 @@ public class AccountSettingActivityController extends BaseController implements 
 
     public AccountSettingActivityController(Context context, FragmentActivity activity){
         super(context, activity);
-        postAuthenticatedData = new PostAuthenticatedData(context,this);
-
     }
 
     @Override
@@ -70,6 +68,7 @@ public class AccountSettingActivityController extends BaseController implements 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(Customer.usernameKey,username);
             jsonObject.put(Customer.addressKey,address);
+            postAuthenticatedData = new PostAuthenticatedData(getContext(),this);
             postAuthenticatedData.setEndPoint(Constant.setCustomerData);
             postAuthenticatedData.setTaskType(Constant.setCustomerDataTaskType);
             postAuthenticatedData.setToken(getToken());
@@ -85,6 +84,7 @@ public class AccountSettingActivityController extends BaseController implements 
             if(isAuth()){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put(Customer.passwordKey,newPassword);
+                postAuthenticatedData = new PostAuthenticatedData(getContext(),this);
                 postAuthenticatedData.setEndPoint(Constant.changePassword);
                 postAuthenticatedData.setTaskType(Constant.changePasswordTaskType);
                 postAuthenticatedData.setToken(getToken());

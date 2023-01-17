@@ -52,7 +52,7 @@ public class SearchFragmentController extends BaseController implements
         this.view = view;
         this.mainViewModel = (MainViewModel) viewModel;
 
-        getData = new GetData(getContext(),this);
+
         searchSuggestions = new ArrayList<>();
         topBar = mainViewModel.getTopBarView().getValue();
     }

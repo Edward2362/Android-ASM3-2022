@@ -54,7 +54,7 @@ public class RegisterFragmentController extends BaseController implements
 
         fragmentManager = authViewModel.getFragmentManager().getValue();
         loginFragment = authViewModel.getLoginFragment().getValue();
-        postData = new PostData(getContext(), this);
+
     }
 
     // Render functions
@@ -115,6 +115,7 @@ public class RegisterFragmentController extends BaseController implements
 
     // Request functions
     public void registerCustomer(Customer customer) {
+        postData = new PostData(getContext(), this);
         postData.setEndPoint(Constant.registerCustomer);
         postData.setTaskType(Constant.register);
         postData.execute(Customer.toJSON(customer));
