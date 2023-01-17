@@ -1,9 +1,11 @@
 package com.example.asm3.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Book implements Serializable {
     private String name;
@@ -13,7 +15,7 @@ public class Book implements Serializable {
     private int quantity;
     private String publishedAt;
     private String category;
-    private String subCategory;
+    private ArrayList<String> subCategory;
     private String customer;
     private String _id;
     private boolean isNew;
@@ -33,7 +35,7 @@ public class Book implements Serializable {
     public static String imageKey="image";
 
 
-    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, String subCategory, String customer, String _id, boolean isNew, String image) {
+    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, ArrayList<String> subCategory, String customer, String _id, boolean isNew, String image) {
         this._id = _id;
         this.name = name;
         this.author = author;
@@ -128,11 +130,11 @@ public class Book implements Serializable {
         this.category = category;
     }
 
-    public String getSubCategory() {
+    public ArrayList<String> getSubCategory() {
         return subCategory;
     }
 
-    public void setSubCategory(String subCategory) {
+    public void setSubCategory(ArrayList<String> subCategory) {
         this.subCategory = subCategory;
     }
 
@@ -153,7 +155,7 @@ public class Book implements Serializable {
         int quantity;
         String publishedAt;
         String category;
-        String subCategory;
+        ArrayList<String> subCategory;
         String customer;
         String _id;
         boolean isNew;
@@ -167,7 +169,7 @@ public class Book implements Serializable {
                 quantity = jsonObject.getInt(quantityKey);
                 publishedAt = jsonObject.getString(publishedAtKey);
                 category = jsonObject.getString(categoryKey);
-                subCategory = jsonObject.getString(subCategoryKey);
+                subCategory = getSubCategories(jsonObject.getJSONArray(subCategoryKey));
                 customer = jsonObject.getString(customerKey);
                 _id = jsonObject.getString(idKey);
                 isNew = jsonObject.getBoolean(isNewKey);
@@ -180,7 +182,6 @@ public class Book implements Serializable {
         }
         return book;
     }
-
     public static JSONObject toJSON(Book book) {
         JSONObject jsonObject = null;
         if (book != null) {
@@ -194,7 +195,7 @@ public class Book implements Serializable {
                 jsonObject.put(quantityKey, book.quantity);
                 jsonObject.put(publishedAtKey, book.publishedAt);
                 jsonObject.put(categoryKey, book.category);
-                jsonObject.put(subCategoryKey, book.subCategory);
+                jsonObject.put(subCategoryKey, getSubCategoryJSONArray(book.subCategory));
                 jsonObject.put(customerKey, book.customer);
                 jsonObject.put(isNewKey,book.isNew);
                 jsonObject.put(imageKey,book.image);
@@ -205,4 +206,27 @@ public class Book implements Serializable {
         return jsonObject;
     }
 
+    public static ArrayList<String> getSubCategories(JSONArray jsonArray) {
+        ArrayList<String> subCategories = new ArrayList<String>();
+        try {
+            for(int i=0; i<jsonArray.length();i++){
+                subCategories.add(jsonArray.getString(i));
+            }
+        } catch (JSONException jsonException){
+            jsonException.printStackTrace();
+        }
+        return subCategories;
+    }
+
+    public static JSONArray getSubCategoryJSONArray(ArrayList<String> subCategories) {
+        JSONArray jsonArray = new JSONArray();
+        try {
+            for(int i=0; i<subCategories.size();i++){
+                jsonArray.put(subCategories.get(i));
+            }
+        } catch (Exception exception){
+            exception.printStackTrace();
+        }
+        return jsonArray;
+    }
 }

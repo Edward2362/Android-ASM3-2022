@@ -118,7 +118,7 @@ const getProducts = async (req, response) => {
       let product = products[i];
 
       if (categories.includes(product.category.name)) {
-        if (subCategories.includes(product.subCategory.name)) {
+        if (haveSameElements(products[i].subCategory,subCategories)) {
           filteredProducts.push(product);
         }
       }
@@ -135,7 +135,7 @@ const getProducts = async (req, response) => {
     for (let i = 0; i < products.length; ++i) {
       let product = products[i];
 
-      if (subCategories.includes(product.subCategory.name)) {
+      if (haveSameElements(products[i].subCategory,subCategories)) {
         filteredProducts.push(product);
       }
     }
@@ -263,7 +263,15 @@ const removeDuplicate = (array) => {
   }
   return products;
 }
-
+const haveSameElements = (subCategories, subCategoryIds) => {
+  let  isSameElement = false; 
+  for (let i=0; i<subCategories.length;i++){
+    if(subCategoryIds.includes(subCategories[i].name)){
+      isSameElement = true;
+    }
+  }
+  return true;
+}
 
 module.exports = {
   uploadBook,
