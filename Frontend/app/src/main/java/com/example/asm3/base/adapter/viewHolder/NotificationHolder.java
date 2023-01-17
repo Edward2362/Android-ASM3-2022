@@ -25,12 +25,12 @@ public class NotificationHolder extends RecyclerView.ViewHolder implements View.
         timeStampText = itemView.findViewById(R.id.timeStampText);
         this.onSelectListener = onSelectListener;
 
-        notifBody.setOnClickListener(this);
+        notifCard.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        onSelectListener.onNotificationClick(getAdapterPosition(), view, notifCard);
+        onSelectListener.onNotificationClick(getAdapterPosition(), view);
     }
 
     public MaterialCardView getNotifCard() {
@@ -46,6 +46,6 @@ public class NotificationHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public interface OnSelectListener {
-        void onNotificationClick(int position, View view, MaterialCardView notifCard);
+        void onNotificationClick(int position, View view);
     }
 }

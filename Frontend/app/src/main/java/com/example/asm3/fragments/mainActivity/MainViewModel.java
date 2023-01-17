@@ -8,6 +8,8 @@ import com.example.asm3.R;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
+import com.example.asm3.models.Notification;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 
@@ -16,6 +18,8 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<Integer> selectedItemId = new MutableLiveData<>(R.id.homeNav);
     private final MutableLiveData<TopBarView> topBar = new MutableLiveData<>();
     private final MutableLiveData<Customer> authCustomer = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<Notification>> notifications = new MutableLiveData<>();
+    private final MutableLiveData<NavigationBarView> menu = new MutableLiveData<>();
 
     public MainViewModel() {
     }
@@ -34,6 +38,14 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<Customer> getAuthCustomer() {return authCustomer;}
 
+    public MutableLiveData<ArrayList<Notification>> getNotifications() {
+        return notifications;
+    }
+
+    public MutableLiveData<NavigationBarView> getMenu() {
+        return menu;
+    }
+
     public void setCateArray(ArrayList<Category> newCate) {
         categories.setValue(newCate);
     }
@@ -48,4 +60,13 @@ public class MainViewModel extends ViewModel {
 
     public void setAuthCustomer(Customer newAuthCustomer) {
         authCustomer.setValue(newAuthCustomer);}
+
+    public void setNotifications(ArrayList<Notification> newNotif) {
+        notifications.setValue(newNotif);
+    }
+
+    public void setMenu(NavigationBarView newMenu) {
+        menu.setValue(newMenu);
+    }
+
 }

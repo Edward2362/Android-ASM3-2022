@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.fragments.mainActivity.NotificationFragment;
 import com.example.asm3.models.Notification;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ public class NotificationFragmentController extends BaseController implements
 
     private MainViewModel mainViewModel;
     private LiveData<ArrayList<Notification>> notifications;
-    private ArrayList<Notification> notificationsList;
 
     public NotificationFragmentController(Context context, FragmentActivity activity, View view, ViewModel viewModel) {
         super(context, activity);
@@ -48,12 +49,26 @@ public class NotificationFragmentController extends BaseController implements
     public void onInit() {
         notifRecView = view.findViewById(R.id.notifRecView);
 
-        //test
-        notificationsList = new ArrayList<>();
-        notificationsList.add(new Notification("00", "Karen", "Hello this is a notification", "11:00", true));
-        notificationsList.add(new Notification("01", "Karen", "Hello this is another notification", "10:00", false));
-
-        //end test
+        notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
+            @Override
+            public void onChanged(ArrayList<Notification> notifications) {
+                notifAdapter.notifyDataSetChanged();
+                int countUnread = 0;
+                for (Notification notification : notifications) {
+                    if(!notification.isRead())
+                        countUnread++;
+                }
+                BadgeDrawable notifBadge = mainViewModel.getMenu().getValue().getOrCreateBadge(R.id.notiNav);
+                notifBadge.setVisible(true);
+                notifBadge.setNumber(countUnread);
+            }
+        });
+//        //test
+//        notificationsList = new ArrayList<>();
+//        notificationsList.add(new Notification("00", "Karen", "Hello this is a notification", "11:00", true));
+//        notificationsList.add(new Notification("01", "Karen", "Hello this is another notification", "10:00", false));
+//
+//        //end test
 
         notifAdapter = generateNotificationAdapter();
         notifRecView.setAdapter(notifAdapter);
@@ -61,14 +76,14 @@ public class NotificationFragmentController extends BaseController implements
     }
 
     @Override
-    public void onNotificationClick(int position, View view, MaterialCardView notifCard) {
-        notificationsList.get(position).setRead(true);
-        notifCard.setCardElevation(0);
+    public void onNotificationClick(int position, View view) {
+        notifications.getValue().get(position).setRead(true);
+        ((MaterialCardView) view).setCardElevation(0);
     }
 
     // Helpers
     private GenericAdapter<Notification> generateNotificationAdapter() {
-        return new GenericAdapter<Notification>(notificationsList) {
+        return new GenericAdapter<Notification>(notifications.getValue()) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                 final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.notif_item, parent, false);
@@ -92,7 +107,7 @@ public class NotificationFragmentController extends BaseController implements
     }
 
     // Request functions
-
+    // TODO: After onClick, notify the database that the notification is read
 
     // Navigation functions
 

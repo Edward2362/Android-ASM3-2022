@@ -7,11 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.R;
@@ -34,6 +37,9 @@ import com.example.asm3.models.Customer;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.Order;
 import com.example.asm3.models.SubCategory;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
@@ -52,6 +58,7 @@ public class MainActivityController extends BaseController implements
     private TopBarView topBar;
     private NavigationBarView menu;
     private LiveData<Integer> selectedItemId;
+    private LiveData<ArrayList<Notification>> notifications;
     private FragmentManager fragmentManager;
     private HomeFragment homeFragment;
     private SearchFragment searchFragment;
@@ -72,7 +79,6 @@ public class MainActivityController extends BaseController implements
     // search fragment data
 
     // notification fragment data
-    private ArrayList<Notification> notifications;
 
     // profile fragment data
 
@@ -80,18 +86,21 @@ public class MainActivityController extends BaseController implements
         super(context, activity);
         mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
         mainViewModel.setTopBarView(getActivity().findViewById(R.id.mainTopBar));
+        mainViewModel.setMenu(getActivity().findViewById(R.id.menu));
         selectedItemId = mainViewModel.getSelectedItemId();
         topBar = mainViewModel.getTopBarView().getValue();
+        menu = mainViewModel.getMenu().getValue();
 
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationFragment();
         profileFragment = new ProfileFragment();
 
-        notifications = new ArrayList<Notification>();
         orders = new ArrayList<Order>();
         getData = new GetData(context, this);
         getAuthenticatedData = new GetAuthenticatedData(context, this);
+
+        notifications = mainViewModel.getNotifications();
     }
 
     // Render functions
@@ -99,10 +108,22 @@ public class MainActivityController extends BaseController implements
     public void onInit() {
         fragmentManager = getActivity().getSupportFragmentManager();
         topBar.setMainPage("GoGoat");
-        menu = getActivity().findViewById(R.id.menu);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
 
+        notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
+            @Override
+            public void onChanged(ArrayList<Notification> notifications) {
+                int countUnread = 0;
+                for (Notification notification : notifications) {
+                    if(!notification.isRead())
+                        countUnread++;
+                }
+                BadgeDrawable notifBadge = menu.getOrCreateBadge(R.id.notiNav);
+                notifBadge.setVisible(true);
+                notifBadge.setNumber(countUnread);
+            }
+        });
         if (isAuth()) {
             token = getToken();
             getAuthenticatedData.setEndPoint(Constant.getCustomerData);
@@ -112,13 +133,12 @@ public class MainActivityController extends BaseController implements
             getAuthenticatedData.execute();
         }
         getAllCategories();
+        getNotification();
     }
 
     public void loadMenu() {
         menu.getMenu().getItem(0).setChecked(true);
     }
-
-    // Helpers
 
     // Request functions
     public void getAllCategories() {
@@ -214,7 +234,7 @@ public class MainActivityController extends BaseController implements
             Log.d(TAG, "onFinished: " + subCategories.size());
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
-            notifications = apiList.getList();
+            mainViewModel.setNotifications(apiList.getList());
         }
     }
 
