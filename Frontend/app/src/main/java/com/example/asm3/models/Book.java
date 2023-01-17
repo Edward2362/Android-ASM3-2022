@@ -16,6 +16,8 @@ public class Book implements Serializable {
     private String subCategory;
     private String customer;
     private String _id;
+    private boolean isNew;
+    private String image;
 
     public static String idKey="_id";
     public static String nameKey="name";
@@ -27,9 +29,11 @@ public class Book implements Serializable {
     public static String categoryKey="category";
     public static String subCategoryKey="subCategory";
     public static String customerKey="customer";
+    public static String isNewKey="isNew";
+    public static String imageKey="image";
 
 
-    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, String subCategory, String customer, String _id) {
+    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, String subCategory, String customer, String _id, boolean isNew, String image) {
         this._id = _id;
         this.name = name;
         this.author = author;
@@ -40,6 +44,24 @@ public class Book implements Serializable {
         this.category = category;
         this.subCategory = subCategory;
         this.customer = customer;
+        this.isNew = isNew;
+        this.image = image;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String get_id() {
@@ -134,6 +156,8 @@ public class Book implements Serializable {
         String subCategory;
         String customer;
         String _id;
+        boolean isNew;
+        String image;
         if (jsonObject != null) {
             try {
                 name = jsonObject.getString(nameKey);
@@ -146,8 +170,10 @@ public class Book implements Serializable {
                 subCategory = jsonObject.getString(subCategoryKey);
                 customer = jsonObject.getString(customerKey);
                 _id = jsonObject.getString(idKey);
+                isNew = jsonObject.getBoolean(isNewKey);
+                image = jsonObject.getString(imageKey);
 
-                book = new Book(name,author,description,price,quantity,publishedAt,category,subCategory,customer,_id);
+                book = new Book(name,author,description,price,quantity,publishedAt,category,subCategory,customer,_id,isNew,image);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }
@@ -170,6 +196,8 @@ public class Book implements Serializable {
                 jsonObject.put(categoryKey, book.category);
                 jsonObject.put(subCategoryKey, book.subCategory);
                 jsonObject.put(customerKey, book.customer);
+                jsonObject.put(isNewKey,book.isNew);
+                jsonObject.put(imageKey,book.image);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }

@@ -98,15 +98,15 @@ public class SearchFragmentController extends BaseController implements
             lastTextEdit = System.currentTimeMillis();
             // TODO: implement function fetching
             handler.removeCallbacksAndMessages(null);
-            do {
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSuggestions(newText);
-                        // TODO: put these 2 lines in onFinished, a fetching function will be called here
-                    }
-                }, 1000);
-            } while (!searchSuggestions.isEmpty());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getSuggestions(newText);
+                    Log.d("error","huhu");
+                    // TODO: put these 2 lines in onFinished, a fetching function will be called here
+
+                }
+            }, 1000);
         } else {
             progressBar.setVisibility(View.GONE);
             searchSuggestionRecView.setVisibility(View.GONE);
