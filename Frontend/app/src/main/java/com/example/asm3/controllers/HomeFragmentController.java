@@ -72,9 +72,11 @@ public class HomeFragmentController extends BaseController implements
             @Override
             public void onChanged(ArrayList<Category> categories) {
                 Log.d(TAG, "onChanged controller: test " + categories);
-                foreign = categories.get(0).getSubCategories();
-                domestic = categories.get(1).getSubCategories();
-                text = categories.get(2).getSubCategories();
+                if (!categories.isEmpty()) {
+                    foreign = categories.get(0).getSubCategories();
+                    domestic = categories.get(1).getSubCategories();
+                    text = categories.get(2).getSubCategories();
+                }
             }
         });
 
@@ -89,6 +91,7 @@ public class HomeFragmentController extends BaseController implements
         subCateBotDivider = view.findViewById(R.id.subCateBotDivider);
         subCateAdapter = generateSubCateAdapter();
 
+        // put this observe after find view by id
         authCustomer.observe(getActivity(), new Observer<Customer>() {
             @Override
             public void onChanged(Customer customer) {

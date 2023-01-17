@@ -7,10 +7,16 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModel;
 
+import com.example.asm3.R;
+import com.example.asm3.fragments.mainActivity.MainViewModel;
+import com.example.asm3.models.Notification;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,5 +49,22 @@ public class Helper {
             }
         }
         return checked;
+    }
+
+    public static void setBadge(ArrayList<Notification> notifications, MainViewModel viewModel) {
+        int countUnread = 0;
+        for (Notification notification : notifications) {
+            if (!notification.isRead())
+                countUnread++;
+        }
+        BadgeDrawable notifBadge = viewModel.getMenu().getValue().getOrCreateBadge(R.id.notiNav);
+        if (countUnread != 0) {
+            notifBadge.setVisible(true);
+            notifBadge.setNumber(countUnread);
+        } else {
+            Log.d(TAG, "onChanged: Noti test");
+            notifBadge.setVisible(false);
+            notifBadge.clearNumber();
+        }
     }
 }

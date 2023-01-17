@@ -56,8 +56,8 @@ public class HomeFragment extends Fragment {
         return home;
     }
 
-        public void onInit(View view, ViewModel viewModel) {
-            homeFragmentController = new HomeFragmentController(requireContext(), requireActivity(), view, viewModel);
-            homeFragmentController.onInit();
-        }
+    public void onInit(View view, ViewModel viewModel) {
+        homeFragmentController = new HomeFragmentController(requireContext(), requireActivity(), view, viewModel);
+        homeFragmentController.onInit();
+    }
 }
