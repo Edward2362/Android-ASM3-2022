@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
 
 import com.example.asm3.AuthenticationActivity;
+import com.example.asm3.CartActivity;
 import com.example.asm3.R;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.models.Notification;
@@ -75,5 +76,10 @@ public class Helper {
     public static void goToLogin(Context context, Activity activity) {
         Intent intent = new Intent(context, AuthenticationActivity.class);
         activity.startActivityForResult(intent, Constant.authActivityCode);
+    }
+
+    public static void goToCart(Context context, Activity activity) {
+        Intent intent = new Intent(context, CartActivity.class);
+        activity.startActivity(intent);
     }
 }

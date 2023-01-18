@@ -131,10 +131,12 @@ public class MainActivityController extends BaseController implements
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.cartButton:
                 if (!isAuth()) {
-                    Helper.goToLogin(getContext(),getActivity());
+                    Helper.goToLogin(getContext(), getActivity());
+                } else {
+                    Helper.goToCart(getContext(), getActivity());
                 }
                 break;
         }
