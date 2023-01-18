@@ -26,7 +26,8 @@ import java.util.ArrayList;
 
 public class SearchResultActivityController extends BaseController implements
         View.OnClickListener,
-        BookHolder.OnSelectListener {
+        BookHolder.OnSelectListener,
+        View.OnFocusChangeListener{
     // top bar view
     private TopBarView topBar;
     private MaterialButton backBtn;
@@ -66,9 +67,7 @@ public class SearchResultActivityController extends BaseController implements
         backBtn.setOnClickListener(this);
         cartBtn.setOnClickListener(this);
         searchView.setOnClickListener(this);
-        searchEditTextId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-//        EditText searchEditText = (EditText) searchView.findViewById(searchEditTextId);
-//        searchEditText.setOnClickListener(this);
+        searchView.setOnQueryTextFocusChangeListener(this);
 
         // for test
         searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
@@ -103,6 +102,11 @@ public class SearchResultActivityController extends BaseController implements
     @Override
     public void onBookClick(int position, View view) {
 
+    }
+
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        getActivity().finish();
     }
 
     @Override
