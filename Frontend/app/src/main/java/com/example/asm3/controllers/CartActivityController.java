@@ -34,7 +34,7 @@ public class CartActivityController extends BaseController implements
         View.OnClickListener {
     private TopBarView topBar;
     private RecyclerView cartRecView;
-    private TextView totalOrderTxt;
+    private TextView totalOrderTxt, countItemsTxt;
     private Button backBtn, checkoutBtn;
     private ArrayList<CartItem> cartItems;
     private GenericAdapter<CartItem> cartItemsAdapter;
@@ -65,6 +65,8 @@ public class CartActivityController extends BaseController implements
         cartItemsAdapter = generateOrderAdapter();
         loadPurchased();
 
+        countItemsTxt = getActivity().findViewById(R.id.countItemsTxt);
+        countItemsTxt.setText("You have "+cartItems.size()+" books in your cart.");
         totalOrderTxt = getActivity().findViewById(R.id.totalOrderTxt);
         for (int i=0; i< cartItems.size();i++){
             totalPrice = totalPrice + cartItems.get(i).getProduct().getPrice()*cartItems.get(i).getQuantity();
@@ -89,7 +91,10 @@ public class CartActivityController extends BaseController implements
                 Helper.goToBookDetail(getContext(),getActivity(), cartItems.get(position).getProduct().get_id());
                 break;
             case R.id.orderDeleteBtn:
+                totalPrice = totalPrice - cartItems.get(position).getProduct().getPrice()*cartItems.get(position).getQuantity();
+                totalOrderTxt.setText("Total: "+ totalPrice);
                 cartItems.remove(position);
+                countItemsTxt.setText("You have "+cartItems.size()+" books in your cart.");
                 cartItemsAdapter.notifyItemRemoved(position);
                 break;
         }
