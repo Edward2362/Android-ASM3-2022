@@ -90,6 +90,7 @@ public class ManageBookActivityController extends BaseController implements
         super(context, activity);
     }
 
+    // render functions
     @Override
     public void onInit(){
 
@@ -138,141 +139,6 @@ public class ManageBookActivityController extends BaseController implements
         }
     }
 
-    private GenericAdapter<SubCategory> generateSubCateAdapter() {
-        return new GenericAdapter<SubCategory>(displayList) {
-            @Override
-            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
-                final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_category_item, parent, false);
-                return new SubCategoryHolder(view, ManageBookActivityController.this);
-            }
-
-            @Override
-            public void onBindData(RecyclerView.ViewHolder holder, SubCategory item) {
-                SubCategoryHolder subCategoryHolder = (SubCategoryHolder) holder;
-                subCategoryHolder.getSubCateTxt().setText(item.getName());
-                subCategoryHolder.getSubCateCheckBox().setChecked(item.isChosen());
-            }
-        };
-    }
-
-    public boolean isUpload() {
-        Intent intent = getActivity().getIntent();
-        if (intent.getExtras().get(Constant.isUploadKey) != null) {
-            if ((Integer.parseInt(intent.getExtras().get(Constant.isUploadKey).toString()) == Constant.uploadCode)){
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public void setProductId() {
-        Intent intent = getActivity().getIntent();
-        productId = intent.getExtras().get(Constant.productIdKey).toString();
-    }
-
-    private void setCategoriesGrp(int cateBtn) {
-        categoriesBtnGrp.check(cateBtn);
-    }
-
-    public void uploadBook(Book inputBook){
-        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
-        postAuthenticatedData.setEndPoint(Constant.uploadBook);
-        postAuthenticatedData.setTaskType(Constant.uploadBookTaskType);
-        postAuthenticatedData.setToken(token);
-        postAuthenticatedData.execute(Book.toJSON(inputBook));
-    }
-
-    public void updateBook(Book inputBook) {
-        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
-        postAuthenticatedData.setEndPoint(Constant.updateBook);
-        postAuthenticatedData.setTaskType(Constant.updateBookTaskType);
-        postAuthenticatedData.setToken(token);
-        postAuthenticatedData.execute(Book.toJSON(inputBook));
-    }
-
-    public void deleteBook(String bookId) {
-        deleteAuthenticatedData = new DeleteAuthenticatedData(getContext(), this);
-        deleteAuthenticatedData.setEndPoint(Constant.deleteBook + "/" + bookId);
-        deleteAuthenticatedData.setTaskType(Constant.deleteBookTaskType);
-        deleteAuthenticatedData.setToken(token);
-        deleteAuthenticatedData.execute();
-    }
-
-    public void getAllCategories() {
-        getData = new GetData(getContext(), this);
-        getData.setEndPoint(Constant.getAllCategories);
-        getData.setTaskType(Constant.getAllCategoriesTaskType);
-        getData.execute();
-    }
-
-    public void getProduct(String id) {
-        getData = new GetData(getContext(), this);
-        getData.setEndPoint(Constant.getProduct + "/" + id);
-        getData.setTaskType(Constant.getProductTaskType);
-        getData.execute();
-    }
-
-    @Override
-    public void onFinished(String message,String taskType){
-        if (taskType.equals(Constant.uploadBookTaskType)){
-            getActivity().finish();
-        } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
-            ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message),Category.class);
-            categories = apiList.getList();
-            foreign = categories.get(0).getSubCategories();
-            domestic = categories.get(1).getSubCategories();
-            text = categories.get(2).getSubCategories();
-        } else if (taskType.equals(Constant.getProductTaskType)) {
-            ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
-            Book product = apiData.getData();
-            productNameEt.setText(product.getName());
-            authorRegisEt.setText(product.getAuthor());
-            descriptionEt.setText(product.getDescription());
-            priceEt.setText(String.valueOf(product.getPrice()));
-            quantityEt.setText(String.valueOf(product.getQuantity()));
-            if (categories.get(0).get_id().equals(product.getCategory())) {
-                categoriesBtnGrp.check(R.id.manageProductForeignCateBtn);
-            } else if (categories.get(1).get_id().equals(product.getCategory())) {
-                categoriesBtnGrp.check(R.id.manageProductDomesticCateBtn);
-            } else if (categories.get(2).get_id().equals(product.getCategory())) {
-                categoriesBtnGrp.check(R.id.manageProductTextCateBtn);
-            }
-
-            ArrayList<String> productSubCategory = product.getSubCategory();
-            for (int i = 0; i < displayList.size(); ++i) {
-                for (int index = 0; index < productSubCategory.size(); ++index) {
-                    if (displayList.get(i).get_id().equals(productSubCategory.get(i))) {
-                        displayList.get(i).setChosen(true);
-                    }
-                }
-            }
-
-            subCateRecView.setAdapter(subCateAdapter);
-            subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-            if (product.isNew()) {
-                newProduct.setChecked(true);
-                usedProduct.setChecked(false);
-            } else {
-                newProduct.setChecked(false);
-                usedProduct.setChecked(true);
-            }
-
-            productPhoto = Helper.stringToBitmap(product.getImage());
-            productView.setImageBitmap(productPhoto);
-        }
-    }
-
-    @Override
-    public void onError(String taskType) {
-
-    }
-
-
-
     @Override
     public void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox) {
         boolean newStatus = false;
@@ -320,6 +186,42 @@ public class ManageBookActivityController extends BaseController implements
         }
     }
 
+    // helper functions
+    private GenericAdapter<SubCategory> generateSubCateAdapter() {
+        return new GenericAdapter<SubCategory>(displayList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sub_category_item, parent, false);
+                return new SubCategoryHolder(view, ManageBookActivityController.this);
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, SubCategory item) {
+                SubCategoryHolder subCategoryHolder = (SubCategoryHolder) holder;
+                subCategoryHolder.getSubCateTxt().setText(item.getName());
+                subCategoryHolder.getSubCateCheckBox().setChecked(item.isChosen());
+            }
+        };
+    }
+
+    public boolean isUpload() {
+        Intent intent = getActivity().getIntent();
+        if (intent.getExtras().get(Constant.isUploadKey) != null) {
+            if ((Integer.parseInt(intent.getExtras().get(Constant.isUploadKey).toString()) == Constant.uploadCode)){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public void setProductId() {
+        Intent intent = getActivity().getIntent();
+        productId = intent.getExtras().get(Constant.productIdKey).toString();
+    }
+
     public void openCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -342,67 +244,9 @@ public class ManageBookActivityController extends BaseController implements
             }
         }
     }
-    public void onRequestPermissionsResult(int requestCode, @NonNull int[] grantResults) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Intent intent;
-            switch (requestCode){
-                case Constant.cameraPermissionCode:
-                    intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    getActivity().startActivityForResult(intent, Constant.cameraRequest);
-                    break;
-                case Constant.galleryPermissionCode:
-                    intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    getActivity().startActivityForResult(intent, Constant.galleryRequest);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case Constant.cameraRequest:
-                    productPhoto = (Bitmap) data.getExtras().get("data");
-                    productView.setImageBitmap(productPhoto);
-                    break;
-                case Constant.galleryRequest:
-                    try {
-                        final Uri imageUri = data.getData();
-                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                        productPhoto = BitmapFactory.decodeStream(imageStream);
-                        productView.setImageBitmap(productPhoto);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch(view.getId()) {
-            case R.id.getImageButton:
-                getImageFromGallery();
-                break;
-            case R.id.uploadProduct:
-                onUploadProduct();
-                break;
-            case R.id.updateProduct:
-                onUpdateProduct();
-                break;
-            case R.id.removeProduct:
-                onRemoveProduct();
-                break;
-        }
+    private void setCategoriesGrp(int cateBtn) {
+        categoriesBtnGrp.check(cateBtn);
     }
 
     public void onUploadProduct() {
@@ -480,5 +324,164 @@ public class ManageBookActivityController extends BaseController implements
 
     public void onRemoveProduct() {
         deleteBook(productId);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.getImageButton:
+                getImageFromGallery();
+                break;
+            case R.id.uploadProduct:
+                onUploadProduct();
+                break;
+            case R.id.updateProduct:
+                onUpdateProduct();
+                break;
+            case R.id.removeProduct:
+                onRemoveProduct();
+                break;
+        }
+    }
+
+    // request functions
+    public void uploadBook(Book inputBook){
+        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+        postAuthenticatedData.setEndPoint(Constant.uploadBook);
+        postAuthenticatedData.setTaskType(Constant.uploadBookTaskType);
+        postAuthenticatedData.setToken(token);
+        postAuthenticatedData.execute(Book.toJSON(inputBook));
+    }
+
+    public void updateBook(Book inputBook) {
+        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+        postAuthenticatedData.setEndPoint(Constant.updateBook);
+        postAuthenticatedData.setTaskType(Constant.updateBookTaskType);
+        postAuthenticatedData.setToken(token);
+        postAuthenticatedData.execute(Book.toJSON(inputBook));
+    }
+
+    public void deleteBook(String bookId) {
+        deleteAuthenticatedData = new DeleteAuthenticatedData(getContext(), this);
+        deleteAuthenticatedData.setEndPoint(Constant.deleteBook + "/" + bookId);
+        deleteAuthenticatedData.setTaskType(Constant.deleteBookTaskType);
+        deleteAuthenticatedData.setToken(token);
+        deleteAuthenticatedData.execute();
+    }
+
+    public void getAllCategories() {
+        getData = new GetData(getContext(), this);
+        getData.setEndPoint(Constant.getAllCategories);
+        getData.setTaskType(Constant.getAllCategoriesTaskType);
+        getData.execute();
+    }
+
+    public void getProduct(String id) {
+        getData = new GetData(getContext(), this);
+        getData.setEndPoint(Constant.getProduct + "/" + id);
+        getData.setTaskType(Constant.getProductTaskType);
+        getData.execute();
+    }
+
+    // callback functions
+    @Override
+    public void onFinished(String message,String taskType){
+        if (taskType.equals(Constant.uploadBookTaskType)){
+            getActivity().finish();
+        } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
+            ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message),Category.class);
+            categories = apiList.getList();
+            foreign = categories.get(0).getSubCategories();
+            domestic = categories.get(1).getSubCategories();
+            text = categories.get(2).getSubCategories();
+        } else if (taskType.equals(Constant.getProductTaskType)) {
+            ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
+            Book product = apiData.getData();
+            productNameEt.setText(product.getName());
+            authorRegisEt.setText(product.getAuthor());
+            descriptionEt.setText(product.getDescription());
+            priceEt.setText(String.valueOf(product.getPrice()));
+            quantityEt.setText(String.valueOf(product.getQuantity()));
+            if (categories.get(0).get_id().equals(product.getCategory())) {
+                categoriesBtnGrp.check(R.id.manageProductForeignCateBtn);
+            } else if (categories.get(1).get_id().equals(product.getCategory())) {
+                categoriesBtnGrp.check(R.id.manageProductDomesticCateBtn);
+            } else if (categories.get(2).get_id().equals(product.getCategory())) {
+                categoriesBtnGrp.check(R.id.manageProductTextCateBtn);
+            }
+
+            ArrayList<String> productSubCategory = product.getSubCategory();
+            for (int i = 0; i < displayList.size(); ++i) {
+                for (int index = 0; index < productSubCategory.size(); ++index) {
+                    if (displayList.get(i).get_id().equals(productSubCategory.get(i))) {
+                        displayList.get(i).setChosen(true);
+                    }
+                }
+            }
+
+            subCateRecView.setAdapter(subCateAdapter);
+            subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            if (product.isNew()) {
+                newProduct.setChecked(true);
+                usedProduct.setChecked(false);
+            } else {
+                newProduct.setChecked(false);
+                usedProduct.setChecked(true);
+            }
+
+            productPhoto = Helper.stringToBitmap(product.getImage());
+            productView.setImageBitmap(productPhoto);
+        }
+    }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent intent;
+            switch (requestCode){
+                case Constant.cameraPermissionCode:
+                    intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    getActivity().startActivityForResult(intent, Constant.cameraRequest);
+                    break;
+                case Constant.galleryPermissionCode:
+                    intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    getActivity().startActivityForResult(intent, Constant.galleryRequest);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case Constant.cameraRequest:
+                    productPhoto = (Bitmap) data.getExtras().get("data");
+                    productView.setImageBitmap(productPhoto);
+                    break;
+                case Constant.galleryRequest:
+                    try {
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                        productPhoto = BitmapFactory.decodeStream(imageStream);
+                        productView.setImageBitmap(productPhoto);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
