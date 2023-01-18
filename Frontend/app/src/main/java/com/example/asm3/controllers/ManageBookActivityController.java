@@ -473,6 +473,7 @@ public class ManageBookActivityController extends BaseController implements
                         final Uri imageUri = data.getData();
                         final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                         productPhoto = BitmapFactory.decodeStream(imageStream);
+                        productPhoto = Bitmap.createScaledBitmap(productPhoto, (int)(productPhoto.getWidth()*0.3), (int)(productPhoto.getHeight()*0.3), true);
                         productView.setImageBitmap(productPhoto);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
