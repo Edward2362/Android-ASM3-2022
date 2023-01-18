@@ -15,6 +15,12 @@
         android:layout_weight=".12"
         android:paddingHorizontal="5dp" />
 
+    <TextView
+        android:id="@+id/countItemsTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You have"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecView"
         android:layout_width="match_parent"
