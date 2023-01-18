@@ -20,6 +20,7 @@ import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.OrderHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.CartItem;
@@ -83,8 +84,15 @@ public class CartActivityController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
-        cartItems.remove(position);
-        cartItemsAdapter.notifyItemRemoved(position);
+        switch (view.getId()) {
+            case R.id.orderBody:
+                Helper.goToBookDetail(getContext(),getActivity(), cartItems.get(position).getProduct().get_id());
+                break;
+            case R.id.orderDeleteBtn:
+                cartItems.remove(position);
+                cartItemsAdapter.notifyItemRemoved(position);
+                break;
+        }
     }
 
     private GenericAdapter<CartItem> generateOrderAdapter() {
