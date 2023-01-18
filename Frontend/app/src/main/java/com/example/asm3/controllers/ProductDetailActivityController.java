@@ -15,26 +15,36 @@ import com.example.asm3.models.Book;
 public class ProductDetailActivityController extends BaseController implements AsyncTaskCallBack {
     private GetData getData;
     private Book book;
+
     public ProductDetailActivityController(Context context, FragmentActivity activity) {
-        super(context,activity);
+        super(context, activity);
     }
 
+    // Render functions
     @Override
-    public void onInit(){
+    public void onInit() {
 
     }
 
-    public void getProduct(String productId){
-        getData = new GetData(getContext(),this);
-        getData.setEndPoint(Constant.getProduct+"/"+productId);
+    // Helpers
+
+
+    // Request functions
+    public void getProduct(String productId) {
+        getData = new GetData(getContext(), this);
+        getData.setEndPoint(Constant.getProduct + "/" + productId);
         getData.setTaskType(Constant.getProductTaskType);
         getData.execute();
     }
 
+    // Navigation functions
+
+
+    // Callback functions
     @Override
-    public void onFinished(String message, String taskType){
-        if (taskType.equals(Constant.getProductTaskType)){
-            ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message),Book.class);
+    public void onFinished(String message, String taskType) {
+        if (taskType.equals(Constant.getProductTaskType)) {
+            ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
             book = apiData.getData();
         }
     }
@@ -43,4 +53,6 @@ public class ProductDetailActivityController extends BaseController implements A
     public void onError(String taskType) {
 
     }
+
+    // Getter and Setter
 }
