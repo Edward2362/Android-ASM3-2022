@@ -75,7 +75,7 @@ public class ManageBookActivityController extends BaseController implements
 
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TopBarView manageTopBar;
-    private TextView cateNotifyTxt, manageProductCateErrorTxt;
+    private TextView cateNotifyTxt, manageProductCateErrorTxt, manageProductSubCateErrorTxt;
     private View subCateTopDivider;
     private GenericAdapter<SubCategory> subCateAdapter;
     private RecyclerView subCateRecView;
@@ -111,6 +111,7 @@ public class ManageBookActivityController extends BaseController implements
             subCateRecView = getActivity().findViewById(R.id.manageProductSubCateRecView);
             cateNotifyTxt = getActivity().findViewById(R.id.manageProductCateNotifyTxt);
             manageProductCateErrorTxt = getActivity().findViewById(R.id.manageProductCateErrorTxt);
+            manageProductSubCateErrorTxt = getActivity().findViewById(R.id.manageProductSubCateErrorTxt);
             subCateTopDivider = getActivity().findViewById(R.id.manageProductSubCateTopDivider);
             productView = getActivity().findViewById(R.id.productImage);
             productImageLayout = getActivity().findViewById(R.id.productImageLayout);
@@ -172,6 +173,7 @@ public class ManageBookActivityController extends BaseController implements
 
     @Override
     public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+        manageProductCateErrorTxt.setVisibility(View.GONE);
         subCateTopDivider.setVisibility(View.VISIBLE);
         cateNotifyTxt.setVisibility(View.GONE);
         subCateRecView.setVisibility(View.VISIBLE);
@@ -367,11 +369,17 @@ public class ManageBookActivityController extends BaseController implements
             cateNotifyTxt.setVisibility(View.GONE);
         }
 
+        if (selectedSubCate == 0 && selectedCategory != null) {
+            manageProductSubCateErrorTxt.setVisibility(View.VISIBLE);
+        } else {
+            manageProductSubCateErrorTxt.setVisibility(View.GONE);
+        }
+
         return Helper.inputChecked(productNameEt, productNameLayout, null, null) +
                 Helper.inputChecked(authorRegisEt, authorLayout, null, null) +
                 Helper.inputChecked(priceEt, priceLayout, null, null) +
                 Helper.inputChecked(quantityEt, quantityLayout, null, null) +
-                Helper.inputChecked(publishedAtEt, publishedAtLayout, null, null) +
+                Helper.publishedYearChecked(publishedAtEt, publishedAtLayout) +
                 selectedCate +
                 selectedSubCate == 7;
     }

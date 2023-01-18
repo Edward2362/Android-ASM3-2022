@@ -62,6 +62,29 @@ public class Helper {
         return checked;
     }
 
+    public static int publishedYearChecked(TextInputEditText textInputEditText, TextInputLayout textInputLayout) {
+        int checked = 1;
+        String input = textInputEditText.getText().toString();
+        textInputLayout.setErrorEnabled(false);
+        if (input.equals("")) {
+            textInputLayout.setErrorEnabled(true);
+            textInputLayout.setError("Cannot be empty!");
+            checked = 0;
+        } else {
+            int intInput = Integer.parseInt(input);
+            int currentYear = 2023;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                currentYear = Year.now().getValue();
+            }
+            if (intInput < 1700 || intInput > currentYear) {
+                textInputLayout.setErrorEnabled(true);
+                textInputLayout.setError("Invalid year!");
+                checked = 0;
+            }
+        }
+        return checked;
+    }
+
     public static void setBadge(ArrayList<Notification> notifications, MainViewModel viewModel) {
         int countUnread = 0;
         for (Notification notification : notifications) {
