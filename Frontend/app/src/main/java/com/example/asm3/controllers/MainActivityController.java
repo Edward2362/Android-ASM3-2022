@@ -278,7 +278,7 @@ public class MainActivityController extends BaseController implements
     @Override
     public void onError(String taskType) {
         if (taskType.equals(Constant.getCustomer)) {
-
+            getLocalFileController().writeFile(new ArrayList<>());
         }
     }
 

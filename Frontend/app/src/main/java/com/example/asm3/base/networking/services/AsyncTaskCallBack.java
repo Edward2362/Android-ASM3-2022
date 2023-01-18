@@ -25,7 +25,8 @@ public interface AsyncTaskCallBack {
         } catch(JSONException jsonException) {
             jsonException.printStackTrace();
             Log.d(TAG, "verifyMessage: test in excep");
-            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error catch", Toast.LENGTH_SHORT).show();
+            callBack.onError(taskType);
         }
     }
 }

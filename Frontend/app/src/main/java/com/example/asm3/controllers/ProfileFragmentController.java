@@ -186,11 +186,7 @@ public class ProfileFragmentController extends BaseController implements
         switch (view.getId()) {
             case R.id.orderBody:
                 Log.d(TAG, "onOrderClick: test " + position);
-                reviewDialogBody = new ReviewDialogBody(getContext());
-                builder = new MaterialAlertDialogBuilder(getContext());
-                builder.setView(reviewDialogBody).
-                        setPositiveButton(R.string.submit, this).
-                        setNegativeButton(R.string.cancel, this).show();
+                showDialog();
                 break;
             case R.id.orderDeleteBtn:
                 Log.d(TAG, "onOrderClick: test delete " + position);
@@ -315,6 +311,14 @@ public class ProfileFragmentController extends BaseController implements
     private void loadFeedback() {
         feedbackRecView.setAdapter(reviewAdapter);
         feedbackRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    private void showDialog() {
+        reviewDialogBody = new ReviewDialogBody(getContext());
+        builder = new MaterialAlertDialogBuilder(getContext());
+        builder.setView(reviewDialogBody).
+                setPositiveButton(R.string.submit, this).
+                setNegativeButton(R.string.cancel, this).show();
     }
 
     // Request functions
