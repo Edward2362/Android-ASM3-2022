@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.asm3.CartActivity;
+import com.example.asm3.CheckoutActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.OrderHolder;
@@ -54,6 +57,9 @@ public class CartActivityController extends BaseController implements
         backBtn = topBar.getBackButton();
         backBtn.setOnClickListener(this);
 
+        checkoutBtn = getActivity().findViewById(R.id.checkoutBtn);
+        checkoutBtn.setOnClickListener(this);
+
         cartItems.add(new CartItem(2, new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null)));
         cartItems.add(new CartItem(2, new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null)));
         cartItems.add(new CartItem(2, new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null)));
@@ -80,6 +86,10 @@ public class CartActivityController extends BaseController implements
         switch (view.getId()) {
             case R.id.backButton:
                 getActivity().finish();
+                break;
+            case R.id.checkoutBtn:
+                Intent intent = new Intent(getContext(), CheckoutActivity.class);
+                getActivity().startActivity(intent);
                 break;
         }
     }
