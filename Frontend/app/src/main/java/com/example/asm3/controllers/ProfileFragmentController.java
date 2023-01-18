@@ -3,6 +3,7 @@ package com.example.asm3.controllers;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.util.Log;
@@ -33,12 +34,14 @@ import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
+import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
 import com.example.asm3.models.OrderDetail;
 import com.example.asm3.models.Review;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -47,7 +50,8 @@ public class ProfileFragmentController extends BaseController implements
         View.OnClickListener,
         BookHolder.OnSelectListener,
         OrderHolder.OnSelectListener,
-        ReviewHolder.OnSelectListener {
+        ReviewHolder.OnSelectListener,
+        DialogInterface.OnClickListener {
 
     private View view;
     private ImageView profileAvatarImg;
@@ -56,6 +60,8 @@ public class ProfileFragmentController extends BaseController implements
     private MaterialButtonToggleGroup profileDataBtnGrp;
     private Button settingProfileBtn, sellingBtn, purchasedBtn, feedbackBtn;
     private RecyclerView sellingRecView, purchasedRecView, feedbackRecView;
+    private MaterialAlertDialogBuilder builder;
+    private ReviewDialogBody reviewDialogBody;
     private GenericAdapter<Book> bookAdapter;
     private GenericAdapter<OrderDetail> orderAdapter;
     private GenericAdapter<Review> reviewAdapter;
@@ -178,6 +184,11 @@ public class ProfileFragmentController extends BaseController implements
         switch (view.getId()) {
             case R.id.orderBody:
                 Log.d(TAG, "onOrderClick: test " + position);
+                reviewDialogBody = new ReviewDialogBody(getContext());
+                builder = new MaterialAlertDialogBuilder(getContext());
+                builder.setView(reviewDialogBody).
+                        setPositiveButton(R.string.submit, this).
+                        setNegativeButton(R.string.cancel, this).show();
                 break;
             case R.id.orderDeleteBtn:
                 Log.d(TAG, "onOrderClick: test delete " + position);
@@ -203,6 +214,21 @@ public class ProfileFragmentController extends BaseController implements
                 break;
         }
 
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) { // onClick for dialog
+        Log.d(TAG, "onClick: dialog click " + i);
+        switch (i) {
+            case -1: // submit
+                float rating = reviewDialogBody.getRatingBar().getRating();
+                String userReviewTxt = reviewDialogBody.getReviewTxt().getText().toString();
+                Log.d(TAG, "onClick: dialog rating = " + rating);
+                Log.d(TAG, "onClick: dialog user review text = " + userReviewTxt);
+                break;
+            case -2: // cancel
+                break;
+        }
     }
 
     // Helpers

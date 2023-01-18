@@ -6,11 +6,11 @@ import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,16 +18,22 @@ import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.BookHolder;
 import com.example.asm3.base.controller.BaseController;
+import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
+import com.example.asm3.fragments.searchResultActivity.FilterBottomSheetFragment;
+import com.example.asm3.fragments.searchResultActivity.ResultViewModel;
 import com.example.asm3.models.Book;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 
 public class SearchResultActivityController extends BaseController implements
         View.OnClickListener,
         BookHolder.OnSelectListener,
-        View.OnFocusChangeListener{
+        View.OnFocusChangeListener,
+        AsyncTaskCallBack {
     // top bar view
     private TopBarView topBar;
     private MaterialButton backBtn;
@@ -36,13 +42,18 @@ public class SearchResultActivityController extends BaseController implements
     private int searchEditTextId;
     // search result view
     private MaterialButton filterBtn;
+    private LinearProgressIndicator filterProgressBar;
     private RecyclerView searchResultRecView;
     private GenericAdapter<Book> searchResultAdapter;
     private ArrayList<Book> searchResults;
 
+    private ResultViewModel resultViewModel;
+
     public SearchResultActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         searchResults = new ArrayList<>();
+        resultViewModel = new ViewModelProvider(getActivity()).get(ResultViewModel.class);
+        resultViewModel.setFilterProgressBar(filterProgressBar);
     }
 
     // Render functions
@@ -54,6 +65,7 @@ public class SearchResultActivityController extends BaseController implements
         cartBtn = topBar.getCartButton();
         searchView = topBar.getSearchView();
         filterBtn = getActivity().findViewById(R.id.filterBtn);
+        filterProgressBar = getActivity().findViewById(R.id.filterProgressBar);
         searchResultRecView = getActivity().findViewById(R.id.searchResultRecView);
 
         // set topBar here
@@ -97,6 +109,9 @@ public class SearchResultActivityController extends BaseController implements
                 }
             }
         });
+
+        filterProgressBar.setVisibility(View.VISIBLE);
+        getSearchResults();
     }
 
     @Override
@@ -118,8 +133,11 @@ public class SearchResultActivityController extends BaseController implements
                 getActivity().finish();
                 break;
             case R.id.cartButton:
+                Helper.goToCart(getContext(), getActivity());
                 break;
             case R.id.filterBtn:
+                FilterBottomSheetFragment bottomSheet = new FilterBottomSheetFragment();
+                bottomSheet.show(getActivity().getSupportFragmentManager(), "filterBottomSheet");
                 break;
         }
     }
@@ -144,13 +162,24 @@ public class SearchResultActivityController extends BaseController implements
     }
 
     // Request functions
+    public void getSearchResults() {
 
+    }
 
     // Navigation functions
 
 
     // Callback functions
+    @Override
+    public void onFinished(String message, String taskType) {
 
+        filterProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onError(String taskType) {
+
+    }
 
     // Getter and Setter
 }
