@@ -61,6 +61,7 @@ public class ApiService {
 
     public String getJSON(String endPoint, String token) {
         String json = "";
+        Log.d("place", baseUrl + endPoint);
         try {
             URL url = new URL(baseUrl + endPoint);
             httpURLConnection = (HttpURLConnection) url.openConnection();
