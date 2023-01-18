@@ -118,7 +118,6 @@ public class MainActivityController extends BaseController implements
         });
         if (isAuth()) {
             getAuthCustomer();
-            getNotification();
         }
         getAllCategories();
     }
