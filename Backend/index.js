@@ -17,9 +17,8 @@ const reviewRouter = require("./routes/review");
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({
-    parameterLimit: 100000,
     limit: '50mb',
     extended: true
   }));

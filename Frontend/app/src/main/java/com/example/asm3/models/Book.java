@@ -18,7 +18,7 @@ public class Book implements Serializable {
     private ArrayList<String> subCategory;
     private String customer;
     private String _id;
-    private boolean isNew;
+    private boolean isNewProduct;
     private String image;
 
     public static String idKey="_id";
@@ -31,11 +31,11 @@ public class Book implements Serializable {
     public static String categoryKey="category";
     public static String subCategoryKey="subCategory";
     public static String customerKey="customer";
-    public static String isNewKey="isNew";
+    public static String isNewProductKey="isNewProduct";
     public static String imageKey="image";
 
 
-    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, ArrayList<String> subCategory, String customer, String _id, boolean isNew, String image) {
+    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, ArrayList<String> subCategory, String customer, String _id, boolean isNewProduct, String image) {
         this._id = _id;
         this.name = name;
         this.author = author;
@@ -46,16 +46,16 @@ public class Book implements Serializable {
         this.category = category;
         this.subCategory = subCategory;
         this.customer = customer;
-        this.isNew = isNew;
+        this.isNewProduct = isNewProduct;
         this.image = image;
     }
 
     public boolean isNew() {
-        return isNew;
+        return isNewProduct;
     }
 
-    public void setNew(boolean aNew) {
-        isNew = aNew;
+    public void setNew(boolean isNewProduct) {
+        isNewProduct = isNewProduct;
     }
 
     public String getImage() {
@@ -158,7 +158,7 @@ public class Book implements Serializable {
         ArrayList<String> subCategory;
         String customer;
         String _id;
-        boolean isNew;
+        boolean isNewProduct;
         String image;
         if (jsonObject != null) {
             try {
@@ -172,10 +172,10 @@ public class Book implements Serializable {
                 subCategory = getSubCategories(jsonObject.getJSONArray(subCategoryKey));
                 customer = jsonObject.getString(customerKey);
                 _id = jsonObject.getString(idKey);
-                isNew = jsonObject.getBoolean(isNewKey);
+                isNewProduct = jsonObject.getBoolean(isNewProductKey);
                 image = jsonObject.getString(imageKey);
 
-                book = new Book(name,author,description,price,quantity,publishedAt,category,subCategory,customer,_id,isNew,image);
+                book = new Book(name,author,description,price,quantity,publishedAt,category,subCategory,customer,_id,isNewProduct,image);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }
@@ -197,7 +197,7 @@ public class Book implements Serializable {
                 jsonObject.put(categoryKey, book.category);
                 jsonObject.put(subCategoryKey, getSubCategoryJSONArray(book.subCategory));
                 jsonObject.put(customerKey, book.customer);
-                jsonObject.put(isNewKey,book.isNew);
+                jsonObject.put(isNewProductKey,book.isNewProduct);
                 jsonObject.put(imageKey,book.image);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
