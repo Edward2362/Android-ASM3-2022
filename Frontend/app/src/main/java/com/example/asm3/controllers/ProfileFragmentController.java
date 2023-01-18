@@ -251,10 +251,10 @@ public class ProfileFragmentController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Review item) {
                 ReviewHolder reviewHolder = (ReviewHolder) holder;
-                reviewHolder.getReviewUserNameTxt().setText(item.getReviewer().getUsername());
+                reviewHolder.getReviewUserNameTxt().setText(item.getCustomer().getUsername());
                 reviewHolder.getReviewContentTxt().setText(item.getContent());
                 reviewHolder.getReviewRatingBar().setRating(item.getRating());
-                reviewHolder.getReviewDateTxt().setText(item.getTimestamp());
+                reviewHolder.getReviewDateTxt().setText(item.getDate());
             }
         };
     }

@@ -2,7 +2,6 @@ const Book = require("../models/Book");
 
 const Customer = require("../models/Customer");
 const Constants = require("../constants/Constants");
-const { response } = require("express");
 
 const uploadBook = async (req, response) => {
     const bookInput = {
@@ -19,7 +18,9 @@ const uploadBook = async (req, response) => {
       image: req.body.image
     };
 
-    const book = await Book.create(bookInput);
+    const book = await Book(bookInput);
+
+    await book.save();
 
     return response.json({
       message: "",
@@ -33,7 +34,7 @@ const updateBook = async (req, response) => {
       _id: req.body._id
     });
 
-    if (books.length == 0) {
+    if (books.length === 0) {
       return response.json({
         message: "Error",
         error: true,
@@ -77,7 +78,7 @@ const deleteBook = (req, response) => {
 const getProducts = async (req, response) => {
   const input = req.query;
 
-  let products = await Book.find({}).populate("subCategory").populate("category");
+  let products = await Book.find({});
 
   if (input.subCategory === undefined && input.category === undefined) {
     return response.json({
@@ -89,8 +90,6 @@ const getProducts = async (req, response) => {
 
   let filteredProducts = [];
 
-  
-  
   let categories = [];
   if (input.category !== undefined) {
     if (typeof(input.category) === "string") {
@@ -166,23 +165,29 @@ const getUploadedProducts = async (req, response) => {
   }
 };
 
-const getProduct = (req, response) => {
-  const productId = req.params.productId;
-  Book.find({_id: productId}, (error, books) => {
-    if (error) {
+const getProduct = async (req, response) => {
+  
+  try {
+    const productId = req.params.productId;
+    const products = await Book.find({_id: productId});
+
+    if (products.length === 0) {
       return response.json({
         message: "Error",
         error: true,
-        data: []
+        data: products
       });
     }
 
-    response.json({
+    return response.json({
       message: "",
       error: false,
-      data: books
+      data: products
     });
-  });
+  } catch(error) {
+    console.log(error);
+    process.exit(1);
+  }
 };
 
 

@@ -42,6 +42,7 @@ import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Category;
+import com.example.asm3.models.Customer;
 import com.example.asm3.models.SubCategory;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -256,9 +257,9 @@ public class ManageBookActivityController extends BaseController implements
         float productPrice = 0F;
         int productQuantity = 0;
         String productPublishedAt = "";
-        String productCategory = "";
-        ArrayList<String> productSubCategory = new ArrayList<String>();
-        String productCustomer = "";
+        Category productCategory = new Category();
+        ArrayList<SubCategory> productSubCategory = new ArrayList<SubCategory>();
+        Customer productCustomer = new Customer();
         productId = "";
         boolean isProductNew = false;
         String productImage = "";
@@ -269,10 +270,12 @@ public class ManageBookActivityController extends BaseController implements
         productPrice = Float.parseFloat(priceEt.getText().toString());
         productQuantity = Integer.parseInt(quantityEt.getText().toString());
         productPublishedAt = publishedAtEt.getText().toString();
-        productCategory = selectedCategory.get_id();
+        productCategory.set_id(selectedCategory.get_id());
         for (int i = 0; i < displayList.size(); ++i) {
             if (displayList.get(i).isChosen()) {
-                productSubCategory.add(displayList.get(i).get_id());
+                SubCategory subCategory = new SubCategory();
+                subCategory.set_id(displayList.get(i).get_id());
+                productSubCategory.add(subCategory);
             }
         }
 
@@ -293,9 +296,9 @@ public class ManageBookActivityController extends BaseController implements
         float productPrice = 0F;
         int productQuantity = 0;
         String productPublishedAt = "";
-        String productCategory = "";
-        ArrayList<String> productSubCategory = new ArrayList<String>();
-        String productCustomer = "";
+        Category productCategory = new Category();
+        ArrayList<SubCategory> productSubCategory = new ArrayList<SubCategory>();
+        Customer productCustomer = new Customer();
         boolean isProductNew = false;
         String productImage = "";
 
@@ -305,10 +308,12 @@ public class ManageBookActivityController extends BaseController implements
         productPrice = Float.parseFloat(priceEt.getText().toString());
         productQuantity = Integer.parseInt(quantityEt.getText().toString());
         productPublishedAt = publishedAtEt.getText().toString();
-        productCategory = selectedCategory.get_id();
+        productCategory.set_id(selectedCategory.get_id());
         for (int i = 0; i < displayList.size(); ++i) {
             if (displayList.get(i).isChosen()) {
-                productSubCategory.add(displayList.get(i).get_id());
+                SubCategory subCategory = new SubCategory();
+                subCategory.set_id(displayList.get(i).get_id());
+                productSubCategory.add(subCategory);
             }
         }
 
@@ -402,18 +407,18 @@ public class ManageBookActivityController extends BaseController implements
             descriptionEt.setText(product.getDescription());
             priceEt.setText(String.valueOf(product.getPrice()));
             quantityEt.setText(String.valueOf(product.getQuantity()));
-            if (categories.get(0).get_id().equals(product.getCategory())) {
+            if (categories.get(0).get_id().equals(product.getCategory().get_id())) {
                 categoriesBtnGrp.check(R.id.manageProductForeignCateBtn);
-            } else if (categories.get(1).get_id().equals(product.getCategory())) {
+            } else if (categories.get(1).get_id().equals(product.getCategory().get_id())) {
                 categoriesBtnGrp.check(R.id.manageProductDomesticCateBtn);
-            } else if (categories.get(2).get_id().equals(product.getCategory())) {
+            } else if (categories.get(2).get_id().equals(product.getCategory().get_id())) {
                 categoriesBtnGrp.check(R.id.manageProductTextCateBtn);
             }
 
-            ArrayList<String> productSubCategory = product.getSubCategory();
+            ArrayList<SubCategory> productSubCategory = product.getSubCategory();
             for (int i = 0; i < displayList.size(); ++i) {
                 for (int index = 0; index < productSubCategory.size(); ++index) {
-                    if (displayList.get(i).get_id().equals(productSubCategory.get(index))) {
+                    if (displayList.get(i).get_id().equals(productSubCategory.get(index).get_id())) {
                         displayList.get(i).setChosen(true);
                     }
                 }

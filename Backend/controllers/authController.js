@@ -29,10 +29,11 @@ const register = async (req, response) => {
         email: req.body.email,
         password: req.body.password,
         username: req.body.username,
-        address: req.body.address,
+        address: "",
         role: Constants.CUSTOMER_ROLE,
         ratings: 0,
         cart: [],
+        avatar: req.body.avatar,
         token: ""
       };
 

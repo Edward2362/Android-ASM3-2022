@@ -108,6 +108,18 @@ public class ApiList<T extends Object> {
             }
 
             return new ApiList<T>((ArrayList<T>) orderDetails);
+        } else if (t.isAssignableFrom(Review.class)) {
+            ArrayList<Review> reviews = new ArrayList<Review>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    reviews.add(Review.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch(Exception exception) {
+                exception.printStackTrace();
+            }
+
+            return new ApiList<T>((ArrayList<T>) reviews);
         } else {
             return null;
         }

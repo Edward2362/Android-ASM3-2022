@@ -5,12 +5,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class Category implements Serializable {
     private String name;
     private String _id;
     private ArrayList<SubCategory> subCategories;
+    private boolean isSubCategoriesPopulated = false;
+
+    public boolean isSubCategoriesPopulated() {
+        return isSubCategoriesPopulated;
+    }
+
+    public void setIsSubCategoriesPopulated(boolean isSubCategoriesPopulated) {
+        this.isSubCategoriesPopulated = isSubCategoriesPopulated;
+    }
 
     public static String nameKey="name";
     public static String idKey="_id";
@@ -20,7 +30,12 @@ public class Category implements Serializable {
         this.name = name;
         this._id = _id;
         this.subCategories = subCategories;
+    }
 
+    public Category() {
+        this.name = "";
+        this._id = "";
+        this.subCategories = null;
     }
 
     public String getName() {
@@ -57,11 +72,25 @@ public class Category implements Serializable {
                 name = jsonObject.getString(nameKey);
                 _id = jsonObject.getString(idKey);
                 JSONArray subCategoryArray = jsonObject.getJSONArray(subCategoriesKey);
-                for (int i = 0; i < subCategoryArray.length(); ++i) {
-                    SubCategory subCategory = SubCategory.fromJSON(subCategoryArray.getJSONObject(i));
-                    subCategories.add(subCategory);
+                if (subCategoryArray.length() == 0) {
+                    category = new Category(name, _id, subCategories);
+                } else {
+                    if (subCategoryArray.get(0) instanceof JSONObject) {
+                        for (int i = 0; i < subCategoryArray.length(); ++i) {
+                            SubCategory subCategory = SubCategory.fromJSON(subCategoryArray.getJSONObject(i));
+                            subCategories.add(subCategory);
+                        }
+                        category = new Category(name, _id, subCategories);
+                        category.setIsSubCategoriesPopulated(true);
+                    } else if (subCategoryArray.get(0) instanceof String) {
+                        for (int i = 0; i < subCategoryArray.length(); ++i) {
+                            SubCategory subCategory = new SubCategory();
+                            subCategory.set_id(subCategoryArray.getString(i));
+                            subCategories.add(subCategory);
+                        }
+                        category = new Category(name, _id, subCategories);
+                    }
                 }
-                category = new Category(name, _id, subCategories);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }
@@ -76,11 +105,19 @@ public class Category implements Serializable {
                 jsonObject = new JSONObject();
                 jsonObject.put(nameKey, category.name);
                 jsonObject.put(idKey, category._id);
-                ArrayList<String> subCategories = new ArrayList<String>();
-                for (int i = 0; i < category.subCategories.size(); ++i) {
-                    subCategories.add(category.subCategories.get(i).get_id());
+                JSONArray subCategoriesJSONArray = new JSONArray();
+
+                if (category.isSubCategoriesPopulated()) {
+                    for (int i = 0; i < category.subCategories.size(); ++i) {
+                        subCategoriesJSONArray.put(SubCategory.toJSON(category.subCategories.get(i)));
+                    }
+                } else {
+                    for (int i = 0; i < category.subCategories.size(); ++i) {
+                        subCategoriesJSONArray.put(category.subCategories.get(i).get_id());
+                    }
                 }
-                jsonObject.put(subCategoriesKey, subCategories);
+
+                jsonObject.put(subCategoriesKey, subCategoriesJSONArray);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }

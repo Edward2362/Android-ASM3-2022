@@ -37,6 +37,8 @@ public class ApiData<T> {
             return new ApiData<T>((T) Order.fromJSON(jsonObject));
         } else if (t.isAssignableFrom(OrderDetail.class)) {
             return new ApiData<T>((T) OrderDetail.fromJSON(jsonObject));
+        } else if (t.isAssignableFrom(Review.class)) {
+            return new ApiData<T>((T) Review.fromJSON(jsonObject));
         } else {
             return null;
         }

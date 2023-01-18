@@ -82,7 +82,7 @@ public class NotificationFragmentController extends BaseController implements
 
     @Override
     public void onNotificationClick(int position, View view) {
-        notifications.getValue().get(position).setRead(true);
+        notifications.getValue().get(position).setIsRead(true);
         ((MaterialCardView) view).setCardElevation(0);
     }
 

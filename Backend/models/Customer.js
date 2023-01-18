@@ -34,6 +34,9 @@ const customerSchema = new mongoose.Schema({
       },
       quantity: Number
     }],
+    avatar: {
+      type: String
+    },
     token: {
       type: String
     }

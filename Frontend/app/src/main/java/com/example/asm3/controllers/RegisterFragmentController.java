@@ -96,12 +96,12 @@ public class RegisterFragmentController extends BaseController implements
         email = String.valueOf(emailRegisEt.getText());
         String inputUsername = String.valueOf(usernameRegisEt.getText());
         password = String.valueOf(pwRegisEt.getText());
-        String address = "";
-        String role = "";
-        float rating = 0F;
 
         if (validated()) {
-            Customer newCustomer = new Customer(email, password, inputUsername, address, role, rating);
+            Customer newCustomer = new Customer();
+            newCustomer.setEmail(email);
+            newCustomer.setPassword(password);
+            newCustomer.setUsername(inputUsername);
             registerCustomer(newCustomer);
         }
     }

@@ -14,11 +14,13 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Book;
+import com.example.asm3.models.Customer;
 
 public class ProductDetailActivityController extends BaseController implements
         AsyncTaskCallBack,
@@ -33,10 +35,13 @@ public class ProductDetailActivityController extends BaseController implements
     private Book book;
     private int bookId;
     private Intent intent;
+    private String token;
+    private Customer customer;
+    private GetAuthenticatedData getAuthenticatedData;
 
     public ProductDetailActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
-        intent = getActivity().getIntent();
+
 //        bookId = intent.getExtras()
     }
 
@@ -58,6 +63,17 @@ public class ProductDetailActivityController extends BaseController implements
         detailSellerTxt.setOnClickListener(this);
         detailAddCartBtn.setOnClickListener(this);
         detailUpdateCartBtn.setOnClickListener(this);
+
+        if (getActivity().getIntent().getExtras().get(Constant.productIdKey) == null) {
+
+        } else {
+            if (isAuth()) {
+                token = getToken();
+                getAuthCustomer();
+            }
+
+            getProduct(getActivity().getIntent().getExtras().get(Constant.productIdKey).toString());
+        }
     }
 
     @Override
@@ -86,6 +102,14 @@ public class ProductDetailActivityController extends BaseController implements
         getData.execute();
     }
 
+    public void getAuthCustomer() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getCustomerData);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.setTaskType(Constant.getCustomer);
+        getAuthenticatedData.execute();
+    }
+
     // Navigation functions
 
 
@@ -95,6 +119,15 @@ public class ProductDetailActivityController extends BaseController implements
         if (taskType.equals(Constant.getProductTaskType)) {
             ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
             book = apiData.getData();
+
+            if (customer != null) {
+
+            }
+
+
+        } else if (taskType.equals(Constant.getCustomer)) {
+            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
+            customer = apiData.getData();
         }
     }
 
