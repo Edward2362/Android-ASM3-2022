@@ -165,7 +165,7 @@ public class TopBarView extends LinearLayout {
         // set visibility
         searchView.setVisibility(GONE);
         backButton.setVisibility(VISIBLE);
-        cartButton.setVisibility(GONE);
+        cartButton.setVisibility(INVISIBLE);
         titleText.setVisibility(VISIBLE);
 
         titleText.setText(title);
