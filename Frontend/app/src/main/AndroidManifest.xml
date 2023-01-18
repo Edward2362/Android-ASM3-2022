@@ -6,8 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-<!--    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>-->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> -->
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -21,7 +20,13 @@
         android:theme="@style/Theme.Asm3"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".SearchResultActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".CheckoutActivity"
             android:exported="false">
@@ -39,8 +44,6 @@
         <activity
             android:name=".AccountSettingActivity"
             android:exported="false">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -82,19 +85,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-<!--        <receiver-->
-<!--            android:name="com.example.asm3.base.broadcastReceiver.NotificationReceiver"-->
-<!--            android:exported="false"-->
-<!--            android:permission="android.permission.POST_NOTIFICATIONS">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="NOTIFICATION_BROADCAST" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
     </application>
 
 </manifest>

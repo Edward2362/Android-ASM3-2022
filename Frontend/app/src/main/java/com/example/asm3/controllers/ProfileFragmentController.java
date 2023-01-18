@@ -191,6 +191,7 @@ public class ProfileFragmentController extends BaseController implements
             case R.id.reviewUserImg:
                 Log.d(TAG, "onAvatarClick: test " + position);
                 break;
+
         }
     }
 
