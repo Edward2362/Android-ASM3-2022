@@ -125,6 +125,7 @@ public class ProfileFragmentController extends BaseController implements
         switch (view.getId()) {
             case R.id.productBody:
                 Log.d(TAG, "onBookClick: test " + position);
+                break;
         }
     }
 

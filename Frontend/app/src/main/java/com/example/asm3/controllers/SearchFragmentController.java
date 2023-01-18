@@ -3,6 +3,7 @@ package com.example.asm3.controllers;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.R;
+import com.example.asm3.SearchResultActivity;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SearchSuggestionHolder;
 import com.example.asm3.base.controller.BaseController;
@@ -24,6 +26,7 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
+import com.example.asm3.fragments.mainActivity.SearchFragment;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -82,11 +85,13 @@ public class SearchFragmentController extends BaseController implements
     public void onSearchSuggestionClick(int position, View view, String suggestionText) {
         // TODO: get text and go to search result
         Log.d(TAG, "onSearchSuggestionClick: clicked!");
+        goToSearchResult(suggestionText);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
         //TODO: go to search result activity
+        goToSearchResult(query);
         return false;
     }
 
@@ -138,11 +143,16 @@ public class SearchFragmentController extends BaseController implements
         };
     }// end generateSearchAdapter
 
-
     // Request functions
 
 
     // Navigation functions
+    private void goToSearchResult(String query) {
+        Intent intent = new Intent(getContext(), SearchResultActivity.class);
+        intent.putExtra("query", query);
+        Log.d(TAG, "goToSearchResult: activity: " + getActivity());
+        getActivity().startActivity(intent);
+    }
 
 
     // Callback functions
