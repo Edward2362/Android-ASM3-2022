@@ -15,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -54,6 +55,7 @@ public class ProfileFragmentController extends BaseController implements
         AsyncTaskCallBack {
 
     private View view;
+    private CardView profileAvatarLayout;
     private ImageView profileAvatarImg;
     private TextView profileUsernameTxt;
     private RatingBar ratingBar;
@@ -111,6 +113,7 @@ public class ProfileFragmentController extends BaseController implements
             reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
             // end testing
 
+            profileAvatarLayout = view.findViewById(R.id.profileAvatarLayout);
             profileAvatarImg = view.findViewById(R.id.profileAvatarImg);
             profileUsernameTxt = view.findViewById(R.id.profileUsernameTxt);
             ratingBar = view.findViewById(R.id.ratingBar);
@@ -130,6 +133,7 @@ public class ProfileFragmentController extends BaseController implements
             profileDataBtnGrp.check(R.id.sellingBtn);
             sellingRecView.setVisibility(View.VISIBLE);
 
+            profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
             profileDataBtnGrp.addOnButtonCheckedListener(this);
 
@@ -186,7 +190,7 @@ public class ProfileFragmentController extends BaseController implements
     @Override
     public void onAvatarClick(int position, View view) {
         switch (view.getId()) {
-            case R.id.reviewUserImg:
+            case R.id.reviewUserImgLayout:
                 Log.d(TAG, "onAvatarClick: test " + position);
                 break;
 
@@ -198,6 +202,8 @@ public class ProfileFragmentController extends BaseController implements
         switch (view.getId()) {
             case R.id.settingProfileBtn:
                 goToSetting();
+                break;
+            case R.id.profileAvatarLayout:
                 break;
         }
 

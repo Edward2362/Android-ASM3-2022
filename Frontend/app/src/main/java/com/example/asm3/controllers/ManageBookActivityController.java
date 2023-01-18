@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,7 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
+import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
@@ -46,6 +48,7 @@ import com.example.asm3.models.SubCategory;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -70,15 +73,17 @@ public class ManageBookActivityController extends BaseController implements
     private Bitmap productPhoto;
 
     private MaterialButtonToggleGroup categoriesBtnGrp;
-    private TextView cateNotifyTxt;
+    private TopBarView manageTopBar;
+    private TextView cateNotifyTxt, manageProductCateErrorTxt;
     private View subCateTopDivider;
     private GenericAdapter<SubCategory> subCateAdapter;
     private RecyclerView subCateRecView;
+    private CardView productImageLayout;
     private ImageView productView;
-    private Button getImageButton;
     private Button uploadProduct;
     private Button updateProduct;
     private Button removeProduct;
+    private TextInputLayout productNameLayout, authorLayout, publishedAtLayout, descriptionLayout, quantityLayout, priceLayout;
     private TextInputEditText productNameEt, authorRegisEt, descriptionEt, priceEt, quantityEt, publishedAtEt;
     private RadioButton newProduct;
     private RadioButton usedProduct;
@@ -92,7 +97,7 @@ public class ManageBookActivityController extends BaseController implements
 
     // render functions
     @Override
-    public void onInit(){
+    public void onInit() {
 
         if (!isAuth()) {
             Helper.goToLogin(getContext(), getActivity());
@@ -100,15 +105,23 @@ public class ManageBookActivityController extends BaseController implements
             token = getToken();
             getAllCategories();
 
+            manageTopBar = getActivity().findViewById(R.id.manageTopBar);
             categoriesBtnGrp = getActivity().findViewById(R.id.manageProductCategoriesBtnGrp);
             subCateRecView = getActivity().findViewById(R.id.manageProductSubCateRecView);
             cateNotifyTxt = getActivity().findViewById(R.id.manageProductCateNotifyTxt);
+            manageProductCateErrorTxt = getActivity().findViewById(R.id.manageProductCateErrorTxt);
             subCateTopDivider = getActivity().findViewById(R.id.manageProductSubCateTopDivider);
             productView = getActivity().findViewById(R.id.productImage);
-            getImageButton = getActivity().findViewById(R.id.getImageButton);
+            productImageLayout = getActivity().findViewById(R.id.productImageLayout);
             uploadProduct = getActivity().findViewById(R.id.uploadProduct);
             updateProduct = getActivity().findViewById(R.id.updateProduct);
             removeProduct = getActivity().findViewById(R.id.removeProduct);
+            productNameLayout = getActivity().findViewById(R.id.productNameLayout);
+            authorLayout = getActivity().findViewById(R.id.authorLayout);
+            descriptionLayout = getActivity().findViewById(R.id.descriptionLayout);
+            priceLayout = getActivity().findViewById(R.id.priceLayout);
+            quantityLayout = getActivity().findViewById(R.id.quantityLayout);
+            publishedAtLayout = getActivity().findViewById(R.id.publishedAtLayout);
             productNameEt = getActivity().findViewById(R.id.productNameEt);
             authorRegisEt = getActivity().findViewById(R.id.authorRegisEt);
             descriptionEt = getActivity().findViewById(R.id.descriptionEt);
@@ -123,14 +136,16 @@ public class ManageBookActivityController extends BaseController implements
             subCateRecView.setAdapter(subCateAdapter);
             subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            getImageButton.setOnClickListener(this);
+            productImageLayout.setOnClickListener(this);
             uploadProduct.setOnClickListener(this);
             updateProduct.setOnClickListener(this);
             removeProduct.setOnClickListener(this);
 
             if (isUpload()) {
+                manageTopBar.setSubPage("Post Book");
                 uploadProduct.setVisibility(View.VISIBLE);
             } else {
+                manageTopBar.setSubPage("Update Book");
                 updateProduct.setVisibility(View.VISIBLE);
                 removeProduct.setVisibility(View.VISIBLE);
                 setProductId();
@@ -207,7 +222,7 @@ public class ManageBookActivityController extends BaseController implements
     public boolean isUpload() {
         Intent intent = getActivity().getIntent();
         if (intent.getExtras().get(Constant.isUploadKey) != null) {
-            if ((Integer.parseInt(intent.getExtras().get(Constant.isUploadKey).toString()) == Constant.uploadCode)){
+            if ((Integer.parseInt(intent.getExtras().get(Constant.isUploadKey).toString()) == Constant.uploadCode)) {
                 return true;
             } else {
                 return false;
@@ -250,86 +265,116 @@ public class ManageBookActivityController extends BaseController implements
     }
 
     public void onUploadProduct() {
-        String productName = "";
-        String productAuthor = "";
-        String productDescription = "";
-        float productPrice = 0F;
-        int productQuantity = 0;
-        String productPublishedAt = "";
-        String productCategory = "";
-        ArrayList<String> productSubCategory = new ArrayList<String>();
-        String productCustomer = "";
-        productId = "";
-        boolean isProductNew = false;
-        String productImage = "";
+        if (validated()) {
+            String productName = "";
+            String productAuthor = "";
+            String productDescription = "";
+            float productPrice = 0F;
+            int productQuantity = 0;
+            String productPublishedAt = "";
+            String productCategory = "";
+            ArrayList<String> productSubCategory = new ArrayList<String>();
+            String productCustomer = "";
+            productId = "";
+            boolean isProductNew = false;
+            String productImage = "";
 
-        productName = productNameEt.getText().toString();
-        productAuthor = authorRegisEt.getText().toString();
-        productDescription = descriptionEt.getText().toString();
-        productPrice = Float.parseFloat(priceEt.getText().toString());
-        productQuantity = Integer.parseInt(quantityEt.getText().toString());
-        productPublishedAt = publishedAtEt.getText().toString();
-        productCategory = selectedCategory.get_id();
-        for (int i = 0; i < displayList.size(); ++i) {
-            if (displayList.get(i).isChosen()) {
-                productSubCategory.add(displayList.get(i).get_id());
+            productName = productNameEt.getText().toString();
+            productAuthor = authorRegisEt.getText().toString();
+            productDescription = descriptionEt.getText().toString();
+            productPrice = Float.parseFloat(priceEt.getText().toString());
+            productQuantity = Integer.parseInt(quantityEt.getText().toString());
+            productPublishedAt = publishedAtEt.getText().toString();
+            productCategory = selectedCategory.get_id();
+            for (int i = 0; i < displayList.size(); ++i) {
+                if (displayList.get(i).isChosen()) {
+                    productSubCategory.add(displayList.get(i).get_id());
+                }
             }
+
+            if (newProduct.isChecked()) {
+                isProductNew = true;
+            }
+
+            productImage = Helper.bitmapToString(productPhoto);
+
+            Book product = new Book(productName, productAuthor, productDescription, productPrice, productQuantity, productPublishedAt, productCategory, productSubCategory, productCustomer, productId, isProductNew, productImage);
+            uploadBook(product);
         }
-
-        if (newProduct.isChecked()) {
-            isProductNew = true;
-        }
-
-        productImage = Helper.bitmapToString(productPhoto);
-
-        Book product = new Book(productName, productAuthor, productDescription, productPrice, productQuantity, productPublishedAt, productCategory, productSubCategory, productCustomer, productId, isProductNew, productImage);
-        uploadBook(product);
     }
 
     public void onUpdateProduct() {
-        String productName = "";
-        String productAuthor = "";
-        String productDescription = "";
-        float productPrice = 0F;
-        int productQuantity = 0;
-        String productPublishedAt = "";
-        String productCategory = "";
-        ArrayList<String> productSubCategory = new ArrayList<String>();
-        String productCustomer = "";
-        boolean isProductNew = false;
-        String productImage = "";
+        if (validated()) {
 
-        productName = productNameEt.getText().toString();
-        productAuthor = authorRegisEt.getText().toString();
-        productDescription = descriptionEt.getText().toString();
-        productPrice = Float.parseFloat(priceEt.getText().toString());
-        productQuantity = Integer.parseInt(quantityEt.getText().toString());
-        productPublishedAt = publishedAtEt.getText().toString();
-        productCategory = selectedCategory.get_id();
-        for (int i = 0; i < displayList.size(); ++i) {
-            if (displayList.get(i).isChosen()) {
-                productSubCategory.add(displayList.get(i).get_id());
+            String productName = "";
+            String productAuthor = "";
+            String productDescription = "";
+            float productPrice = 0F;
+            int productQuantity = 0;
+            String productPublishedAt = "";
+            String productCategory = "";
+            ArrayList<String> productSubCategory = new ArrayList<String>();
+            String productCustomer = "";
+            boolean isProductNew = false;
+            String productImage = "";
+
+            productName = productNameEt.getText().toString();
+            productAuthor = authorRegisEt.getText().toString();
+            productDescription = descriptionEt.getText().toString();
+            productPrice = Float.parseFloat(priceEt.getText().toString());
+            productQuantity = Integer.parseInt(quantityEt.getText().toString());
+            productPublishedAt = publishedAtEt.getText().toString();
+            productCategory = selectedCategory.get_id();
+            for (int i = 0; i < displayList.size(); ++i) {
+                if (displayList.get(i).isChosen()) {
+                    productSubCategory.add(displayList.get(i).get_id());
+                }
             }
+
+            if (newProduct.isChecked()) {
+                isProductNew = true;
+            }
+
+            productImage = Helper.bitmapToString(productPhoto);
+            Book product = new Book(productName, productAuthor, productDescription, productPrice, productQuantity, productPublishedAt, productCategory, productSubCategory, productCustomer, productId, isProductNew, productImage);
+            updateBook(product);
         }
-
-        if (newProduct.isChecked()) {
-            isProductNew = true;
-        }
-
-        productImage = Helper.bitmapToString(productPhoto);
-
-        Book product = new Book(productName, productAuthor, productDescription, productPrice, productQuantity, productPublishedAt, productCategory, productSubCategory, productCustomer, productId, isProductNew, productImage);
-        updateBook(product);
     }
 
     public void onRemoveProduct() {
         deleteBook(productId);
     }
 
+    private boolean validated() {
+        int selectedCate = 0;
+        int selectedSubCate = 0;
+
+        for (SubCategory subCate : displayList) {
+            if (subCate.isChosen()) {
+                selectedSubCate = 1;
+            }
+        }
+
+        if (selectedCategory != null) {
+            selectedCate = 1;
+            manageProductCateErrorTxt.setVisibility(View.GONE);
+        } else {
+            manageProductCateErrorTxt.setVisibility(View.VISIBLE);
+            cateNotifyTxt.setVisibility(View.GONE);
+        }
+
+        return Helper.inputChecked(productNameEt, productNameLayout, null, null) +
+                Helper.inputChecked(authorRegisEt, authorLayout, null, null) +
+                Helper.inputChecked(priceEt, priceLayout, null, null) +
+                Helper.inputChecked(quantityEt, quantityLayout, null, null) +
+                Helper.inputChecked(publishedAtEt, publishedAtLayout, null, null) == 5;
+    }
+
+
     @Override
     public void onClick(View view) {
-        switch(view.getId()) {
-            case R.id.getImageButton:
+        switch (view.getId()) {
+            case R.id.productImageLayout:
                 getImageFromGallery();
                 break;
             case R.id.uploadProduct:
@@ -345,7 +390,7 @@ public class ManageBookActivityController extends BaseController implements
     }
 
     // request functions
-    public void uploadBook(Book inputBook){
+    public void uploadBook(Book inputBook) {
         postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
         postAuthenticatedData.setEndPoint(Constant.uploadBook);
         postAuthenticatedData.setTaskType(Constant.uploadBookTaskType);
@@ -385,11 +430,11 @@ public class ManageBookActivityController extends BaseController implements
 
     // callback functions
     @Override
-    public void onFinished(String message,String taskType){
-        if (taskType.equals(Constant.uploadBookTaskType)){
+    public void onFinished(String message, String taskType) {
+        if (taskType.equals(Constant.uploadBookTaskType)) {
             getActivity().finish();
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
-            ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message),Category.class);
+            ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
             categories = apiList.getList();
             foreign = categories.get(0).getSubCategories();
             domestic = categories.get(1).getSubCategories();
@@ -419,7 +464,6 @@ public class ManageBookActivityController extends BaseController implements
                 }
             }
 
-
             subCateAdapter.notifyDataSetChanged();
             if (product.isNew()) {
                 newProduct.setChecked(true);
@@ -442,7 +486,7 @@ public class ManageBookActivityController extends BaseController implements
     public void onRequestPermissionsResult(int requestCode, @NonNull int[] grantResults) {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Intent intent;
-            switch (requestCode){
+            switch (requestCode) {
                 case Constant.cameraPermissionCode:
                     intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     getActivity().startActivityForResult(intent, Constant.cameraRequest);
@@ -472,7 +516,7 @@ public class ManageBookActivityController extends BaseController implements
                         final Uri imageUri = data.getData();
                         final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                         productPhoto = BitmapFactory.decodeStream(imageStream);
-                        productPhoto = Bitmap.createScaledBitmap(productPhoto, (int)(productPhoto.getWidth()*0.3), (int)(productPhoto.getHeight()*0.3), true);
+                        productPhoto = Bitmap.createScaledBitmap(productPhoto, (int) (productPhoto.getWidth() * 0.3), (int) (productPhoto.getHeight() * 0.3), true);
                         productView.setImageBitmap(productPhoto);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();

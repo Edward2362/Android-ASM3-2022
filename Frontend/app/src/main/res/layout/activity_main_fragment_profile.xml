@@ -27,6 +27,7 @@
                 android:layout_weight=".4">
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/profileAvatarLayout"
                     style="?attr/materialCardViewElevatedStyle"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -135,21 +136,21 @@
         android:id="@+id/sellingRecView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/purchasedRecView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/feedbackRecView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:visibility="gone" />
 
 </LinearLayout>

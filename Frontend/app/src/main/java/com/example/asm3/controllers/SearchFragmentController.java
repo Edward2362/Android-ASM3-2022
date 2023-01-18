@@ -100,7 +100,6 @@ public class SearchFragmentController extends BaseController implements
         if (!newText.isEmpty()) {
             progressBar.setVisibility(View.VISIBLE);
             searchSuggestionRecView.setVisibility(View.GONE);
-            lastTextEdit = System.currentTimeMillis();
             // TODO: implement function fetching
             handler.removeCallbacksAndMessages(null);
             handler.postDelayed(new Runnable() {
@@ -109,7 +108,6 @@ public class SearchFragmentController extends BaseController implements
                     getSuggestions(newText);
                     Log.d("error","huhu");
                     // TODO: put these 2 lines in onFinished, a fetching function will be called here
-
                 }
             }, 1000);
         } else {

@@ -27,7 +27,7 @@ public class ProductDetailActivityController extends BaseController implements
 
     private TopBarView detailTopBar;
     private ImageView detailBookImg;
-    private TextView detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt,detailBookConditionTxt, detailBookDescriptionTxt;
+    private TextView detailBookYearTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt,detailBookConditionTxt, detailBookDescriptionTxt;
     private Button detailAddCartBtn, detailUpdateCartBtn;
 
     private Book book;
@@ -46,6 +46,7 @@ public class ProductDetailActivityController extends BaseController implements
         detailTopBar = getActivity().findViewById(R.id.detailTopBar);
         detailBookImg = getActivity().findViewById(R.id.detailBookImg);
         detailBookNameTxt = getActivity().findViewById(R.id.detailBookNameTxt);
+        detailBookYearTxt = getActivity().findViewById(R.id.detailBookYearTxt);
         detailBookPriceTxt = getActivity().findViewById(R.id.detailBookPriceTxt);
         detailSellerTxt = getActivity().findViewById(R.id.detailSellerTxt);
         detailSellerRatingTxt = getActivity().findViewById(R.id.detailSellerRatingTxt);
