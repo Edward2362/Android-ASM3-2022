@@ -168,7 +168,7 @@ public class ProfileFragmentController extends BaseController implements
     public void onBookClick(int position, View view) {
         switch (view.getId()) {
             case R.id.productBody:
-                Log.d(TAG, "onBookClick: test " + position);
+                Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.get(position).get_id());
                 break;
         }
     }

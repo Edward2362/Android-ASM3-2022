@@ -1,9 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ProductDetailActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.example.asm3.custom.components.TopBarView
+        android:id="@+id/detailTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".12"
+        android:paddingHorizontal="5dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/detailBookImg"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:contentDescription="TODO"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/profile"
+                        app:cardBackgroundColor="@color/md_theme_dark_background"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="22dp"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/detailBookNameTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:textSize="20dp"
+                        android:maxLines="2"
+                        android:text="Lord of the ring"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+                    <TextView
+                        android:layout_marginVertical="5dp"
+                        android:gravity="center_vertical"
+                        android:id="@+id/detailBookPriceTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="900000 đ"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5"
+                        android:textColor="@color/md_theme_light_primary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Poster: "
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+                        <TextView
+                            android:id="@+id/detailSellerTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ed"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            android:textColor="@color/md_theme_light_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" ("
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            android:textColor="@color/md_theme_light_primary"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/detailSellerRatingTxt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4.5"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            android:textColor="@color/md_theme_light_primary"
+                            android:textStyle="bold" />
+
+                        <RatingBar
+                            android:id="@+id/ratingBar"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="true"
+                            android:numStars="1"
+                            android:rating="1"
+                            android:textColor="@color/md_theme_light_primary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=")"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+                            android:textColor="@color/md_theme_light_primary"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/detailBookConditionTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Condition: "
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+                    <TextView
+                        android:id="@+id/detailBookDescriptionTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description: askdklasmdkmaskldmla dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda  dasda asdqwe asd kmk qjwei nj no kqwjeoqwe qwnejlqweqoweqwje  nqwken qwnejqwe"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/detailAddCartBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="22dp"
+            android:layout_marginVertical="10dp"
+            android:text="Add to Cart" />
+
+        <Button
+            android:id="@+id/detailUpdateCartBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="22dp"
+            android:layout_marginVertical="10dp"
+            android:text="Update information"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>
