@@ -159,10 +159,12 @@ public class SearchFragmentController extends BaseController implements
         if(taskType.equals(Constant.suggestProductTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
             ArrayList<Book> products = apiList.getList();
+            searchSuggestions.clear();
             for (int i=0; i<products.size(); i++) {
                 searchSuggestions.add(products.get(i).getName());
             }
             Log.d("error","haha");
+            searchAdapter.notifyDataSetChanged();
             progressBar.setVisibility(View.GONE);
             searchSuggestionRecView.setVisibility(View.VISIBLE);
         }

@@ -69,13 +69,13 @@ public class ProfileFragmentController extends BaseController implements
     private MaterialAlertDialogBuilder builder;
     private ReviewDialogBody reviewDialogBody;
     private GenericAdapter<Book> bookAdapter;
-    private GenericAdapter<OrderDetail> orderAdapter;
+    private GenericAdapter<Order> orderAdapter;
     private GenericAdapter<Review> reviewAdapter;
 
     private MainViewModel mainViewModel;
     private LiveData<Customer> authCustomer;
     private ArrayList<Book> sellingBooks;
-    private ArrayList<OrderDetail> orders;
+    private ArrayList<Order> orders;
     private ArrayList<Review> reviews;
     private String token;
     private GetAuthenticatedData getAuthenticatedData;
@@ -100,15 +100,13 @@ public class ProfileFragmentController extends BaseController implements
             // for testing
             token = getToken();
 
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
-            orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
 
             reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
             reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
@@ -200,7 +198,6 @@ public class ProfileFragmentController extends BaseController implements
             case R.id.reviewUserImgLayout:
                 Log.d(TAG, "onAvatarClick: test " + position);
                 break;
-
         }
     }
 
@@ -250,8 +247,8 @@ public class ProfileFragmentController extends BaseController implements
         };
     }
 
-    private GenericAdapter<OrderDetail> generateOrderAdapter() {
-        return new GenericAdapter<OrderDetail>(orders) {
+    private GenericAdapter<Order> generateOrderAdapter() {
+        return new GenericAdapter<Order>(orders) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                 final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false);
@@ -259,11 +256,12 @@ public class ProfileFragmentController extends BaseController implements
             }
 
             @Override
-            public void onBindData(RecyclerView.ViewHolder holder, OrderDetail item) {
+            public void onBindData(RecyclerView.ViewHolder holder, Order item) {
                 OrderHolder orderHolder = (OrderHolder) holder;
                 orderHolder.getOrderBookTxt().setText(item.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + item.getQuantity());
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
+                orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
             }
         };
     }
