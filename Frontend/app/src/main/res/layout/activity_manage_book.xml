@@ -107,7 +107,7 @@
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButtonToggleGroup
@@ -152,14 +152,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="17dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/manageProductSubCateRecView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone" />
 
             <TextView
@@ -170,9 +170,67 @@
                 android:text="Choose a category, mahhh!"
                 android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
+
+
         </LinearLayout>
 
     </LinearLayout>
 
+    <RadioGroup
+        android:id="@+id/isNewProduct"
+        android:checkedButton="@+id/newProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/newProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/new_product"/>
+        <RadioButton
+            android:id="@+id/usedProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/used_product"/>
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/getImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
+        <Button
+            android:id="@+id/uploadProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/updateProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/removeProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            android:visibility="gone"/>
+    </LinearLayout>
 
 </LinearLayout>

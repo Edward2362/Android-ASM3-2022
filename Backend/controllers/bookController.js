@@ -15,7 +15,7 @@ const uploadBook = async (req, response) => {
       category: req.body.category,
       subCategory: req.body.subCategory,
       customer: req.customer.customerId,
-      isNew: req.body.isNew,
+      isNewProduct: req.body.isNewProduct,
       image: req.body.image
     };
 
@@ -270,7 +270,7 @@ const haveSameElements = (subCategories, subCategoryIds) => {
       isSameElement = true;
     }
   }
-  return true;
+  return isSameElement;
 }
 
 module.exports = {

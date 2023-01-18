@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -20,7 +22,9 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,5 +79,31 @@ public class Helper {
     public static void goToLogin(Context context, Activity activity) {
         Intent intent = new Intent(context, AuthenticationActivity.class);
         activity.startActivityForResult(intent, Constant.authActivityCode);
+    }
+
+    public static String bitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        String data = "";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            data = Base64.getEncoder().encodeToString(bytes);
+        }
+
+        return data;
+    }
+
+    public static Bitmap stringToBitmap(String encodedData) {
+        Bitmap bitmap = null;
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                byte[] encodeByte = Base64.getDecoder().decode(encodedData);
+                bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            }
+        } catch(Exception exception) {
+            exception.getMessage();
+        }
+
+        return bitmap;
     }
 }

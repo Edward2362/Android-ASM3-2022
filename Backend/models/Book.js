@@ -34,7 +34,7 @@ const bookSchema = new mongoose.Schema({
       type: Schema.Types.ObjectId,
       ref: "Customer"
     },
-    isNew: {
+    isNewProduct: {
       type: Boolean,
     },
     image: {
