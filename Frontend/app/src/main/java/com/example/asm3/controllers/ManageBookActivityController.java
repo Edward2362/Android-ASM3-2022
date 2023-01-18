@@ -367,7 +367,9 @@ public class ManageBookActivityController extends BaseController implements
                 Helper.inputChecked(authorRegisEt, authorLayout, null, null) +
                 Helper.inputChecked(priceEt, priceLayout, null, null) +
                 Helper.inputChecked(quantityEt, quantityLayout, null, null) +
-                Helper.inputChecked(publishedAtEt, publishedAtLayout, null, null) == 5;
+                Helper.inputChecked(publishedAtEt, publishedAtLayout, null, null) +
+                selectedCate +
+                selectedSubCate == 7;
     }
 
 

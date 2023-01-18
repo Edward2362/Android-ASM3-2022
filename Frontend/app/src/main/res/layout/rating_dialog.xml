@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/reviewDialogBody"
+    style="@style/MaterialAlertDialog.Material3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="20dp"
+    android:paddingHorizontal="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Review seller"
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5" />
+
+    <TextView
+        android:id="@+id/reviewUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Aaron B."
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5" />
+
+    <RatingBar
+        android:id="@+id/ratingBarDialog"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:stepSize="1" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/userReviewTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:singleLine="false"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</LinearLayout>

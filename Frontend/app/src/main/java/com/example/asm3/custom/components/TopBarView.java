@@ -165,11 +165,22 @@ public class TopBarView extends LinearLayout {
         // set visibility
         searchView.setVisibility(GONE);
         backButton.setVisibility(VISIBLE);
-        cartButton.setVisibility(INVISIBLE);
+        cartButton.setVisibility(GONE);
         titleText.setVisibility(VISIBLE);
 
         titleText.setText(title);
         titleText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+    }
+
+    /**
+     * Set visibility and constraints for cart, user info, post book page's components
+     */
+    public void setBookDetailPage() {
+        // set visibility
+        searchView.setVisibility(GONE);
+        backButton.setVisibility(VISIBLE);
+        cartButton.setVisibility(VISIBLE);
+        titleText.setVisibility(GONE);
     }
 
     // getters
