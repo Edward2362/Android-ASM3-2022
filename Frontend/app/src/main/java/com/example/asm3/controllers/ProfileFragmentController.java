@@ -30,9 +30,12 @@ import com.example.asm3.base.adapter.viewHolder.BookHolder;
 import com.example.asm3.base.adapter.viewHolder.OrderHolder;
 import com.example.asm3.base.adapter.viewHolder.ReviewHolder;
 import com.example.asm3.base.controller.BaseController;
+import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
+import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
@@ -47,7 +50,8 @@ public class ProfileFragmentController extends BaseController implements
         View.OnClickListener,
         BookHolder.OnSelectListener,
         OrderHolder.OnSelectListener,
-        ReviewHolder.OnSelectListener {
+        ReviewHolder.OnSelectListener,
+        AsyncTaskCallBack {
 
     private View view;
     private ImageView profileAvatarImg;
@@ -65,6 +69,8 @@ public class ProfileFragmentController extends BaseController implements
     private ArrayList<Book> sellingBooks;
     private ArrayList<OrderDetail> orders;
     private ArrayList<Review> reviews;
+    private String token;
+    private GetAuthenticatedData getAuthenticatedData;
 
     public ProfileFragmentController(Context context, FragmentActivity activity, View view, ViewModel viewModel) {
         super(context, activity);
@@ -84,17 +90,7 @@ public class ProfileFragmentController extends BaseController implements
             Helper.goToLogin(getContext(), getActivity());
         } else {
             // for testing
-
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-            sellingBooks.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
+            token = getToken();
 
             orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
             orders.add(new OrderDetail("Lord of the ring", 100000, 2, "1"));
@@ -136,9 +132,11 @@ public class ProfileFragmentController extends BaseController implements
 
             settingProfileBtn.setOnClickListener(this);
             profileDataBtnGrp.addOnButtonCheckedListener(this);
+
             loadSelling();
             loadPurchased();
             loadFeedback();
+            getCustomerProducts();
         }
     }
 
@@ -288,7 +286,13 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     // Request functions
-
+    public void getCustomerProducts() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getUploadedProducts);
+        getAuthenticatedData.setTaskType(Constant.getUploadedProductsTaskType);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.execute();
+    }
 
     // Navigation functions
     public void goToSetting() {
@@ -297,7 +301,20 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     // Callback functions
+    @Override
+    public void onFinished(String message, String taskType) {
+        if (taskType.equals(Constant.getUploadedProductsTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
+            sellingBooks.clear();
+            sellingBooks.addAll(apiList.getList());
+            bookAdapter.notifyDataSetChanged();
+            Log.d("place", String.valueOf(sellingBooks.size()));
+        }
+    }
 
+    @Override
+    public void onError(String taskType) {
 
-    // Getter and Setter
+    }
+// Getter and Setter
 }

@@ -95,7 +95,7 @@ public class ManageBookActivityController extends BaseController implements
     public void onInit(){
 
         if (!isAuth()) {
-            getActivity().finish();
+            Helper.goToLogin(getContext(), getActivity());
         } else {
             token = getToken();
             getAllCategories();
@@ -120,6 +120,8 @@ public class ManageBookActivityController extends BaseController implements
             subCateAdapter = generateSubCateAdapter();
 
             categoriesBtnGrp.addOnButtonCheckedListener(this);
+            subCateRecView.setAdapter(subCateAdapter);
+            subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
             getImageButton.setOnClickListener(this);
             uploadProduct.setOnClickListener(this);
@@ -128,8 +130,6 @@ public class ManageBookActivityController extends BaseController implements
 
             if (isUpload()) {
                 uploadProduct.setVisibility(View.VISIBLE);
-                subCateRecView.setAdapter(subCateAdapter);
-                subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
             } else {
                 updateProduct.setVisibility(View.VISIBLE);
                 removeProduct.setVisibility(View.VISIBLE);
@@ -413,15 +413,14 @@ public class ManageBookActivityController extends BaseController implements
             ArrayList<String> productSubCategory = product.getSubCategory();
             for (int i = 0; i < displayList.size(); ++i) {
                 for (int index = 0; index < productSubCategory.size(); ++index) {
-                    if (displayList.get(i).get_id().equals(productSubCategory.get(i))) {
+                    if (displayList.get(i).get_id().equals(productSubCategory.get(index))) {
                         displayList.get(i).setChosen(true);
                     }
                 }
             }
 
-            subCateRecView.setAdapter(subCateAdapter);
-            subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+            subCateAdapter.notifyDataSetChanged();
             if (product.isNew()) {
                 newProduct.setChecked(true);
                 usedProduct.setChecked(false);
