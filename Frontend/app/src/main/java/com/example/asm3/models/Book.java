@@ -14,12 +14,16 @@ public class Book implements Serializable {
     private float price;
     private int quantity;
     private String publishedAt;
-    private String category;
-    private ArrayList<String> subCategory;
-    private String customer;
+    private Category category;
+    private ArrayList<SubCategory> subCategory;
+    private Customer customer;
     private String _id;
     private boolean isNewProduct;
     private String image;
+    private boolean isCategoryPopulated = false;
+    private boolean isSubCategoryPopulated = false;
+    private boolean isCustomerPopulated = false;
+
 
     public static String idKey="_id";
     public static String nameKey="name";
@@ -35,7 +39,7 @@ public class Book implements Serializable {
     public static String imageKey="image";
 
 
-    public Book(String name, String author, String description, float price, int quantity, String publishedAt, String category, ArrayList<String> subCategory, String customer, String _id, boolean isNewProduct, String image) {
+    public Book(String name, String author, String description, float price, int quantity, String publishedAt, Category category, ArrayList<SubCategory> subCategory, Customer customer, String _id, boolean isNewProduct, String image) {
         this._id = _id;
         this.name = name;
         this.author = author;
@@ -50,12 +54,51 @@ public class Book implements Serializable {
         this.image = image;
     }
 
+    public Book() {
+        this._id = "";
+        this.name = "";
+        this.author = "";
+        this.description = "";
+        this.price = 0F;
+        this.quantity = 0;
+        this.publishedAt = "";
+        this.category = null;
+        this.subCategory = null;
+        this.customer = null;
+        this.isNewProduct = false;
+        this.image = "";
+    }
+
+    public boolean isCategoryPopulated() {
+        return isCategoryPopulated;
+    }
+
+    public void setIsCategoryPopulated(boolean isCategoryPopulated) {
+        this.isCategoryPopulated = isCategoryPopulated;
+    }
+
+    public boolean isSubCategoryPopulated() {
+        return isSubCategoryPopulated;
+    }
+
+    public void setIsSubCategoryPopulated(boolean isSubCategoryPopulated) {
+        this.isSubCategoryPopulated = isSubCategoryPopulated;
+    }
+
+    public boolean isCustomerPopulated() {
+        return isCustomerPopulated;
+    }
+
+    public void setIsCustomerPopulated(boolean isCustomerPopulated) {
+        this.isCustomerPopulated = isCustomerPopulated;
+    }
+
     public boolean isNew() {
         return isNewProduct;
     }
 
-    public void setNew(boolean isNewProduct) {
-        isNewProduct = isNewProduct;
+    public void setIsNewProduct(boolean isNewProduct) {
+        this.isNewProduct = isNewProduct;
     }
 
     public String getImage() {
@@ -122,60 +165,87 @@ public class Book implements Serializable {
         this.publishedAt = publishedAt;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public ArrayList<String> getSubCategory() {
+    public ArrayList<SubCategory> getSubCategory() {
         return subCategory;
     }
 
-    public void setSubCategory(ArrayList<String> subCategory) {
+    public void setSubCategory(ArrayList<SubCategory> subCategory) {
         this.subCategory = subCategory;
     }
 
-    public String getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
     public static Book fromJSON(JSONObject jsonObject) {
-        Book book = null;
-        String name;
-        String author;
-        String description;
-        float price;
-        int quantity;
-        String publishedAt;
-        String category;
-        ArrayList<String> subCategory;
-        String customer;
-        String _id;
-        boolean isNewProduct;
-        String image;
+        Book book = new Book();
         if (jsonObject != null) {
             try {
-                name = jsonObject.getString(nameKey);
-                author = jsonObject.getString(authorKey);
-                description = jsonObject.getString(descriptionKey);
-                price = (float) jsonObject.getDouble(priceKey);
-                quantity = jsonObject.getInt(quantityKey);
-                publishedAt = jsonObject.getString(publishedAtKey);
-                category = jsonObject.getString(categoryKey);
-                subCategory = getSubCategories(jsonObject.getJSONArray(subCategoryKey));
-                customer = jsonObject.getString(customerKey);
-                _id = jsonObject.getString(idKey);
-                isNewProduct = jsonObject.getBoolean(isNewProductKey);
-                image = jsonObject.getString(imageKey);
 
-                book = new Book(name,author,description,price,quantity,publishedAt,category,subCategory,customer,_id,isNewProduct,image);
+
+                book.setName(jsonObject.getString(nameKey));
+                book.setAuthor(jsonObject.getString(authorKey));
+                book.setDescription(jsonObject.getString(descriptionKey));
+                book.setPrice((float) jsonObject.getDouble(priceKey));
+                book.setQuantity(jsonObject.getInt(quantityKey));
+                book.setPublishedAt(jsonObject.getString(publishedAtKey));
+                if (jsonObject.get(categoryKey) instanceof JSONObject) {
+                    Category category = Category.fromJSON(jsonObject.getJSONObject(categoryKey));
+                    book.setCategory(category);
+                    book.setIsCategoryPopulated(true);
+                } else if (jsonObject.get(categoryKey) instanceof String) {
+                    Category category = new Category();
+                    category.set_id(jsonObject.getString(categoryKey));
+                    book.setCategory(category);
+                }
+
+                JSONArray subCategoriesJSONArray = jsonObject.getJSONArray(subCategoryKey);
+                if (subCategoriesJSONArray.length() ==0) {
+                    book.setSubCategory(new ArrayList<SubCategory>());
+                } else {
+                    if (subCategoriesJSONArray.get(0) instanceof JSONObject) {
+                        ArrayList<SubCategory> subCategories = new ArrayList<SubCategory>();
+                        for (int i =0; i< subCategoriesJSONArray.length(); ++i) {
+                            subCategories.add(SubCategory.fromJSON(subCategoriesJSONArray.getJSONObject(i)));
+                        }
+                        book.setSubCategory(subCategories);
+                        book.setIsSubCategoryPopulated(true);
+                    } else if (subCategoriesJSONArray.get(0) instanceof String) {
+                        ArrayList<SubCategory> subCategories = new ArrayList<SubCategory>();
+                        for (int i =0; i< subCategoriesJSONArray.length(); ++i) {
+                            SubCategory subCategory = new SubCategory();
+                            subCategory.set_id(subCategoriesJSONArray.getString(i));
+                            subCategories.add(subCategory);
+                        }
+                        book.setSubCategory(subCategories);
+                    }
+                }
+
+                if (jsonObject.get(customerKey) instanceof JSONObject) {
+                    Customer customer = Customer.fromJSON(jsonObject.getJSONObject(customerKey));
+                    book.setCustomer(customer);
+                    book.setIsCustomerPopulated(true);
+                } else if (jsonObject.get(customerKey) instanceof String) {
+                    Customer customer = new Customer();
+                    customer.set_id(jsonObject.getString(customerKey));
+                    book.setCustomer(customer);
+                }
+
+                book.set_id(jsonObject.getString(idKey));
+                book.setIsNewProduct(jsonObject.getBoolean(isNewProductKey));
+                book.setImage(jsonObject.getString(imageKey));
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }
@@ -194,11 +264,35 @@ public class Book implements Serializable {
                 jsonObject.put(priceKey, book.price);
                 jsonObject.put(quantityKey, book.quantity);
                 jsonObject.put(publishedAtKey, book.publishedAt);
-                jsonObject.put(categoryKey, book.category);
-                jsonObject.put(subCategoryKey, getSubCategoryJSONArray(book.subCategory));
-                jsonObject.put(customerKey, book.customer);
-                jsonObject.put(isNewProductKey,book.isNewProduct);
-                jsonObject.put(imageKey,book.image);
+
+                if (book.isCategoryPopulated()) {
+                    jsonObject.put(categoryKey, Category.toJSON(book.category));
+                } else {
+                    jsonObject.put(categoryKey, book.category.get_id());
+                }
+
+                JSONArray subCategoriesJSONArray = new JSONArray();
+
+                if (book.isSubCategoryPopulated()) {
+                    for (int i = 0; i < book.subCategory.size(); ++i) {
+                        subCategoriesJSONArray.put(SubCategory.toJSON(book.subCategory.get(i)));
+                    }
+                } else {
+                    for (int i = 0; i < book.subCategory.size(); ++i) {
+                        subCategoriesJSONArray.put(book.subCategory.get(i).get_id());
+                    }
+                }
+
+                jsonObject.put(subCategoryKey, subCategoriesJSONArray);
+
+                if (book.isCustomerPopulated()) {
+                    jsonObject.put(customerKey, Customer.toJSON(book.customer));
+                } else {
+                    jsonObject.put(customerKey, book.customer.get_id());
+                }
+
+                jsonObject.put(isNewProductKey, book.isNewProduct);
+                jsonObject.put(imageKey, book.image);
             } catch (JSONException jsonException) {
                 jsonException.printStackTrace();
             }

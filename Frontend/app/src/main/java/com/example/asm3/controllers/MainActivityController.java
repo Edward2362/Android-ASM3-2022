@@ -264,7 +264,7 @@ public class MainActivityController extends BaseController implements
 //            categories = apiList.getList();
             mainViewModel.setCateArray(apiList.getList());
 //            Toast.makeText(getContext(), categories.getValue().get(0).getName(), Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onFinished: test " + mainViewModel.getCateArray().getValue());
+            Log.d(TAG, "onFinished: test " + mainViewModel.getCateArray().getValue().get(0).getSubCategories());
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();

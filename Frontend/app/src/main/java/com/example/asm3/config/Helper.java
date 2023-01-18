@@ -91,7 +91,7 @@ public class Helper {
 
     public static void goToBookDetail(Context context, Activity activity, String bookId) {
         Intent intent = new Intent(context, ProductDetailActivity.class);
-        intent.putExtra("BookId", bookId);
+        intent.putExtra(Constant.productIdKey, bookId);
         activity.startActivity(intent);
     }
 

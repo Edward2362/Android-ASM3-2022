@@ -2,6 +2,7 @@ package com.example.asm3.fragments.searchResultActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resultViewModel = new ViewModelProvider(requireActivity()).get(ResultViewModel.class);
+
     }
 
     @Override
@@ -73,6 +75,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
                 break;
         }
 
+        Log.d("TAG", "onCheckedChanged: test " + resultViewModel.getFilterProgressBar().getValue());
         resultViewModel.getFilterProgressBar().getValue().setVisibility(View.VISIBLE);
         dismiss();
     }

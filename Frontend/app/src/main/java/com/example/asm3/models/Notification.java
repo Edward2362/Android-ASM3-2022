@@ -5,10 +5,20 @@ import org.json.JSONObject;
 
 public class Notification {
     private String _id;
-    private String customer;
+    private Customer customer;
     private String content;
     private String timestamp;
     private boolean isRead;
+    private boolean isCustomerPopulated = false;
+
+    public boolean isCustomerPopulated() {
+        return isCustomerPopulated;
+    }
+
+    public void setIsCustomerPopulated(boolean isCustomerPopulated) {
+        this.isCustomerPopulated = isCustomerPopulated;
+    }
+
 
     public static String idKey = "_id";
     public static String customerKey = "customer";
@@ -16,12 +26,20 @@ public class Notification {
     public static String timestampKey = "timestamp";
     public static String isReadKey = "isRead";
 
-    public Notification(String _id, String customer, String content, String timestamp, boolean isRead) {
+    public Notification(String _id, Customer customer, String content, String timestamp, boolean isRead) {
         this._id = _id;
         this.customer = customer;
         this.content = content;
         this.timestamp = timestamp;
         this.isRead = isRead;
+    }
+
+    public Notification() {
+        this._id = "";
+        this.customer = null;
+        this.content = "";
+        this.timestamp = "";
+        this.isRead = false;
     }
 
     public String get_id() {
@@ -32,11 +50,11 @@ public class Notification {
         this._id = _id;
     }
 
-    public String getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(String customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
@@ -60,8 +78,8 @@ public class Notification {
         return isRead;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
     }
 
     public static String getIdKey() {
@@ -105,20 +123,25 @@ public class Notification {
     }
 
     public static Notification fromJSON(JSONObject jsonObject) {
-        Notification notification = null;
-        String _id = "";
-        String customer = "";
-        String content = "";
-        String timestamp = "";
-        boolean isRead = false;
+        Notification notification = new Notification();
+
         if (jsonObject != null) {
             try {
-                _id = jsonObject.getString(idKey);
-                customer = jsonObject.getString(customerKey);
-                content = jsonObject.getString(contentKey);
-                timestamp = jsonObject.getString(timestampKey);
-                isRead = jsonObject.getBoolean(isReadKey);
-                notification = new Notification(_id,customer,content,timestamp,isRead);
+
+                notification.set_id(jsonObject.getString(idKey));
+                if (jsonObject.get(customerKey) instanceof JSONObject) {
+                    Customer customer = Customer.fromJSON(jsonObject.getJSONObject(customerKey));
+                    notification.setCustomer(customer);
+                    notification.setIsCustomerPopulated(true);
+                } else if (jsonObject.get(customerKey) instanceof String) {
+                    Customer customer = new Customer();
+                    customer.set_id(jsonObject.getString(customerKey));
+                    notification.setCustomer(customer);
+                }
+
+                notification.setContent(jsonObject.getString(contentKey));
+                notification.setTimestamp(jsonObject.getString(timestampKey));
+                notification.setIsRead(jsonObject.getBoolean(isReadKey));
             } catch(Exception exception) {
                 exception.printStackTrace();
             }
@@ -132,7 +155,12 @@ public class Notification {
             try {
                 jsonObject = new JSONObject();
                 jsonObject.put(idKey, notification._id);
-                jsonObject.put(customerKey, notification.customer);
+
+                if (notification.isCustomerPopulated()) {
+                    jsonObject.put(customerKey, Customer.toJSON(notification.customer));
+                } else {
+                    jsonObject.put(customerKey, notification.customer.get_id());
+                }
                 jsonObject.put(contentKey, notification.content);
                 jsonObject.put(timestampKey, notification.timestamp);
                 jsonObject.put(isReadKey, notification.isRead);

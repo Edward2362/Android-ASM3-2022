@@ -29,7 +29,7 @@ const uploadReview = async (req, response) => {
 
 const getReviews = async (req, response) => {
     const customerId = req.customer.customerId;
-    const reviews = await Review.find({}).populate("customer").populate("order");
+    const reviews = await Review.find({});
     let reviewArray = [];
     for (let i=0; i< reviews.length;i++){
         let review = reviews[i];

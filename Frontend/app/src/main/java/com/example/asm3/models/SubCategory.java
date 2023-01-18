@@ -18,6 +18,12 @@ public class SubCategory implements Serializable {
         this._id = _id;
     }
 
+    public SubCategory() {
+        this._id = "";
+        this.name = "";
+    }
+
+
     public String getName() {
         return name;
     }

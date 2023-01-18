@@ -53,7 +53,6 @@ public class SearchResultActivityController extends BaseController implements
         super(context, activity);
         searchResults = new ArrayList<>();
         resultViewModel = new ViewModelProvider(getActivity()).get(ResultViewModel.class);
-        resultViewModel.setFilterProgressBar(filterProgressBar);
     }
 
     // Render functions
@@ -68,6 +67,7 @@ public class SearchResultActivityController extends BaseController implements
         filterProgressBar = getActivity().findViewById(R.id.filterProgressBar);
         searchResultRecView = getActivity().findViewById(R.id.searchResultRecView);
 
+        resultViewModel.setFilterProgressBar(filterProgressBar);
         // set topBar here
         topBar.setSearchResultPage();
 

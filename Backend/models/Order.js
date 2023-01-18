@@ -3,12 +3,7 @@ const { Schema } = mongoose;
 
 const orderSchema = new mongoose.Schema({
     timeStamp: {
-      type: Date,
-      default: Date.now()
-    },
-    seller: {
-      type: Schema.Types.ObjectId,
-      ref: "Customer"
+      type: String
     },
     status: {
       type: String
@@ -16,6 +11,18 @@ const orderSchema = new mongoose.Schema({
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
+    },
+    bookName: {
+      type: String
+    },
+    bookPrice: {
+      type: Number
+    },
+    quantity: {
+      type: Number
+    },
+    hasReview: {
+      type: Boolean
     }
 });
 
