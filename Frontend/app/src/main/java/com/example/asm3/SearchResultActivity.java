@@ -15,10 +15,16 @@ public class SearchResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
-        onIt();
+        onInit();
     }
 
-    public void onIt() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        searchResultActivityController.onResume();
+    }
+
+    public void onInit() {
         searchResultActivityController = new SearchResultActivityController(getApplicationContext(), this);
         searchResultActivityController.onInit();
     }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,10 +64,10 @@ public class ProfileFragmentController extends BaseController implements
     private View view;
     private CardView profileAvatarLayout;
     private ImageView profileAvatarImg;
-    private TextView profileUsernameTxt;
+    private TextView profileUsernameTxt, profileEmailTxt;
     private RatingBar ratingBar;
     private MaterialButtonToggleGroup profileDataBtnGrp;
-    private Button settingProfileBtn, sellingBtn, purchasedBtn, feedbackBtn;
+    private Button settingProfileBtn, sellingBtn, purchasedBtn, feedbackBtn, userLogoutBtn;
     private RecyclerView sellingRecView, purchasedRecView, feedbackRecView;
     private MaterialAlertDialogBuilder builder;
     private ReviewDialogBody reviewDialogBody;
@@ -143,6 +144,8 @@ public class ProfileFragmentController extends BaseController implements
             sellingRecView = view.findViewById(R.id.sellingRecView);
             purchasedRecView = view.findViewById(R.id.purchasedRecView);
             feedbackRecView = view.findViewById(R.id.feedbackRecView);
+            userLogoutBtn = view.findViewById(R.id.userLogoutBtn);
+            profileEmailTxt = view.findViewById(R.id.profileEmailTxt);
             bookAdapter = generateBookAdapter();
             orderAdapter = generateOrderAdapter();
             reviewAdapter = generateReviewAdapter();
@@ -157,12 +160,15 @@ public class ProfileFragmentController extends BaseController implements
             });
 
             profileUsernameTxt.setText(authCustomer.getValue().getUsername());
+            profileEmailTxt.setText(authCustomer.getValue().getEmail());
             profileDataBtnGrp.check(R.id.sellingBtn);
             sellingRecView.setVisibility(View.VISIBLE);
 
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
             profileDataBtnGrp.addOnButtonCheckedListener(this);
+            userLogoutBtn.setOnClickListener(this);
+            profileEmailTxt.setOnClickListener(this);
 
             loadSelling();
             loadPurchased();
@@ -171,7 +177,7 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     public void onResume() {
-        getCustomerProducts();
+        if (isOnline()) getCustomerProducts();
     }
 
     @Override
@@ -251,6 +257,22 @@ public class ProfileFragmentController extends BaseController implements
                 break;
             case R.id.profileAvatarLayout:
                 break;
+            case R.id.userLogoutBtn:
+                getLocalFileController().writeFile(new ArrayList<>());
+                Helper.goToLogin(getContext(),getActivity());
+                break;
+            case R.id.profileEmailTxt:
+                String uriText =
+                        "mailto:" + profileEmailTxt.getText().toString() +
+                                "?subject=" + Uri.encode("See you on Go Goat") +
+                                "&body=" + Uri.encode("Hi, I'm " + profileUsernameTxt.getText().toString());
+
+                Uri uri = Uri.parse(uriText);
+
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(uri);
+                getActivity().startActivity(Intent.createChooser(sendIntent, "Send email"));
+                break;
         }
 
     }
@@ -282,8 +304,9 @@ public class ProfileFragmentController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Book item) {
                 BookHolder bookHolder = (BookHolder) holder;
+                bookHolder.getBookImg().setImageBitmap(Helper.stringToBitmap(item.getImage()));
                 bookHolder.getBookNameTxt().setText(item.getName());
-                bookHolder.getBookConditionTxt().setText("Condition: New");
+                bookHolder.getBookConditionTxt().setText("Condition: " + (item.isNew() ? "new" : "used"));
                 bookHolder.getBookPriceTxt().setText(item.getPrice() + " đ");
             }
         };
@@ -300,6 +323,7 @@ public class ProfileFragmentController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Order item) {
                 OrderHolder orderHolder = (OrderHolder) holder;
+//                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.get));
                 orderHolder.getOrderBookTxt().setText(item.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + item.getQuantity());
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
@@ -319,6 +343,7 @@ public class ProfileFragmentController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Review item) {
                 ReviewHolder reviewHolder = (ReviewHolder) holder;
+//                reviewHolder.getReviewUserImg().setImageBitmap(Helper.stringToBitmap(item.getCustomer().getAvatar()));
                 reviewHolder.getReviewUserNameTxt().setText(item.getCustomer().getUsername());
                 reviewHolder.getReviewContentTxt().setText(item.getContent());
                 reviewHolder.getReviewRatingBar().setRating(item.getRating());

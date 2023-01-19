@@ -77,7 +77,7 @@ public class ManageBookActivityController extends BaseController implements
     private TopBarView manageTopBar;
     private Button backBtn;
     private TextView cateNotifyTxt, manageProductCateErrorTxt, manageProductSubCateErrorTxt;
-    private View subCateTopDivider;
+    private View subCateTopDivider, bookUpdateLayout, bookInfoLayout, manageProgressBar;
     private GenericAdapter<SubCategory> subCateAdapter;
     private RecyclerView subCateRecView;
     private CardView productImageLayout;
@@ -135,6 +135,9 @@ public class ManageBookActivityController extends BaseController implements
             publishedAtEt = getActivity().findViewById(R.id.publishedAtEt);
             newProduct = getActivity().findViewById(R.id.newProduct);
             usedProduct = getActivity().findViewById(R.id.usedProduct);
+            bookInfoLayout = getActivity().findViewById(R.id.bookInfoLayout);
+            bookUpdateLayout = getActivity().findViewById(R.id.bookUpdateLayout);
+            manageProgressBar = getActivity().findViewById(R.id.manageProgressBar);
             subCateAdapter = generateSubCateAdapter();
 
             categoriesBtnGrp.addOnButtonCheckedListener(this);
@@ -142,6 +145,7 @@ public class ManageBookActivityController extends BaseController implements
             subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
             productImageLayout.setOnClickListener(this);
+            backBtn.setOnClickListener(this);
             uploadProduct.setOnClickListener(this);
             updateProduct.setOnClickListener(this);
             removeProduct.setOnClickListener(this);
@@ -152,8 +156,9 @@ public class ManageBookActivityController extends BaseController implements
                 uploadProduct.setVisibility(View.VISIBLE);
             } else {
                 manageTopBar.setSubPage("Update Book");
-                updateProduct.setVisibility(View.VISIBLE);
-                removeProduct.setVisibility(View.VISIBLE);
+                bookInfoLayout.setVisibility(View.INVISIBLE);
+                bookUpdateLayout.setVisibility(View.INVISIBLE);
+                manageProgressBar.setVisibility(View.VISIBLE);
                 setProductId();
                 getProduct(productId);
             }
@@ -480,6 +485,7 @@ public class ManageBookActivityController extends BaseController implements
             domestic = categories.get(1).getSubCategories();
             text = categories.get(2).getSubCategories();
         } else if (taskType.equals(Constant.getProductTaskType)) {
+
             ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
             Book product = apiData.getData();
             productNameEt.setText(product.getName());
@@ -518,6 +524,11 @@ public class ManageBookActivityController extends BaseController implements
 
             productPhoto = Helper.stringToBitmap(product.getImage());
             productView.setImageBitmap(productPhoto);
+            manageProgressBar.setVisibility(View.GONE);
+            bookInfoLayout.setVisibility(View.VISIBLE);
+            bookUpdateLayout.setVisibility(View.VISIBLE);
+            updateProduct.setVisibility(View.VISIBLE);
+            removeProduct.setVisibility(View.VISIBLE);
         } else if (taskType.equals(Constant.updateBookTaskType)) {
             Intent intent = new Intent(getContext(), ProductDetailActivity.class);
             intent.putExtra(Constant.isUpdateKey, Constant.isUpdateKey);

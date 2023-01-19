@@ -3,6 +3,7 @@ package com.example.asm3.controllers;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,8 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ProductDetailActivityController extends BaseController implements
         AsyncTaskCallBack,
@@ -111,11 +114,11 @@ public class ProductDetailActivityController extends BaseController implements
                 break;
             case R.id.detailAddCartBtn:
                 Log.d("TAG", "onClick: test cart ");
-                if (!isAuth()){
-                    Helper.goToLogin(getContext(),getActivity());
+                if (!isAuth()) {
+                    Helper.goToLogin(getContext(), getActivity());
                 } else {
-                    if(!checkAddToCart()){
-                        saveProduct(productId,1);
+                    if (!checkAddToCart()) {
+                        saveProduct(productId, 1);
                     }
                 }
                 break;
@@ -131,8 +134,8 @@ public class ProductDetailActivityController extends BaseController implements
         boolean isAdd;
         isAdd = false;
         if (customer != null) {
-            for (int i=0;i<customer.getCart().size();i++){
-                if(customer.getCart().get(i).getProduct().get_id().equals(productId)) {
+            for (int i = 0; i < customer.getCart().size(); i++) {
+                if (customer.getCart().get(i).getProduct().get_id().equals(productId)) {
                     isAdd = true;
                 }
             }
@@ -156,20 +159,21 @@ public class ProductDetailActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
-    public void saveProduct(String id,int quantity) {
+    public void saveProduct(String id, int quantity) {
         postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
         postAuthenticatedData.setEndPoint(Constant.saveProduct);
         postAuthenticatedData.setToken(token);
         postAuthenticatedData.setTaskType(Constant.saveProductTaskType);
         JSONObject jsonObject = new JSONObject();
-        try{
-            jsonObject.put(Constant.productKey,id);
-            jsonObject.put(Constant.quantityKey,quantity);
+        try {
+            jsonObject.put(Constant.productKey, id);
+            jsonObject.put(Constant.quantityKey, quantity);
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
         postAuthenticatedData.execute(jsonObject);
     }
+
     // Navigation functions
     public void goToManageBookActivity() {
         Intent intent = new Intent(getContext(), ManageBookActivity.class);
@@ -192,14 +196,14 @@ public class ProductDetailActivityController extends BaseController implements
             }
 
             detailBookNameTxt.setText(book.getName());
-            detailBookYearTxt.setText(String.valueOf(book.getPublishedAt()));
-            detailBookDescriptionTxt.setText(book.getDescription());
-            detailBookPriceTxt.setText(String.valueOf(book.getPrice()));
+            detailBookYearTxt.setText("Published year: " + book.getPublishedAt());
+            detailBookDescriptionTxt.setText("Description: " + book.getDescription());
+            detailBookPriceTxt.setText(book.getPrice() + " đ");
             detailBookImg.setImageBitmap(Helper.stringToBitmap(book.getImage()));
             if (book.isNew()) {
-                detailBookConditionTxt.setText("new");
+                detailBookConditionTxt.setText("Condition: new");
             } else {
-                detailBookConditionTxt.setText("used");
+                detailBookConditionTxt.setText("Condition: used");
             }
             productDetailBody.setVisibility(View.VISIBLE);
             detailActionBody.setVisibility(View.VISIBLE);

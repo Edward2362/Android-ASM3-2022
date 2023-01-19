@@ -93,10 +93,22 @@ public class HomeFragmentController extends BaseController implements
         subCateAdapter = generateSubCateAdapter();
 
         // put this observe after find view by id
+
+        categoriesBtnGrp.addOnButtonCheckedListener(this);
+        subCateRecView.setAdapter(subCateAdapter);
+        subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        postBookBtn.setOnClickListener(this);
+        findBookBtn.setOnClickListener(this);
+        loginNavBtn.setOnClickListener(this);
+    }
+
+    public void onResume() {
         authCustomer.observe(getActivity(), new Observer<Customer>() {
             @Override
             public void onChanged(Customer customer) {
-                if (customer != null) {
+                Log.d(TAG, "onChanged: test change nha");
+                if (authCustomer.getValue() != null) {
                     helloTxt.setText("Hello " + customer.getUsername() + ", mahhh!");
                     loginNavBtn.setVisibility(View.GONE);
                     postBookBtn.setVisibility(View.VISIBLE);
@@ -107,14 +119,6 @@ public class HomeFragmentController extends BaseController implements
                 }
             }
         });
-
-        categoriesBtnGrp.addOnButtonCheckedListener(this);
-        subCateRecView.setAdapter(subCateAdapter);
-        subCateRecView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        postBookBtn.setOnClickListener(this);
-        findBookBtn.setOnClickListener(this);
-        loginNavBtn.setOnClickListener(this);
     }
 
     @Override
@@ -185,7 +189,7 @@ public class HomeFragmentController extends BaseController implements
 
     @Override
     public void onClick(View view) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return;
         }

@@ -125,7 +125,7 @@ public class MainActivityController extends BaseController implements
             }
         });
 
-        if(isOnline()) {
+        if (isOnline()) {
             if (isAuth()) {
                 Log.d(TAG, "onInit: test customer");
                 getAuthCustomer();
@@ -135,6 +135,12 @@ public class MainActivityController extends BaseController implements
     }
 
     public void onResume() {
+        if (isOnline()) {
+            if (isAuth()) {
+                Log.d(TAG, "onInit: test customer");
+                getAuthCustomer();
+            }
+        }
         if (getFragmentManager().findFragmentByTag("home") instanceof HomeFragment) {
             loadMenu();
         }
@@ -142,7 +148,7 @@ public class MainActivityController extends BaseController implements
 
     @Override
     public void onClick(View view) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return;
         }
@@ -198,7 +204,7 @@ public class MainActivityController extends BaseController implements
     // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return false;
         }
@@ -305,6 +311,7 @@ public class MainActivityController extends BaseController implements
     public void onError(String taskType) {
         if (taskType.equals(Constant.getCustomer)) {
             getLocalFileController().writeFile(new ArrayList<>());
+            mainViewModel.setAuthCustomer(null);
         }
     }
 

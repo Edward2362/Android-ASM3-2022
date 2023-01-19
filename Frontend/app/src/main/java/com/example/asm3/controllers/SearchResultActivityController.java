@@ -111,13 +111,16 @@ public class SearchResultActivityController extends BaseController implements
             }
         });
 
+    }
+
+    public void onResume() {
         filterProgressBar.setVisibility(View.VISIBLE);
-        if(isOnline()) getSearchResults(queryInput);
+        if (isOnline()) getSearchResults(queryInput);
     }
 
     @Override
     public void onBookClick(int position, View view) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return;
         }
@@ -139,14 +142,14 @@ public class SearchResultActivityController extends BaseController implements
                 getActivity().finish();
                 break;
             case R.id.cartButton:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
                 Helper.goToCart(getContext(), getActivity());
                 break;
             case R.id.filterBtn:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
@@ -168,6 +171,7 @@ public class SearchResultActivityController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Book item) {
                 BookHolder bookHolder = (BookHolder) holder;
+                bookHolder.getBookImg().setImageBitmap(Helper.stringToBitmap(item.getImage()));
                 bookHolder.getBookNameTxt().setText(item.getName());
                 bookHolder.getBookConditionTxt().setText("Condition: New");
                 bookHolder.getBookPriceTxt().setText(item.getPrice() + " đ");
@@ -189,9 +193,7 @@ public class SearchResultActivityController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-
         filterProgressBar.setVisibility(View.GONE);
-
         if (taskType.equals(Constant.searchProductTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             searchResults.clear();
