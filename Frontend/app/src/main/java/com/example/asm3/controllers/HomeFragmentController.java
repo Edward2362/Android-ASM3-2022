@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,6 +185,10 @@ public class HomeFragmentController extends BaseController implements
 
     @Override
     public void onClick(View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.loginNavBtn:
                 Helper.goToLogin(getContext(), getActivity());

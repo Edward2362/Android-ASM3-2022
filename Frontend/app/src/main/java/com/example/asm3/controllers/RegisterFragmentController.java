@@ -86,6 +86,10 @@ public class RegisterFragmentController extends BaseController implements
                 Helper.loadFragment(fragmentManager, loginFragment, "login", authLayoutId);
                 break;
             case R.id.registerBtn:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 onRegister();
                 break;
         }

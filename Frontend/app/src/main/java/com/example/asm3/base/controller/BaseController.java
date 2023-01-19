@@ -1,15 +1,20 @@
 package com.example.asm3.base.controller;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.asm3.R;
 import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.config.Constant;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -21,7 +26,7 @@ public abstract class BaseController {
     public BaseController(Context context, FragmentActivity activity) {
         this.context = context;
         this.activity = activity;
-        this.localFileController = new LocalFileController<String>(Constant.tokenFile,context);
+        this.localFileController = new LocalFileController<String>(Constant.tokenFile, context);
     }
 
     public LocalFileController<String> getLocalFileController() {
@@ -48,21 +53,21 @@ public abstract class BaseController {
         this.activity = activity;
     }
 
-    public String getToken(){
+    public String getToken() {
         ArrayList<String> arrayList = new ArrayList<String>();
-        String token ="";
+        String token = "";
         arrayList = localFileController.readFile();
-        if (!arrayList.isEmpty()){
+        if (!arrayList.isEmpty()) {
             token = arrayList.get(0);
         }
         return token;
     }
 
-    public boolean isAuth(){
+    public boolean isAuth() {
         ArrayList<String> arrayList = new ArrayList<String>();
         Boolean isTokenStored = false;
         arrayList = localFileController.readFile();
-        if (!arrayList.isEmpty() && !arrayList.get(0).equals("")){
+        if (!arrayList.isEmpty() && !arrayList.get(0).equals("")) {
             isTokenStored = true;
         }
         Log.d("TAG", "getToken: test " + isTokenStored);
@@ -71,10 +76,20 @@ public abstract class BaseController {
 
     public abstract void onInit();
 
-    public boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean isOnline() {
+        Log.d(TAG, "isOnline: test");
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         //should check null because in airplane mode it will be null
         return (netInfo != null && netInfo.isConnected());
+    }
+
+    public void showConnectDialog() {
+        Log.d(TAG, "showConnectDialog: context " + getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        builder.setTitle(R.string.no_connection).
+                setMessage(R.string.no_connection_message).
+                show();
+        Handler handler = new Handler();
     }
 }

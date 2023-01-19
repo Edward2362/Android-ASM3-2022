@@ -96,6 +96,10 @@ public class LoginFragmentController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.forgetPwTxt:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 Intent intent = new Intent(getContext(), ForgetPasswordActivity.class);
                 getActivity().startActivity(intent);
                 break;
@@ -103,6 +107,10 @@ public class LoginFragmentController extends BaseController implements
                 Helper.loadFragment(fragmentManager, registerFragment, "register", authLayoutId);
                 break;
             case R.id.loginBtn:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 onLogin();
                 break;
         }

@@ -92,32 +92,35 @@ public class ProfileFragmentController extends BaseController implements
         this.view = view;
         this.mainViewModel = (MainViewModel) viewModel;
 
-        authCustomer = mainViewModel.getAuthCustomer();
-        sellingBooks = mainViewModel.getBooks();
-        orders = mainViewModel.getOrders();
-        reviews = mainViewModel.getReviews();
+        if (isOnline()) {
+            authCustomer = mainViewModel.getAuthCustomer();
+            sellingBooks = mainViewModel.getBooks();
+            orders = mainViewModel.getOrders();
+            reviews = mainViewModel.getReviews();
 
-        displayBooks = sellingBooks.getValue();
-        displayOrders = orders.getValue();
-        displayReviews = reviews.getValue();
+            displayBooks = sellingBooks.getValue();
+            displayOrders = orders.getValue();
+            displayReviews = reviews.getValue();
+        }
     }
 
     // Render functions
     @Override
     public void onInit() {
+        if (!isOnline()) return;
         if (!isAuth()) {
             Helper.goToLogin(getContext(), getActivity());
         } else {
             // for testing
             token = getToken();
 
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
 
             displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
             displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
@@ -194,6 +197,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onBookClick(int position, View view) {
+        if (!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.productBody:
                 Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.getValue().get(position).get_id(), position);
@@ -203,6 +210,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
+        if (!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.orderBody:
                 Log.d(TAG, "onOrderClick: test " + position);
@@ -216,6 +227,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onAvatarClick(int position, View view) {
+        if (!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.reviewUserImgLayout:
                 Log.d(TAG, "onAvatarClick: test " + position);
@@ -225,6 +240,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onClick(View view) {
+        if (!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.settingProfileBtn:
                 goToSetting();

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onInit() {
-        mainActivityController = new MainActivityController(getApplicationContext(), this);
+        mainActivityController = new MainActivityController(this, this);
         mainActivityController.onInit();
     }
 
