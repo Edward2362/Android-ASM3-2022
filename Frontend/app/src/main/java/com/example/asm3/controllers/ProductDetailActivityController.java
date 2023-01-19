@@ -31,6 +31,7 @@ public class ProductDetailActivityController extends BaseController implements
     private GetData getData;
 
     private TopBarView detailTopBar;
+    private Button backButton;
     private ImageView detailBookImg;
     private TextView detailBookYearTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt, detailBookConditionTxt, detailBookDescriptionTxt;
     private Button detailAddCartBtn, detailUpdateCartBtn;
@@ -54,6 +55,7 @@ public class ProductDetailActivityController extends BaseController implements
     @Override
     public void onInit() {
         detailTopBar = getActivity().findViewById(R.id.detailTopBar);
+        backButton = detailTopBar.getBackButton();
         detailBookImg = getActivity().findViewById(R.id.detailBookImg);
         detailBookNameTxt = getActivity().findViewById(R.id.detailBookNameTxt);
         detailBookYearTxt = getActivity().findViewById(R.id.detailBookYearTxt);
@@ -66,6 +68,7 @@ public class ProductDetailActivityController extends BaseController implements
         detailUpdateCartBtn = getActivity().findViewById(R.id.detailUpdateCartBtn);
 
         detailTopBar.setSubPage("");
+        backButton.setOnClickListener(this);
         detailSellerTxt.setOnClickListener(this);
         detailAddCartBtn.setOnClickListener(this);
         detailUpdateCartBtn.setOnClickListener(this);
@@ -86,6 +89,9 @@ public class ProductDetailActivityController extends BaseController implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.backButton:
+                getActivity().finish();
+                break;
             case R.id.detailSellerTxt:
                 Log.d("TAG", "onClick: test seller ");
                 break;
