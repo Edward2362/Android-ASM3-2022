@@ -20,7 +20,7 @@ public class CheckoutActivityController extends BaseController implements
 
     public CheckoutActivityController(Context context, FragmentActivity activity){
         super(context,activity);
-        topBar = getActivity().findViewById(R.id.cartTopBar);
+        topBar = getActivity().findViewById(R.id.checkoutTopBar);
         topBar.setSubPage("Checkout");
     }
 

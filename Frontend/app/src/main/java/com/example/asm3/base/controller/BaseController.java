@@ -2,6 +2,8 @@ package com.example.asm3.base.controller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
@@ -68,4 +70,11 @@ public abstract class BaseController {
     }
 
     public abstract void onInit();
+
+    public boolean isOnline(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        //should check null because in airplane mode it will be null
+        return (netInfo != null && netInfo.isConnected());
+    }
 }
