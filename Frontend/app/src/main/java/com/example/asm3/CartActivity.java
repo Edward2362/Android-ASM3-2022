@@ -15,9 +15,14 @@ public class CartActivity extends AppCompatActivity {
         onInit();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cartActivityController.onResume();
+    }
+
     public void onInit(){
         cartActivityController = new CartActivityController(CartActivity.this,this);
         cartActivityController.onInit();
-
     }
 }

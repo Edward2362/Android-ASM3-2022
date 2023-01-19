@@ -34,8 +34,9 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="2"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingHorizontal="5dp"
             android:paddingVertical="10dp">
@@ -63,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:text="Status: "
                 android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/orderPriceTxt"
@@ -78,6 +79,31 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/orderQuantityActionLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/orderIncreaseBtn"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_arrow_up" />
+
+            <Button
+                android:id="@+id/orderDownBtn"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_arrow_down" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/orderDeleteLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/md_theme_light_error">

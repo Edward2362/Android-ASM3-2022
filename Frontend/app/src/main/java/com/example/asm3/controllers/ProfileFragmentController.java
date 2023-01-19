@@ -62,7 +62,7 @@ public class ProfileFragmentController extends BaseController implements
         AsyncTaskCallBack,
         DialogInterface.OnClickListener {
 
-    private View view;
+    private View view, profileNotifyLayout;
     private CardView profileAvatarLayout;
     private ImageView profileAvatarImg;
     private TextView profileUsernameTxt, profileEmailTxt;
@@ -149,6 +149,7 @@ public class ProfileFragmentController extends BaseController implements
             feedbackRecView = view.findViewById(R.id.feedbackRecView);
             userLogoutBtn = view.findViewById(R.id.userLogoutBtn);
             profileEmailTxt = view.findViewById(R.id.profileEmailTxt);
+            profileNotifyLayout = view.findViewById(R.id.profileNotifyLayout);
             bookAdapter = generateBookAdapter();
             orderAdapter = generateOrderAdapter();
             reviewAdapter = generateReviewAdapter();
@@ -156,16 +157,22 @@ public class ProfileFragmentController extends BaseController implements
             sellingBooks.observe(getActivity(), new Observer<ArrayList<Book>>() {
                 @Override
                 public void onChanged(ArrayList<Book> books) {
-                    displayBooks.clear();
-                    displayBooks.addAll(books);
-                    bookAdapter.notifyDataSetChanged();
+                    if (books.isEmpty()) {
+                        sellingRecView.setVisibility(View.GONE);
+                        profileNotifyLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        displayBooks.clear();
+                        displayBooks.addAll(books);
+                        bookAdapter.notifyDataSetChanged();
+                        sellingRecView.setVisibility(View.VISIBLE);
+                        profileNotifyLayout.setVisibility(View.GONE);
+                    }
                 }
             });
 
             profileUsernameTxt.setText(authCustomer.getValue().getUsername());
             profileEmailTxt.setText(authCustomer.getValue().getEmail());
             profileDataBtnGrp.check(R.id.sellingBtn);
-            sellingRecView.setVisibility(View.VISIBLE);
 
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
@@ -186,21 +193,28 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+        profileNotifyLayout.setVisibility(View.VISIBLE);
+        sellingRecView.setVisibility(View.GONE);
+        feedbackRecView.setVisibility(View.GONE);
+        purchasedRecView.setVisibility(View.GONE);
         switch (group.getCheckedButtonId()) {
             case R.id.sellingBtn:
-                sellingRecView.setVisibility(View.VISIBLE);
-                purchasedRecView.setVisibility(View.GONE);
-                feedbackRecView.setVisibility(View.GONE);
+                if (!sellingBooks.getValue().isEmpty()) {
+                    sellingRecView.setVisibility(View.VISIBLE);
+                    profileNotifyLayout.setVisibility(View.GONE);
+                }
                 break;
             case R.id.purchasedBtn:
-                sellingRecView.setVisibility(View.GONE);
-                purchasedRecView.setVisibility(View.VISIBLE);
-                feedbackRecView.setVisibility(View.GONE);
+                if (!orders.getValue().isEmpty()) {
+                    purchasedRecView.setVisibility(View.VISIBLE);
+                    profileNotifyLayout.setVisibility(View.GONE);
+                }
                 break;
             case R.id.feedbackBtn:
-                sellingRecView.setVisibility(View.GONE);
-                purchasedRecView.setVisibility(View.GONE);
-                feedbackRecView.setVisibility(View.VISIBLE);
+                if (!reviews.getValue().isEmpty()) {
+                    feedbackRecView.setVisibility(View.VISIBLE);
+                    profileNotifyLayout.setVisibility(View.GONE);
+                }
                 break;
         }
 

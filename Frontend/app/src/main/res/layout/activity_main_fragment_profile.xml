@@ -50,7 +50,6 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -85,11 +84,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
                     android:id="@+id/profileEmailTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="nguyenquang2362@gmail.com" />
+                    android:text="nguyenquang2362@gmail.com"
+                    android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2"
+                    android:textColor="@color/md_theme_light_primary" />
 
                 <RatingBar
                     android:id="@+id/ratingBar"
@@ -119,11 +119,12 @@
 
     <Button
         android:id="@+id/salesBtn"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?attr/materialButtonOutlinedStyle"
-        android:text="Sales in progress"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginBottom="10dp"
+        android:text="Sales in progress" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/profileDataBtnGrp"
@@ -182,5 +183,47 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/profileNotifyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/goat_grazing"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="W, 1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight=".4"
+                android:text="There is nothing here..."
+                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Subtitle1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

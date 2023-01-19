@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,16 +48,17 @@ public class CartActivityController extends BaseController implements
         OrderHolder.OnSelectListener,
         View.OnClickListener {
     private TopBarView topBar;
+    private View cartProgressBar, cartActionLayout;
     private RecyclerView cartRecView;
     private TextView totalOrderTxt, countItemsTxt;
     private Button backBtn, checkoutBtn;
     private ArrayList<CartItem> cartItems;
     private GenericAdapter<CartItem> cartItemsAdapter;
     private String token;
-    private float totalPrice;
     private GetAuthenticatedData getAuthenticatedData;
     private DeleteAuthenticatedData deleteAuthenticatedData;
     private Customer customer;
+    private MutableLiveData<Float> totalPrice = new MutableLiveData<>();
 
 
     public CartActivityController(Context context, FragmentActivity activity) {
@@ -63,11 +66,13 @@ public class CartActivityController extends BaseController implements
         topBar = getActivity().findViewById(R.id.cartTopBar);
         topBar.setSubPage("Your Cart");
         cartItems = new ArrayList<>();
-
     }
 
     @Override
     public void onInit() {
+        cartProgressBar = getActivity().findViewById(R.id.cartProgressBar);
+        cartActionLayout = getActivity().findViewById(R.id.cartActionLayout);
+
         backBtn = topBar.getBackButton();
         backBtn.setOnClickListener(this);
 
@@ -80,9 +85,23 @@ public class CartActivityController extends BaseController implements
 
         countItemsTxt = getActivity().findViewById(R.id.countItemsTxt);
         totalOrderTxt = getActivity().findViewById(R.id.totalOrderTxt);
-        if (!isAuth()){
-            Helper.goToLogin(getContext(),getActivity());
+        totalPrice.observe(getActivity(), new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                if (aFloat == 0) {
+                    checkoutBtn.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    public void onResume() {
+        if (!isAuth()) {
+            Helper.goToLogin(getContext(), getActivity());
         } else {
+            cartActionLayout.setVisibility(View.INVISIBLE);
+            cartRecView.setVisibility(View.INVISIBLE);
+            cartProgressBar.setVisibility(View.VISIBLE);
             token = getToken();
             getAuthCustomer();
         }
@@ -105,8 +124,8 @@ public class CartActivityController extends BaseController implements
     }
 
     public void removeCart(String id) {
-        deleteAuthenticatedData = new DeleteAuthenticatedData(getContext(),this);
-        deleteAuthenticatedData.setEndPoint(Constant.removeCart+"/"+id);
+        deleteAuthenticatedData = new DeleteAuthenticatedData(getContext(), this);
+        deleteAuthenticatedData.setEndPoint(Constant.removeCart + "/" + id);
         deleteAuthenticatedData.setToken(token);
         deleteAuthenticatedData.setTaskType(Constant.removeCartTaskType);
         deleteAuthenticatedData.execute();
@@ -119,7 +138,7 @@ public class CartActivityController extends BaseController implements
                 getActivity().finish();
                 break;
             case R.id.checkoutBtn:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
@@ -131,21 +150,45 @@ public class CartActivityController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return;
         }
+        CartItem chosenCart = cartItems.get(position);
         switch (view.getId()) {
             case R.id.orderBody:
-                Helper.goToBookDetail(getContext(),getActivity(), cartItems.get(position).getProduct().get_id(), position);
+                Helper.goToBookDetail(getContext(), getActivity(), chosenCart.getProduct().get_id(), position);
                 break;
             case R.id.orderDeleteBtn:
-                removeCart(cartItems.get(position).getProduct().get_id());
-                totalPrice = totalPrice - cartItems.get(position).getProduct().getPrice()*cartItems.get(position).getQuantity();
-                totalOrderTxt.setText("Total: "+ totalPrice);
+                removeCart(chosenCart.getProduct().get_id());
+                totalPrice.setValue(totalPrice.getValue() - chosenCart.getProduct().getPrice() * chosenCart.getQuantity());
+                totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
                 cartItems.remove(position);
-                countItemsTxt.setText("You have "+cartItems.size()+" books in your cart.");
+                countItemsTxt.setText("You have " + cartItems.size() + " books in your cart.");
                 cartItemsAdapter.notifyItemRemoved(position);
+                break;
+            case R.id.orderIncreaseBtn:
+                chosenCart.setQuantity(chosenCart.getQuantity() + 1);
+                totalPrice.setValue(totalPrice.getValue() + chosenCart.getProduct().getPrice());
+                totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
+                cartItems.set(position, chosenCart);
+                cartItemsAdapter.notifyItemChanged(position);
+                break;
+            case R.id.orderDownBtn:
+                if (chosenCart.getQuantity() > 1) {
+                    chosenCart.setQuantity(chosenCart.getQuantity() - 1);
+                    totalPrice.setValue(totalPrice.getValue() - chosenCart.getProduct().getPrice());
+                    totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
+                    cartItems.set(position, chosenCart);
+                    cartItemsAdapter.notifyItemChanged(position);
+                } else {
+                    removeCart(chosenCart.getProduct().get_id());
+                    totalPrice.setValue(totalPrice.getValue() - chosenCart.getProduct().getPrice() * chosenCart.getQuantity());
+                    totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
+                    cartItems.remove(position);
+                    countItemsTxt.setText("You have " + cartItems.size() + " books in your cart.");
+                    cartItemsAdapter.notifyItemRemoved(position);
+                }
                 break;
         }
     }
@@ -161,12 +204,13 @@ public class CartActivityController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, CartItem cartItem) {
                 OrderHolder orderHolder = (OrderHolder) holder;
+                orderHolder.getOrderQuantityActionLayout().setVisibility(View.VISIBLE);
                 orderHolder.getOrderBookTxt().setText(cartItem.getProduct().getName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + cartItem.getQuantity());
-            orderHolder.getOrderPriceTxt().setText(cartItem.getProduct().getPrice()*cartItem.getQuantity() + " đ");
-        }
-    };
-}
+                orderHolder.getOrderPriceTxt().setText(cartItem.getProduct().getPrice() * cartItem.getQuantity() + " đ");
+            }
+        };
+    }
 
     private void loadPurchased() {
         cartRecView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -177,21 +221,26 @@ public class CartActivityController extends BaseController implements
     @Override
     public void onFinished(String message, String taskType) {
         if (taskType.equals(Constant.getCustomer)) {
-            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message),Customer.class);
+            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
             getCart();
         } else if (taskType.equals(Constant.getCartTaskType)) {
-            ApiList<CartItem> apiList = ApiList.fromJSON(ApiList.getData(message),CartItem.class);
+            ApiList<CartItem> apiList = ApiList.fromJSON(ApiList.getData(message), CartItem.class);
             cartItems.clear();
             cartItems.addAll(apiList.getList());
             cartItemsAdapter.notifyDataSetChanged();
-            totalPrice = 0;
-            for (int i=0; i< cartItems.size();i++){
-                totalPrice = totalPrice + cartItems.get(i).getProduct().getPrice()*cartItems.get(i).getQuantity();
+
+            float newTotalPrice = 0;
+            for (int i = 0; i < cartItems.size(); i++) {
+                newTotalPrice = newTotalPrice + cartItems.get(i).getProduct().getPrice() * cartItems.get(i).getQuantity();
 
             }
-            totalOrderTxt.setText("Total: "+ totalPrice);
-            countItemsTxt.setText("You have "+cartItems.size()+" books in your cart.");
+            totalPrice.setValue(newTotalPrice);
+            totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
+            countItemsTxt.setText("You have " + cartItems.size() + " books in your cart.");
+            cartActionLayout.setVisibility(View.VISIBLE);
+            cartRecView.setVisibility(View.VISIBLE);
+            cartProgressBar.setVisibility(View.INVISIBLE);
         } else if (taskType.equals(Constant.removeCartTaskType)) {
 
         }

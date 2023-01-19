@@ -192,7 +192,7 @@ public class SearchResultActivityController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-        filterProgressBar.setVisibility(View.GONE);
+        filterProgressBar.setVisibility(View.INVISIBLE);
         if (taskType.equals(Constant.searchProductTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             searchResults.clear();
