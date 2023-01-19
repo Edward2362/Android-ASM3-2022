@@ -25,7 +25,7 @@ public class AddressHolder extends RecyclerView.ViewHolder implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        onSelectListener.onAddressClick(getAdapterPosition(), view);
+        onSelectListener.onAddressClick(getAdapterPosition(), view, addressTextView);
     }
 
     public TextView getAddressTextView() {
@@ -34,7 +34,7 @@ public class AddressHolder extends RecyclerView.ViewHolder implements View.OnCli
 
 
     public interface OnSelectListener {
-        void onAddressClick(int position, View view);
+        void onAddressClick(int position, View view, TextView textView);
     }
 
 }

@@ -4,12 +4,15 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
@@ -36,7 +39,7 @@ import java.util.ArrayList;
 public class SearchFragmentController extends BaseController implements
         AsyncTaskCallBack,
         SearchView.OnQueryTextListener,
-        SearchSuggestionHolder.OnSelectListener {
+        SearchSuggestionHolder.OnSelectListener{
 
     private LinearProgressIndicator progressBar;
     private GenericAdapter<String> searchAdapter;
@@ -174,6 +177,7 @@ public class SearchFragmentController extends BaseController implements
     public void onError(String taskType) {
 
     }
+
 
     // Getter and Setter
 }
