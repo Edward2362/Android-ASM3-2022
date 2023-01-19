@@ -1,5 +1,7 @@
 package com.example.asm3.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -156,6 +158,7 @@ public class Customer implements Serializable {
                 for (int i = 0; i < cartJSONArray.length(); ++i) {
                     cartItems.add(CartItem.fromJSON(cartJSONArray.getJSONObject(i)));
                 }
+                customer.setCart(cartItems);
                 customer.setIsCartPopulated(true);
                 customer.setAvatar(jsonObject.getString(avatarKey));
             } catch(Exception exception) {

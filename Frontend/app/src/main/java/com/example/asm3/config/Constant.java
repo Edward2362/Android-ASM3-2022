@@ -3,7 +3,7 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-    public static String baseDomain = "http://192.168.18.27:9000"; //
+    public static String baseDomain = "http://192.168.18.26:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -19,6 +19,7 @@ public class Constant {
     public static String getNotifications = "/api/notification/getNotifications";
     public static String suggestProduct = "/api/book/suggestProduct";
     public static String searchProduct = "/api/book/searchProduct";
+    public static String saveProduct = "/api/book/saveProduct";
     public static String tokenFile = "token.txt";
 
     public static final Pattern emailPattern =
@@ -48,6 +49,7 @@ public class Constant {
     public static String isRemoveKey = "isRemove";
     public static String productIdKey = "productId";
     public static String productKey = "product";
+    public static String quantityKey = "quantity";
     public static String booksArrPositionKey = "booksArrPosition";
 
     public static final int mainActivityCode = 000;
@@ -69,6 +71,7 @@ public class Constant {
     public static String uploadBookTaskType = "uploadBook";
     public static String updateBookTaskType = "updateBook";
     public static String deleteBookTaskType = "deleteBook";
+    public static String saveProductTaskType = "saveProduct";
     public static String getProductTaskType = "getProduct";
     public static String getUploadedProductsTaskType = "getUploadedProducts";
     public static String setCustomerDataTaskType = "setCustomerData";

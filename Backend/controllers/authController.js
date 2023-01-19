@@ -78,7 +78,7 @@ const login = async (req, response) => {
 
       const customers = await Customer.find({email: customerInput.email});
 
-      if (customers.length == 0) {
+      if (customers.length === 0) {
         return response.json({
           message: "Error",
           error: true,

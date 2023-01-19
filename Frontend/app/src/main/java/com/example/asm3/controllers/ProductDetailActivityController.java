@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.asm3.CartActivity;
 import com.example.asm3.MainActivity;
 import com.example.asm3.ManageBookActivity;
 import com.example.asm3.R;
@@ -18,12 +19,16 @@ import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.base.networking.services.GetData;
+import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Customer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ProductDetailActivityController extends BaseController implements
         AsyncTaskCallBack,
@@ -42,6 +47,7 @@ public class ProductDetailActivityController extends BaseController implements
     private String token;
     private Customer customer;
     private GetAuthenticatedData getAuthenticatedData;
+    private PostAuthenticatedData postAuthenticatedData;
     private String productId;
     private int bookPosition;
 
@@ -97,6 +103,13 @@ public class ProductDetailActivityController extends BaseController implements
                 break;
             case R.id.detailAddCartBtn:
                 Log.d("TAG", "onClick: test cart ");
+                if (!isAuth()){
+                    Helper.goToLogin(getContext(),getActivity());
+                } else {
+                    if(!checkAddToCart()){
+                        saveProduct(productId,1);
+                    }
+                }
                 break;
             case R.id.detailUpdateCartBtn:
                 Log.d("TAG", "onClick: test update ");
@@ -106,7 +119,18 @@ public class ProductDetailActivityController extends BaseController implements
     }
 
     // Helpers
-
+    public boolean checkAddToCart() {
+        boolean isAdd;
+        isAdd = false;
+        if (customer != null) {
+            for (int i=0;i<customer.getCart().size();i++){
+                if(customer.getCart().get(i).getProduct().get_id().equals(productId)) {
+                    isAdd = true;
+                }
+            }
+        }
+        return isAdd;
+    }
 
     // Request functions
     public void getProduct(String productId) {
@@ -124,6 +148,20 @@ public class ProductDetailActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
+    public void saveProduct(String id,int quantity) {
+        postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+        postAuthenticatedData.setEndPoint(Constant.saveProduct);
+        postAuthenticatedData.setToken(token);
+        postAuthenticatedData.setTaskType(Constant.saveProductTaskType);
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put(Constant.productKey,id);
+            jsonObject.put(Constant.quantityKey,quantity);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+        postAuthenticatedData.execute(jsonObject);
+    }
     // Navigation functions
     public void goToManageBookActivity() {
         Intent intent = new Intent(getContext(), ManageBookActivity.class);
@@ -158,6 +196,8 @@ public class ProductDetailActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
+        } else if (taskType.equals(Constant.saveProductTaskType)) {
+            getActivity().finish();
         }
     }
 
