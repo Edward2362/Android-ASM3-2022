@@ -125,7 +125,6 @@ public class ApiService {
             httpURLConnection.setRequestProperty(Constant.tokenHeader, token);
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
             dataOutputStream.writeBytes(jsonObject.toString());
-
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String line = "";
             StringBuilder stringBuilder = new StringBuilder();
@@ -134,7 +133,6 @@ public class ApiService {
             }
 
             json = stringBuilder.toString();
-
             dataOutputStream.flush();
             dataOutputStream.close();
         } catch(MalformedURLException malformedURLException) {
@@ -143,6 +141,8 @@ public class ApiService {
             protocolException.printStackTrace();
         } catch(IOException ioException) {
             ioException.printStackTrace();
+        } catch (Exception exception){
+            exception.printStackTrace();
         }
 
         return json;

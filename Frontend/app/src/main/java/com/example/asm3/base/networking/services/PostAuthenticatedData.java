@@ -2,6 +2,7 @@ package com.example.asm3.base.networking.services;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.asm3.base.networking.api.ApiService;
 import com.example.asm3.config.Constant;
@@ -40,6 +41,7 @@ public class PostAuthenticatedData extends AsyncTask<JSONObject, String,String> 
 
     @Override
     protected String doInBackground(JSONObject... data) {
+        Log.d("dasda","adasda");
         String message = apiService.postJSON(endPoint, data[0], token);
         return message;
     }

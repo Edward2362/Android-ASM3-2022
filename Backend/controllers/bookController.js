@@ -4,288 +4,331 @@ const Customer = require("../models/Customer");
 const Constants = require("../constants/Constants");
 
 const uploadBook = async (req, response) => {
-    const bookInput = {
-      name: req.body.name,
-      author: req.body.author,
-      description: req.body.description,
-      price: req.body.price,
-      quantity: req.body.quantity,
-      publishedAt: req.body.publishedAt,
-      category: req.body.category,
-      subCategory: req.body.subCategory,
-      customer: req.customer.customerId,
-      isNewProduct: req.body.isNewProduct,
-      image: req.body.image
-    };
+	const bookInput = {
+		name: req.body.name,
+		author: req.body.author,
+		description: req.body.description,
+		price: req.body.price,
+		quantity: req.body.quantity,
+		publishedAt: req.body.publishedAt,
+		category: req.body.category,
+		subCategory: req.body.subCategory,
+		customer: req.customer.customerId,
+		isNewProduct: req.body.isNewProduct,
+		image: req.body.image,
+	};
 
-    const book = await Book(bookInput);
+	const book = await Book(bookInput);
 
-    await book.save();
+	await book.save();
 
-    return response.json({
-      message: "",
-      error: false,
-      data: [book]
-    });
+	return response.json({
+		message: "",
+		error: false,
+		data: [book],
+	});
 };
 
 const updateBook = async (req, response) => {
-    const books = await Book.find({
-      _id: req.body._id
-    });
+	const books = await Book.find({
+		_id: req.body._id,
+	});
 
-    if (books.length === 0) {
-      return response.json({
-        message: "Error",
-        error: true,
-        data: []
-      });
-    }
+	if (books.length === 0) {
+		return response.json({
+			message: "Error",
+			error: true,
+			data: [],
+		});
+	}
 
-    let bookInput = req.body;
+	let bookInput = req.body;
 
-    delete bookInput._id;
+	delete bookInput._id;
 
-    const book = await Book.findOneAndUpdate({_id: books[0]._id}, {$set: bookInput}, {new: true});
+	const book = await Book.findOneAndUpdate(
+		{ _id: books[0]._id },
+		{ $set: bookInput },
+		{ new: true }
+	);
 
-    return response.json({
-      message: "",
-      error: false,
-      data: [book]
-    });
+	return response.json({
+		message: "",
+		error: false,
+		data: [book],
+	});
 };
 
-const deleteBook = (req, response) => {
-    Book.deleteOne({_id: req.params.id}, (error, result) => {
-        if (error) {
-          return response.json({
-            message: "Error",
-            error: true,
-            data: []
-          });
-        }
+const deleteBook = async (req, response) => {
+	if (req.params.id === undefined || req.params.id === "") {
+		return response.json({
+			message: "Error",
+			error: true,
+			data: [],
+		});
+	}
+	let books = await Book.find({
+		_id: req.params.id,
+	});
+	if (books.length === 0) {
+		return response.json({
+			message: "Error",
+			error: true,
+			data: [],
+		});
+	}
+	let customers = await Customer.find({
+		cart: { $elemMatch: { product: req.params.id } },
+	});
+	for (let i = 0; i < customers.length; i++) {
+		let cart = [];
+		let productIndex = -1;
+		cart = cart.concat(customers[i].cart);
+		for (let j = 0; j < cart.length; j++) {
+			if (cart[j].product === req.params.id) {
+				productIndex = j;
+			}
+		}
+		customers[i].cart.splice(productIndex, 1);
+		await customers[i].save();
+	}
+	Book.deleteOne({ _id: req.params.id }, (error, result) => {
+		if (error) {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: [],
+			});
+		}
 
-        return response.json({
-          message: "",
-          error: false,
-          data: []
-        });
-    });
-    
+		return response.json({
+			message: "",
+			error: false,
+			data: [],
+		});
+	});
 };
-
 
 const getProducts = async (req, response) => {
-  const input = req.query;
+	const input = req.query;
 
-  let products = await Book.find({});
+	let products = await Book.find({});
 
-  if (input.subCategory === undefined && input.category === undefined) {
-    return response.json({
-      message: "",
-      error: false,
-      data: products
-    });
-  }
+	if (input.subCategory === undefined && input.category === undefined) {
+		return response.json({
+			message: "",
+			error: false,
+			data: products,
+		});
+	}
 
-  let filteredProducts = [];
+	let filteredProducts = [];
 
-  let categories = [];
-  if (input.category !== undefined) {
-    if (typeof(input.category) === "string") {
-      categories.push(input.category.replace(" ","+"));
-    } else if (Array.isArray(input.category)) {
-      for (let i=0;i<input.category.length;i++){
-        categories.push(input.category[i].replace(" ","+"));
-      }
-    }
-  }
+	let categories = [];
+	if (input.category !== undefined) {
+		if (typeof input.category === "string") {
+			categories.push(input.category.replace(" ", "+"));
+		} else if (Array.isArray(input.category)) {
+			for (let i = 0; i < input.category.length; i++) {
+				categories.push(input.category[i].replace(" ", "+"));
+			}
+		}
+	}
 
-  let subCategories = [];
-  if (input.subCategory !== undefined) {
-    if (typeof(input.subCategory) === "string") {
-      subCategories.push(input.subCategory.replace(" ","+"));
-    } else if (Array.isArray(input.subCategory)) {
-      for (let i=0;i<input.subCategory.length;i++){
-        subCategories.push(input.subCategory[i].replace(" ","+"));
-      }
-    }
-  }
+	let subCategories = [];
+	if (input.subCategory !== undefined) {
+		if (typeof input.subCategory === "string") {
+			subCategories.push(input.subCategory.replace(" ", "+"));
+		} else if (Array.isArray(input.subCategory)) {
+			for (let i = 0; i < input.subCategory.length; i++) {
+				subCategories.push(input.subCategory[i].replace(" ", "+"));
+			}
+		}
+	}
 
-  if (categories.length !== 0 && subCategories.length !== 0) {
-    for (let i = 0; i < products.length; ++i) {
-      let product = products[i];
+	if (categories.length !== 0 && subCategories.length !== 0) {
+		for (let i = 0; i < products.length; ++i) {
+			let product = products[i];
 
-      if (categories.includes(product.category.name)) {
-        if (haveSameElements(products[i].subCategory,subCategories)) {
-          filteredProducts.push(product);
-        }
-      }
-    }
-  } else if (categories.length !== 0) {
-    for (let i = 0; i < products.length; ++i) {
-      let product = products[i];
+			if (categories.includes(product.category.name)) {
+				if (haveSameElements(products[i].subCategory, subCategories)) {
+					filteredProducts.push(product);
+				}
+			}
+		}
+	} else if (categories.length !== 0) {
+		for (let i = 0; i < products.length; ++i) {
+			let product = products[i];
 
-      if (categories.includes(product.category.name)) {
-        filteredProducts.push(product);
-      }
-    }
-  } else if (subCategories.length !== 0) {
-    for (let i = 0; i < products.length; ++i) {
-      let product = products[i];
+			if (categories.includes(product.category.name)) {
+				filteredProducts.push(product);
+			}
+		}
+	} else if (subCategories.length !== 0) {
+		for (let i = 0; i < products.length; ++i) {
+			let product = products[i];
 
-      if (haveSameElements(products[i].subCategory,subCategories)) {
-        filteredProducts.push(product);
-      }
-    }
-  }
+			if (haveSameElements(products[i].subCategory, subCategories)) {
+				filteredProducts.push(product);
+			}
+		}
+	}
 
-  return response.json({
-    message: "",
-    error: false,
-    data: filteredProducts
-  });
+	return response.json({
+		message: "",
+		error: false,
+		data: filteredProducts,
+	});
 };
 
-
 const getUploadedProducts = async (req, response) => {
-  try {
-    const customerId = req.customer.customerId;
+	try {
+		const customerId = req.customer.customerId;
 
-    const products = await Book.find({customer: customerId});
+		const products = await Book.find({ customer: customerId });
 
-    return response.json({
-      message: "",
-      error: false,
-      data: products
-    });
-  } catch(error) {
-    console.log(error);
-    process.exit(1);
-  }
+		return response.json({
+			message: "",
+			error: false,
+			data: products,
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
 };
 
 const getProduct = async (req, response) => {
-  
-  try {
-    const productId = req.params.productId;
-    const products = await Book.find({_id: productId});
+	try {
+		const productId = req.params.productId;
+		const products = await Book.find({ _id: productId });
 
-    if (products.length === 0) {
+		if (products.length === 0) {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: products,
+			});
+		}
+
+		return response.json({
+			message: "",
+			error: false,
+			data: products,
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
+};
+
+const saveProduct = async (req, response) => {
+	try {
+		const customerId = req.customer.customerId;
+		const input = req.body;
+
+		const customers = await Customer.find({ _id: customerId });
+    if (customers[0].cart.findIndex((element) => {
+      return input.product == element.product;
+    }) === -1) {
+      customers[0].cart.push({
+        product: input.product,
+        quantity: input.quantity,
+      });
+      await customers[0].save();
+    } else {
       return response.json({
         message: "Error",
         error: true,
-        data: products
+        data: [],
       });
     }
-
     return response.json({
       message: "",
       error: false,
-      data: products
+      data: [],
     });
-  } catch(error) {
-    console.log(error);
-    process.exit(1);
-  }
-};
-
-
-const saveProduct = async (req, response) => {
-  try {
-    const customerId = req.customer.customerId;
-    const input = req.body;
-
-    const customers = await Customer.find({_id: customerId});
-    customers[0].cart.push({
-      product: input.product,
-      quantity: input.quantity
-    });
-
-    return response.json({
-      message: "",
-      error: false,
-      data: []
-    });
-
-  } catch(error) {
-    console.log(error);
-    process.exit(1);
-  }
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
 };
 
 const suggestProduct = async (req, response) => {
-  try {
-    const input = req.query;
-    if (input.queryInput === undefined || input.queryInput === ""){
-      return response.json({
-        message: "Error",
-        error: true,
-        data: []
-      });
-    }
-    let products = await Book.find({name: {$regex: input.queryInput}});
-    products = removeDuplicate(products);
-    return response.json({
-      message: "",
-      error: false,
-      data: products
-    });
-  } catch(error) {
-    console.log(error);
-    process.exit(1);
-  }
-}
+	try {
+		const input = req.query;
+		if (input.queryInput === undefined || input.queryInput === "") {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: [],
+			});
+		}
+		let products = await Book.find({ name: { $regex: input.queryInput } });
+		products = removeDuplicate(products);
+		return response.json({
+			message: "",
+			error: false,
+			data: products,
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
+};
 
 const searchProduct = async (req, response) => {
-  try {
-    const input = req.query;
-    if (input.queryInput === undefined || input.queryInput === ""){
-      return response.json({
-        message: "Error",
-        error: true,
-        data: []
-      });
-    }
-    let products = await Book.find({name: {$regex: input.queryInput}});
-    return response.json({
-      message: "",
-      error: false,
-      data: products
-    });
-  } catch(error) {
-    console.log(error);
-    process.exit(1);
-  }
-}
+	try {
+		const input = req.query;
+		if (input.queryInput === undefined || input.queryInput === "") {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: [],
+			});
+		}
+		let products = await Book.find({ name: { $regex: input.queryInput } });
+		return response.json({
+			message: "",
+			error: false,
+			data: products,
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
+};
 const removeDuplicate = (array) => {
-  let products = [];
-  for (let i=0;i<array.length;i++){
-    if (products.findIndex((element) => {
-      return element.name === array[i].name; } ) === -1 ) {
-        products.push(array[i]);
-      }
-  }
-  return products;
-}
+	let products = [];
+	for (let i = 0; i < array.length; i++) {
+		if (
+			products.findIndex((element) => {
+				return element.name === array[i].name;
+			}) === -1
+		) {
+			products.push(array[i]);
+		}
+	}
+	return products;
+};
 const haveSameElements = (subCategories, subCategoryIds) => {
-  let  isSameElement = false; 
-  for (let i=0; i<subCategories.length;i++){
-    if(subCategoryIds.includes(subCategories[i].name)){
-      isSameElement = true;
-    }
-  }
-  return isSameElement;
-}
+	let isSameElement = false;
+	for (let i = 0; i < subCategories.length; i++) {
+		if (subCategoryIds.includes(subCategories[i].name)) {
+			isSameElement = true;
+		}
+	}
+	return isSameElement;
+};
 
 module.exports = {
-  uploadBook,
-  updateBook,
-  deleteBook,
-  getProducts,
-  getProduct,
-  getUploadedProducts,
-  saveProduct,
-  suggestProduct,
-  searchProduct
+	uploadBook,
+	updateBook,
+	deleteBook,
+	getProducts,
+	getProduct,
+	getUploadedProducts,
+	saveProduct,
+	suggestProduct,
+	searchProduct,
 };
