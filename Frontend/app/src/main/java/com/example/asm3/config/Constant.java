@@ -60,6 +60,7 @@ public class Constant {
     public static final int productDetailActivityCode = 500;
     public static final int cartActivityCode = 600;
     public static final int checkoutActivityCode = 70;
+    public static final int salesProgressActivityCode = 800;
 
     public static final int uploadCode = 700;
     public static final int isUploadCode = 305;

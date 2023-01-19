@@ -16,7 +16,7 @@ public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     private CardView orderBody;
     private ImageView orderBookImg;
-    private TextView orderBookTxt, orderQuantityTxt, orderPriceTxt;
+    private TextView orderBookTxt, orderQuantityTxt, orderStatusTxt, orderPriceTxt;
     private Button orderDeleteBtn;
     private OnSelectListener onSelectListener;
 
@@ -26,6 +26,7 @@ public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClick
         orderBookImg = itemView.findViewById(R.id.orderBookImg);
         orderBookTxt = itemView.findViewById(R.id.orderBookTxt);
         orderQuantityTxt = itemView.findViewById(R.id.orderQuantityTxt);
+        orderStatusTxt = itemView.findViewById(R.id.orderStatusTxt);
         orderPriceTxt = itemView.findViewById(R.id.orderPriceTxt);
         orderDeleteBtn = itemView.findViewById(R.id.orderDeleteBtn);
         this.onSelectListener = onSelectListener;
@@ -49,6 +50,10 @@ public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public TextView getOrderQuantityTxt() {
         return orderQuantityTxt;
+    }
+
+    public TextView getOrderStatusTxt() {
+        return orderStatusTxt;
     }
 
     public TextView getOrderPriceTxt() {

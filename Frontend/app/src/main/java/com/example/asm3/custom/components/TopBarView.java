@@ -161,6 +161,7 @@ public class TopBarView extends LinearLayout {
     /**
      * Set visibility and constraints for cart, user info, post book page's components
      */
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void setSubPage(String title) {
         // set visibility
         searchView.setVisibility(GONE);
@@ -170,6 +171,7 @@ public class TopBarView extends LinearLayout {
 
         titleText.setText(title);
         titleText.setTextAlignment(TEXT_ALIGNMENT_CENTER);
+        titleText.setTextAppearance(R.style.TextAppearance_MdcTypographyStyles_Headline4);
     }
 
     /**
