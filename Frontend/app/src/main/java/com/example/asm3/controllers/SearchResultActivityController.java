@@ -45,7 +45,6 @@ public class SearchResultActivityController extends BaseController implements
     private MaterialButton backBtn;
     private SearchView searchView;
     private MaterialButton cartBtn;
-    private int searchEditTextId;
     // search result view
     private MaterialButton filterBtn;
     private LinearProgressIndicator filterProgressBar;

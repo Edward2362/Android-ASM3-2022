@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.asm3.AccountSettingActivity;
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
+import com.example.asm3.SaleProgressActivity;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.BookHolder;
 import com.example.asm3.base.adapter.viewHolder.OrderHolder;
@@ -67,7 +68,7 @@ public class ProfileFragmentController extends BaseController implements
     private TextView profileUsernameTxt, profileEmailTxt;
     private RatingBar ratingBar;
     private MaterialButtonToggleGroup profileDataBtnGrp;
-    private Button settingProfileBtn, sellingBtn, purchasedBtn, feedbackBtn, userLogoutBtn;
+    private Button settingProfileBtn, sellingBtn, purchasedBtn, feedbackBtn, userLogoutBtn, salesBtn;
     private RecyclerView sellingRecView, purchasedRecView, feedbackRecView;
     private MaterialAlertDialogBuilder builder;
     private ReviewDialogBody reviewDialogBody;
@@ -141,6 +142,7 @@ public class ProfileFragmentController extends BaseController implements
             sellingBtn = view.findViewById(R.id.sellingBtn);
             purchasedBtn = view.findViewById(R.id.purchasedBtn);
             feedbackBtn = view.findViewById(R.id.feedbackBtn);
+            salesBtn = view.findViewById(R.id.salesBtn);
             sellingRecView = view.findViewById(R.id.sellingRecView);
             purchasedRecView = view.findViewById(R.id.purchasedRecView);
             feedbackRecView = view.findViewById(R.id.feedbackRecView);
@@ -166,6 +168,7 @@ public class ProfileFragmentController extends BaseController implements
 
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
+            salesBtn.setOnClickListener(this);
             profileDataBtnGrp.addOnButtonCheckedListener(this);
             userLogoutBtn.setOnClickListener(this);
             profileEmailTxt.setOnClickListener(this);
@@ -272,6 +275,11 @@ public class ProfileFragmentController extends BaseController implements
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                 sendIntent.setData(uri);
                 getActivity().startActivity(Intent.createChooser(sendIntent, "Send email"));
+            case R.id.salesBtn:
+                // TODO: go to sales activity
+                Intent intent = new Intent(getContext(), SaleProgressActivity.class);
+                intent.putExtra("data", authCustomer.getValue());
+                getActivity().startActivityForResult(intent, Constant.salesProgressActivityCode);
                 break;
         }
 

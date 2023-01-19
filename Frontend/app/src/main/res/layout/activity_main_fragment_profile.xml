@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        android:layout_marginVertical="20dp"
+        android:layout_marginVertical="10dp"
         app:cardElevation="2dp"
         app:contentPadding="20dp">
 
@@ -116,6 +116,14 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/salesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?attr/materialButtonOutlinedStyle"
+        android:text="Sales in progress"
+        android:layout_marginBottom="10dp"/>
 
     <com.google.android.material.button.MaterialButtonToggleGroup
         android:id="@+id/profileDataBtnGrp"
