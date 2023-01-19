@@ -3,7 +3,9 @@ package com.example.asm3.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CartItem {
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
     private int quantity;
     private Book product;
     private boolean isProductPopulated = false;

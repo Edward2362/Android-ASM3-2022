@@ -280,6 +280,7 @@ public class ProfileFragmentController extends BaseController implements
                 Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
                 sendIntent.setData(uri);
                 getActivity().startActivity(Intent.createChooser(sendIntent, "Send email"));
+                break;
             case R.id.salesBtn:
                 // TODO: go to sales activity
                 Intent intent = new Intent(getContext(), SaleProgressActivity.class);
