@@ -9,35 +9,52 @@ public class Order implements Serializable {
     private String _id;
     private String timestamp;
     private String status;
-    private Customer customer;
+    private Customer buyer, seller;
+    private String bookImage;
     private String bookName;
     private float bookPrice;
     private int quantity;
     private boolean hasReview;
-    private boolean isCustomerPopulated = false;
+    private boolean isBuyerPopulated = false;
+    private boolean isSellerPopulated = false;
 
-    public boolean isCustomerPopulated() {
-        return isCustomerPopulated;
+
+    public boolean isBuyerPopulated() {
+        return isBuyerPopulated;
     }
 
-    public void setIsCustomerPopulated(boolean isCustomerPopulated) {
-        this.isCustomerPopulated = isCustomerPopulated;
+
+    public void setIsBuyerPopulated(boolean isBuyerPopulated) {
+        this.isBuyerPopulated = isBuyerPopulated;
+    }
+
+    public boolean isSellerPopulated() {
+        return isSellerPopulated;
+    }
+
+
+    public void setIsSellerPopulated(boolean isSellerPopulated) {
+        this.isSellerPopulated = isSellerPopulated;
     }
 
     public static String idKey = "_id";
-    public static String timestampKey = "timestamp";
+    public static String timestampKey = "timeStamp";
     public static String statusKey = "status";
-    public static String customerKey = "customer";
+    public static String buyerKey = "buyer";
+    public static String sellerKey = "seller";
     public static String bookNameKey = "bookName";
+    public static String bookImageKey = "bookImage";
     public static String bookPriceKey = "bookPrice";
     public static String quantityKey = "quantity";
     public static String hasReviewKey = "hasReview";
 
-    public Order(String _id, String timestamp, String status, Customer customer, String bookName, float bookPrice, int quantity, boolean hasReview) {
+    public Order(String _id, String timestamp, String status, Customer buyer, Customer seller, String bookImage, String bookName, float bookPrice, int quantity, boolean hasReview) {
         this._id = _id;
         this.timestamp = timestamp;
         this.status = status;
-        this.customer = customer;
+        this.buyer = buyer;
+        this.seller = seller;
+        this.bookImage = bookImage;
         this.bookName = bookName;
         this.bookPrice = bookPrice;
         this.quantity = quantity;
@@ -48,9 +65,11 @@ public class Order implements Serializable {
         this._id = "";
         this.timestamp = "";
         this.status = "";
-        this.customer = null;
+        this.buyer = null;
+        this.seller = null;
+        this.bookImage = "";
         this.bookName = "";
-        this.bookPrice = 0F;
+        this.bookPrice = 0f;
         this.quantity = 0;
         this.hasReview = false;
     }
@@ -71,28 +90,36 @@ public class Order implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public static String getTimestampKey() {
-        return timestampKey;
-    }
-
-    public static void setTimestampKey(String timestampKey) {
-        Order.timestampKey = timestampKey;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Customer getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Customer buyer) {
+        this.buyer = buyer;
+    }
+
+    public Customer getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Customer seller) {
+        this.seller = seller;
+    }
+
+    public String getBookImage() {
+        return bookImage;
+    }
+
+    public void setBookImage(String bookImage) {
+        this.bookImage = bookImage;
     }
 
     public String getBookName() {
@@ -127,14 +154,6 @@ public class Order implements Serializable {
         this.hasReview = hasReview;
     }
 
-    public static String getCustomerKey() {
-        return customerKey;
-    }
-
-    public static void setCustomerKey(String customerKey) {
-        Order.customerKey = customerKey;
-    }
-
     public static Order fromJSON(JSONObject jsonObject) {
         Order order = new Order();
 
@@ -144,16 +163,25 @@ public class Order implements Serializable {
                 order.set_id(jsonObject.getString(idKey));
                 order.setTimestamp(jsonObject.getString(timestampKey));
                 order.setStatus(jsonObject.getString(statusKey));
-                if (jsonObject.get(customerKey) instanceof JSONObject) {
-                    Customer customer = Customer.fromJSON(jsonObject.getJSONObject(customerKey));
-                    order.setCustomer(customer);
-                    order.setIsCustomerPopulated(true);
-                } else if (jsonObject.get(customerKey) instanceof String) {
-                    Customer customer = new Customer();
-                    customer.set_id(jsonObject.getString(customerKey));
-                    order.setCustomer(customer);
+                if (jsonObject.get(sellerKey) instanceof JSONObject) {
+                    Customer seller = Customer.fromJSON(jsonObject.getJSONObject(sellerKey));
+                    order.setSeller(seller);
+                    order.setIsSellerPopulated(true);
+                } else if (jsonObject.get(sellerKey) instanceof String) {
+                    Customer seller = new Customer();
+                    seller.set_id(jsonObject.getString(sellerKey));
+                    order.setSeller(seller);
                 }
-
+                if (jsonObject.get(buyerKey) instanceof JSONObject) {
+                    Customer buyer = Customer.fromJSON(jsonObject.getJSONObject(buyerKey));
+                    order.setBuyer(buyer);
+                    order.setIsBuyerPopulated(true);
+                } else if (jsonObject.get(buyerKey) instanceof String) {
+                    Customer buyer = new Customer();
+                    buyer.set_id(jsonObject.getString(buyerKey));
+                    order.setBuyer(buyer);
+                }
+                order.setBookImage(jsonObject.getString(bookImageKey));
                 order.setBookName(jsonObject.getString(bookNameKey));
                 order.setBookPrice((float) jsonObject.getDouble(bookPriceKey));
                 order.setQuantity(jsonObject.getInt(quantityKey));
@@ -173,12 +201,17 @@ public class Order implements Serializable {
                 jsonObject.put(idKey, order._id);
                 jsonObject.put(timestampKey, order.timestamp);
                 jsonObject.put(statusKey, order.status);
-                if (order.isCustomerPopulated()) {
-                    jsonObject.put(customerKey, Customer.toJSON(order.customer));
+                if (order.isSellerPopulated()) {
+                    jsonObject.put(sellerKey, Customer.toJSON(order.seller));
                 } else {
-                    jsonObject.put(customerKey, order.customer.get_id());
+                    jsonObject.put(sellerKey, order.seller.get_id());
                 }
-
+                if (order.isBuyerPopulated()) {
+                    jsonObject.put(buyerKey, Customer.toJSON(order.buyer));
+                } else {
+                    jsonObject.put(buyerKey, order.buyer.get_id());
+                }
+                jsonObject.put(bookImageKey, order.bookImage);
                 jsonObject.put(bookNameKey, order.bookName);
                 jsonObject.put(bookPriceKey, order.bookPrice);
                 jsonObject.put(quantityKey, order.quantity);

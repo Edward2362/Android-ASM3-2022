@@ -2,6 +2,7 @@ const Book = require("../models/Book");
 
 const Customer = require("../models/Customer");
 const Constants = require("../constants/Constants");
+const { response } = require("express");
 
 const uploadBook = async (req, response) => {
 	const bookInput = {
@@ -228,26 +229,28 @@ const saveProduct = async (req, response) => {
 		const input = req.body;
 
 		const customers = await Customer.find({ _id: customerId });
-    if (customers[0].cart.findIndex((element) => {
-      return input.product == element.product;
-    }) === -1) {
-      customers[0].cart.push({
-        product: input.product,
-        quantity: input.quantity,
-      });
-      await customers[0].save();
-    } else {
-      return response.json({
-        message: "Error",
-        error: true,
-        data: [],
-      });
-    }
-    return response.json({
-      message: "",
-      error: false,
-      data: [],
-    });
+		if (
+			customers[0].cart.findIndex((element) => {
+				return input.product == element.product;
+			}) === -1
+		) {
+			customers[0].cart.push({
+				product: input.product,
+				quantity: input.quantity,
+			});
+			await customers[0].save();
+		} else {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: [],
+			});
+		}
+		return response.json({
+			message: "",
+			error: false,
+			data: [],
+		});
 	} catch (error) {
 		console.log(error);
 		process.exit(1);
@@ -298,6 +301,62 @@ const searchProduct = async (req, response) => {
 		process.exit(1);
 	}
 };
+
+const getCustomerCart = async (req, response) => {
+	try {
+		const customerId = req.customer.customerId;
+		const customers = await Customer.find({
+			_id: customerId,
+		}).populate("cart.product");
+		return response.json({
+			message: "",
+			error: false,
+			data: customers[0].cart,
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
+};
+
+const removeCustomerCart = async (req, response) => {
+	try {
+		const customerId = req.customer.customerId;
+		const productId = req.params.productId;
+		if (productId === undefined || productId === "") {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: [],
+			});
+		}
+		const customers = await Customer.find({
+			_id: customerId,
+		}).populate("cart.product");
+		let index = customers[0].cart.findIndex((element) => {
+			return productId == element.product._id;
+		});
+		if (index === -1) {
+			return response.json({
+				message: "Error",
+				error: true,
+				data: [],
+			});
+		} 
+		customers[0].cart.splice(index,1);
+		await customers[0].save();
+
+		return response.json({
+			message: "",
+			error: false,
+			data: customers[0].cart,
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
+};
+
 const removeDuplicate = (array) => {
 	let products = [];
 	for (let i = 0; i < array.length; i++) {
@@ -331,4 +390,6 @@ module.exports = {
 	saveProduct,
 	suggestProduct,
 	searchProduct,
+	getCustomerCart, 
+	removeCustomerCart
 };

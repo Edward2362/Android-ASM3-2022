@@ -8,9 +8,16 @@ const orderSchema = new mongoose.Schema({
     status: {
       type: String
     },
-    customer: {
+    buyer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
+    },
+    seller: {
+      type: Schema.Types.ObjectId,
+      ref: "Customer"
+    },
+    bookImage: {
+      type: String
     },
     bookName: {
       type: String

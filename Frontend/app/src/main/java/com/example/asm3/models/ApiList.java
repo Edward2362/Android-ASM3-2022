@@ -1,5 +1,7 @@
 package com.example.asm3.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,7 +122,19 @@ public class ApiList<T extends Object> {
             }
 
             return new ApiList<T>((ArrayList<T>) reviews);
-        } else {
+        } else if (t.isAssignableFrom(CartItem.class)) {
+            ArrayList<CartItem> cartItems = new ArrayList<CartItem>();
+
+            try {
+                for (int i = 0; i < jsonArray.length(); ++i) {
+                    cartItems.add(CartItem.fromJSON(jsonArray.getJSONObject(i)));
+                }
+            } catch(Exception exception) {
+                exception.printStackTrace();
+            }
+            return new ApiList<T>((ArrayList<T>) cartItems);
+        }
+        else {
             return null;
         }
     }
