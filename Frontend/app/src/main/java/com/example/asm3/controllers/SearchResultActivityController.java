@@ -19,10 +19,13 @@ import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.BookHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.GetData;
+import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.searchResultActivity.FilterBottomSheetFragment;
 import com.example.asm3.fragments.searchResultActivity.ResultViewModel;
+import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -49,6 +52,9 @@ public class SearchResultActivityController extends BaseController implements
 
     private ResultViewModel resultViewModel;
 
+    private GetData getData;
+    private String queryInput;
+
     public SearchResultActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         searchResults = new ArrayList<>();
@@ -72,7 +78,9 @@ public class SearchResultActivityController extends BaseController implements
         topBar.setSearchResultPage();
 
         Intent intent = getActivity().getIntent();
-        searchView.setQuery(intent.getExtras().getString("query"), false);
+
+        queryInput = intent.getExtras().getString("query");
+        searchView.setQuery(queryInput, false);
 
         // set on click listener here
         filterBtn.setOnClickListener(this);
@@ -82,16 +90,6 @@ public class SearchResultActivityController extends BaseController implements
         searchView.setOnQueryTextFocusChangeListener(this);
 
         // for test
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
-        searchResults.add(new Book("Lord of the ring", "J. R. R. Tolkien", null, 100000, 0, null, null, null, null, null, true, null));
         // end test
 
         //adapter
@@ -111,7 +109,7 @@ public class SearchResultActivityController extends BaseController implements
         });
 
         filterProgressBar.setVisibility(View.VISIBLE);
-        getSearchResults();
+        getSearchResults(queryInput);
     }
 
     @Override
@@ -162,8 +160,11 @@ public class SearchResultActivityController extends BaseController implements
     }
 
     // Request functions
-    public void getSearchResults() {
-
+    public void getSearchResults(String textInput) {
+        getData = new GetData(getContext(), this);
+        getData.setEndPoint(Constant.searchProduct + "?queryInput=" + textInput);
+        getData.setTaskType(Constant.searchProductTaskType);
+        getData.execute();
     }
 
     // Navigation functions
@@ -174,6 +175,13 @@ public class SearchResultActivityController extends BaseController implements
     public void onFinished(String message, String taskType) {
 
         filterProgressBar.setVisibility(View.GONE);
+
+        if (taskType.equals(Constant.searchProductTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
+            searchResults.clear();
+            searchResults.addAll(apiList.getList());
+            searchResultAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
