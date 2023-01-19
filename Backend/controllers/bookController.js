@@ -202,7 +202,7 @@ const getUploadedProducts = async (req, response) => {
 const getProduct = async (req, response) => {
 	try {
 		const productId = req.params.productId;
-		const products = await Book.find({ _id: productId });
+		const products = await Book.find({ _id: productId }).populate("customer");
 
 		if (products.length === 0) {
 			return response.json({
