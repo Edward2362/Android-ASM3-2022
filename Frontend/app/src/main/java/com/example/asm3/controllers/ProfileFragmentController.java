@@ -297,6 +297,7 @@ public class ProfileFragmentController extends BaseController implements
     // Navigation functions
     public void goToSetting() {
         Intent intent = new Intent(getContext(), AccountSettingActivity.class);
+        intent.putExtra("data", authCustomer.getValue());
         getActivity().startActivityForResult(intent, Constant.accSettingActivityCode);
     }
 

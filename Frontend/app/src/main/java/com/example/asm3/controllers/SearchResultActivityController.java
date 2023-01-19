@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -109,7 +108,7 @@ public class SearchResultActivityController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backButton:
-            case R.id.searchView:
+            case R.id.searchViewAddress:
                 // send back query
                 getActivity().finish();
                 break;
