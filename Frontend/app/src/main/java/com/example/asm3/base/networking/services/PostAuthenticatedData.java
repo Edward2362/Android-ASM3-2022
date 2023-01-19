@@ -41,7 +41,6 @@ public class PostAuthenticatedData extends AsyncTask<JSONObject, String,String> 
 
     @Override
     protected String doInBackground(JSONObject... data) {
-        Log.d("dasda","adasda");
         String message = apiService.postJSON(endPoint, data[0], token);
         return message;
     }

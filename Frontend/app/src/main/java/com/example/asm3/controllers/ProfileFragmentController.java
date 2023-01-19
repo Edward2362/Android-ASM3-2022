@@ -114,13 +114,13 @@ public class ProfileFragmentController extends BaseController implements
             // for testing
             token = getToken();
 
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
+//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
 
             displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
             displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
