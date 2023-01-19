@@ -180,7 +180,7 @@ public class HomeFragmentController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, SubCategory item) {
                 SubCategoryHolder subCategoryHolder = (SubCategoryHolder) holder;
-                subCategoryHolder.getSubCateTxt().setText(item.getName());
+                subCategoryHolder.getSubCateTxt().setText(item.getName().replace("+", " "));
                 subCategoryHolder.getSubCateCheckBox().setChecked(item.isChosen());
             }
         };
