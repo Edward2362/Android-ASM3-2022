@@ -150,6 +150,7 @@ public class ProfileFragmentController extends BaseController implements
             sellingBooks.observe(getActivity(), new Observer<ArrayList<Book>>() {
                 @Override
                 public void onChanged(ArrayList<Book> books) {
+                    displayBooks.clear();
                     displayBooks.addAll(books);
                     bookAdapter.notifyDataSetChanged();
                 }
