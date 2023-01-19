@@ -86,7 +86,7 @@ public class ProfileFragmentController extends BaseController implements
         this.mainViewModel = (MainViewModel) viewModel;
 
         authCustomer = mainViewModel.getAuthCustomer();
-        sellingBooks = new ArrayList<>();
+        sellingBooks = mainViewModel.getBooks().getValue();
         orders = new ArrayList<>();
         reviews = new ArrayList<>();
     }
@@ -144,7 +144,6 @@ public class ProfileFragmentController extends BaseController implements
             loadSelling();
             loadPurchased();
             loadFeedback();
-            getCustomerProducts();
         }
     }
 
@@ -174,7 +173,7 @@ public class ProfileFragmentController extends BaseController implements
     public void onBookClick(int position, View view) {
         switch (view.getId()) {
             case R.id.productBody:
-                Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.get(position).get_id());
+                Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.get(position).get_id(), position);
                 break;
         }
     }
@@ -320,13 +319,7 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     // Request functions
-    public void getCustomerProducts() {
-        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
-        getAuthenticatedData.setEndPoint(Constant.getUploadedProducts);
-        getAuthenticatedData.setTaskType(Constant.getUploadedProductsTaskType);
-        getAuthenticatedData.setToken(token);
-        getAuthenticatedData.execute();
-    }
+
 
     // Navigation functions
     public void goToSetting() {
@@ -337,13 +330,7 @@ public class ProfileFragmentController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-        if (taskType.equals(Constant.getUploadedProductsTaskType)) {
-            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
-            sellingBooks.clear();
-            sellingBooks.addAll(apiList.getList());
-            bookAdapter.notifyDataSetChanged();
-            Log.d("place", String.valueOf(sellingBooks.size()));
-        }
+
     }
 
     @Override

@@ -33,10 +33,12 @@ import com.example.asm3.fragments.mainActivity.ProfileFragment;
 import com.example.asm3.fragments.mainActivity.SearchFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
+import com.example.asm3.models.Book;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Notification;
 import com.example.asm3.models.Order;
+import com.example.asm3.models.Review;
 import com.example.asm3.models.SubCategory;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.navigation.NavigationBarView;
@@ -73,9 +75,11 @@ public class MainActivityController extends BaseController implements
     private boolean isAuth = false;
     private Customer customer;
     private String token;
-    private ArrayList<Order> orders;
     private LiveData<Integer> selectedItemId;
     private LiveData<ArrayList<Notification>> notifications;
+    private LiveData<ArrayList<Book>> books;
+    private LiveData<ArrayList<Review>> reviews;
+    private LiveData<ArrayList<Order>> orders;
 
     // homepage fragment data
     private ArrayList<SubCategory> subCategories;
@@ -87,6 +91,9 @@ public class MainActivityController extends BaseController implements
         mainViewModel.setMenu(getActivity().findViewById(R.id.menu));
         selectedItemId = mainViewModel.getSelectedItemId();
         notifications = mainViewModel.getNotifications();
+        books = mainViewModel.getBooks();
+        reviews = mainViewModel.getReviews();
+        orders = mainViewModel.getOrders();
         topBar = mainViewModel.getTopBarView().getValue();
         menu = mainViewModel.getMenu().getValue();
         fragmentManager = getActivity().getSupportFragmentManager();
@@ -97,7 +104,6 @@ public class MainActivityController extends BaseController implements
         notificationFragment = new NotificationFragment();
         profileFragment = new ProfileFragment();
 
-        orders = new ArrayList<Order>();
         getData = new GetData(context, this);
         getAuthenticatedData = new GetAuthenticatedData(context, this);
     }
@@ -177,6 +183,14 @@ public class MainActivityController extends BaseController implements
         getAuthenticatedData.setEndPoint(Constant.getCustomerData);
         getAuthenticatedData.setToken(token);
         getAuthenticatedData.setTaskType(Constant.getCustomer);
+        getAuthenticatedData.execute();
+    }
+
+    public void getCustomerProducts() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getUploadedProducts);
+        getAuthenticatedData.setTaskType(Constant.getUploadedProductsTaskType);
+        getAuthenticatedData.setToken(token);
         getAuthenticatedData.execute();
     }
 
@@ -260,6 +274,10 @@ public class MainActivityController extends BaseController implements
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
             mainViewModel.setAuthCustomer(customer);
+
+            if (customer != null) {
+                getCustomerProducts();
+            }
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
 //            categories = apiList.getList();
@@ -273,6 +291,9 @@ public class MainActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             mainViewModel.setNotifications(apiList.getList());
+        } else if (taskType.equals(Constant.getUploadedProductsTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
+            mainViewModel.setBooks(apiList.getList());
         }
     }
 

@@ -24,6 +24,10 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.time.Year;
 import java.util.ArrayList;
@@ -112,10 +116,11 @@ public class Helper {
         activity.startActivity(intent);
     }
 
-    public static void goToBookDetail(Context context, Activity activity, String bookId) {
+    public static void goToBookDetail(Context context, Activity activity, String bookId, int listPosition) {
         Intent intent = new Intent(context, ProductDetailActivity.class);
         intent.putExtra(Constant.productIdKey, bookId);
-        activity.startActivity(intent);
+        intent.putExtra(Constant.booksArrPositionKey, listPosition);
+        activity.startActivityForResult(intent, Constant.productDetailActivityCode);
     }
 
     public static String bitmapToString(Bitmap bitmap) {
@@ -143,4 +148,20 @@ public class Helper {
 
         return bitmap;
     }
+
+    public static boolean isReceivedDataEmpty(String message) {
+        boolean isEmpty = false;
+        try {
+            JSONObject jsonObject = new JSONObject(message);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+            if (jsonArray.length() == 0) {
+                isEmpty = true;
+            }
+        } catch(JSONException jsonException) {
+
+        }
+        return isEmpty;
+    }
+
 }

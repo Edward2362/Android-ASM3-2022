@@ -98,7 +98,7 @@ public class CartActivityController extends BaseController implements
     public void onOrderClick(int position, View view) {
         switch (view.getId()) {
             case R.id.orderBody:
-                Helper.goToBookDetail(getContext(),getActivity(), cartItems.get(position).getProduct().get_id());
+                Helper.goToBookDetail(getContext(),getActivity(), cartItems.get(position).getProduct().get_id(), position);
                 break;
             case R.id.orderDeleteBtn:
                 totalPrice = totalPrice - cartItems.get(position).getProduct().getPrice()*cartItems.get(position).getQuantity();

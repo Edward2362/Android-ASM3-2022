@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.asm3.MainActivity;
+import com.example.asm3.ManageBookActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
@@ -30,7 +32,7 @@ public class ProductDetailActivityController extends BaseController implements
 
     private TopBarView detailTopBar;
     private ImageView detailBookImg;
-    private TextView detailBookYearTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt,detailBookConditionTxt, detailBookDescriptionTxt;
+    private TextView detailBookYearTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt, detailBookConditionTxt, detailBookDescriptionTxt;
     private Button detailAddCartBtn, detailUpdateCartBtn;
 
     private Book book;
@@ -39,6 +41,8 @@ public class ProductDetailActivityController extends BaseController implements
     private String token;
     private Customer customer;
     private GetAuthenticatedData getAuthenticatedData;
+    private String productId;
+    private int bookPosition;
 
     public ProductDetailActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
@@ -67,20 +71,21 @@ public class ProductDetailActivityController extends BaseController implements
         detailUpdateCartBtn.setOnClickListener(this);
 
         if (getActivity().getIntent().getExtras().get(Constant.productIdKey) == null) {
-
+            getActivity().finish();
         } else {
             if (isAuth()) {
                 token = getToken();
                 getAuthCustomer();
             }
-
-            getProduct(getActivity().getIntent().getExtras().get(Constant.productIdKey).toString());
+            bookPosition = getActivity().getIntent().getIntExtra(Constant.booksArrPositionKey, 0);
+            productId = getActivity().getIntent().getExtras().get(Constant.productIdKey).toString();
+            getProduct(productId);
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.detailSellerTxt:
                 Log.d("TAG", "onClick: test seller ");
                 break;
@@ -89,6 +94,7 @@ public class ProductDetailActivityController extends BaseController implements
                 break;
             case R.id.detailUpdateCartBtn:
                 Log.d("TAG", "onClick: test update ");
+                goToManageBookActivity();
                 break;
         }
     }
@@ -113,7 +119,11 @@ public class ProductDetailActivityController extends BaseController implements
     }
 
     // Navigation functions
-
+    public void goToManageBookActivity() {
+        Intent intent = new Intent(getContext(), ManageBookActivity.class);
+        intent.putExtra(Constant.productIdKey, book.get_id());
+        getActivity().startActivityForResult(intent, Constant.manageBookActivityCode);
+    }
 
     // Callback functions
     @Override
@@ -142,6 +152,22 @@ public class ProductDetailActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == Constant.manageBookActivityCode) {
+                if (data.getExtras().get(Constant.isUpdateKey) != null) {
+                    getProduct(productId);
+                } else if (data.getExtras().get(Constant.isRemoveKey) != null) {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra(Constant.isRemoveKey, Constant.isRemovedCode);
+                    intent.putExtra(Constant.booksArrPositionKey, bookPosition);
+                    getActivity().setResult(getActivity().RESULT_OK, intent);
+                    getActivity().finish();
+                }
+            }
         }
     }
 

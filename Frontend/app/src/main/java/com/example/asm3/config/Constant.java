@@ -3,7 +3,7 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-    public static String baseDomain = "http://192.168.18.28:9000"; //
+    public static String baseDomain = "http://10.0.2.2:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -44,7 +44,10 @@ public class Constant {
     public static String categoryKey = "category";
     public static String customerKey = "customerData";
     public static String isUploadKey = "isUpload";
+    public static String isUpdateKey = "isUpdate";
+    public static String isRemoveKey = "isRemove";
     public static String productIdKey = "productId";
+    public static String booksArrPositionKey = "booksArrPosition";
 
     public static final int mainActivityCode = 000;
     public static final int authActivityCode = 100;
@@ -56,6 +59,8 @@ public class Constant {
     public static final int checkoutActivityCode = 70;
 
     public static final int uploadCode = 700;
+    public static final int isUpdatedCode = 105;
+    public static final int isRemovedCode = 115;
 
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";

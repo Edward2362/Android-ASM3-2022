@@ -35,7 +35,7 @@ public class Category implements Serializable {
     public Category() {
         this.name = "";
         this._id = "";
-        this.subCategories = null;
+        this.subCategories = new ArrayList<SubCategory>();
     }
 
     public String getName() {

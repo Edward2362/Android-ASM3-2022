@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.ManageBookActivity;
+import com.example.asm3.ProductDetailActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
@@ -89,6 +90,8 @@ public class ManageBookActivityController extends BaseController implements
     private RadioButton newProduct;
     private RadioButton usedProduct;
     private String productId;
+
+    private String customerId;
 
     private String token;
 
@@ -319,6 +322,7 @@ public class ManageBookActivityController extends BaseController implements
             Category productCategory = new Category();
             ArrayList<SubCategory> productSubCategory = new ArrayList<SubCategory>();
             Customer productCustomer = new Customer();
+            productCustomer.set_id(customerId);
             boolean isProductNew = false;
             String productImage = "";
 
@@ -461,6 +465,7 @@ public class ManageBookActivityController extends BaseController implements
             descriptionEt.setText(product.getDescription());
             priceEt.setText(String.valueOf(product.getPrice()));
             quantityEt.setText(String.valueOf(product.getQuantity()));
+            publishedAtEt.setText(String.valueOf(product.getPublishedAt()));
             if (categories.get(0).get_id().equals(product.getCategory().get_id())) {
                 categoriesBtnGrp.check(R.id.manageProductForeignCateBtn);
             } else if (categories.get(1).get_id().equals(product.getCategory().get_id())) {
@@ -479,6 +484,8 @@ public class ManageBookActivityController extends BaseController implements
             }
 
             subCateAdapter.notifyDataSetChanged();
+            customerId = product.getCustomer().get_id();
+
             if (product.isNew()) {
                 newProduct.setChecked(true);
                 usedProduct.setChecked(false);
@@ -489,6 +496,16 @@ public class ManageBookActivityController extends BaseController implements
 
             productPhoto = Helper.stringToBitmap(product.getImage());
             productView.setImageBitmap(productPhoto);
+        } else if (taskType.equals(Constant.updateBookTaskType)) {
+            Intent intent = new Intent(getContext(), ProductDetailActivity.class);
+            intent.putExtra(Constant.isUpdateKey, Constant.isUpdatedCode);
+            getActivity().setResult(getActivity().RESULT_OK, intent);
+            getActivity().finish();
+        } else if (taskType.equals(Constant.deleteBookTaskType)) {
+            Intent intent = new Intent(getContext(), ProductDetailActivity.class);
+            intent.putExtra(Constant.isRemoveKey, Constant.isRemovedCode);
+            getActivity().setResult(getActivity().RESULT_OK, intent);
+            getActivity().finish();
         }
     }
 

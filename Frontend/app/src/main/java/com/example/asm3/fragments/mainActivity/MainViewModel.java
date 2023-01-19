@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.asm3.R;
 import com.example.asm3.custom.components.TopBarView;
+import com.example.asm3.models.Book;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Notification;
+import com.example.asm3.models.Order;
+import com.example.asm3.models.Review;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
@@ -20,6 +23,9 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<Customer> authCustomer = new MutableLiveData<>();
     private final MutableLiveData<ArrayList<Notification>> notifications = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<NavigationBarView> menu = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<Book>> books = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<ArrayList<Review>> reviews = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<ArrayList<Order>> orders = new MutableLiveData<>(new ArrayList<>());
 
     public MainViewModel() {
     }
@@ -40,6 +46,17 @@ public class MainViewModel extends ViewModel {
 
     public MutableLiveData<ArrayList<Notification>> getNotifications() {
         return notifications;
+    }
+
+    public MutableLiveData<ArrayList<Book>> getBooks() {
+        return books;
+    }
+
+    public MutableLiveData<ArrayList<Review>> getReviews() {
+        return reviews;
+    }
+    public MutableLiveData<ArrayList<Order>> getOrders() {
+        return orders;
     }
 
     public MutableLiveData<NavigationBarView> getMenu() {
@@ -69,4 +86,15 @@ public class MainViewModel extends ViewModel {
         menu.setValue(newMenu);
     }
 
+    public void setBooks(ArrayList<Book> newBooks) {
+        books.setValue(newBooks);
+    }
+
+    public void setReviews(ArrayList<Review> newReviews) {
+        reviews.setValue(newReviews);
+    }
+
+    public void setOrders(ArrayList<Order> newOrders) {
+        orders.setValue(newOrders);
+    }
 }
