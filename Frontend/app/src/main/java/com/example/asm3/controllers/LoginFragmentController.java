@@ -17,6 +17,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.asm3.CheckoutActivity;
+import com.example.asm3.ForgetPasswordActivity;
 import com.example.asm3.MainActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
@@ -94,6 +96,8 @@ public class LoginFragmentController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.forgetPwTxt:
+                Intent intent = new Intent(getContext(), ForgetPasswordActivity.class);
+                getActivity().startActivity(intent);
                 break;
             case R.id.registerNavTxt:
                 Helper.loadFragment(fragmentManager, registerFragment, "register", authLayoutId);
@@ -155,6 +159,8 @@ public class LoginFragmentController extends BaseController implements
         getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
     }
+
+
 
     @Override
     public void onFinished(String message, String taskType) {
