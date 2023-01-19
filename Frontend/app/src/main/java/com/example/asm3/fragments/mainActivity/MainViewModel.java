@@ -27,6 +27,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Review>> reviews = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<ArrayList<Order>> orders = new MutableLiveData<>(new ArrayList<>());
 
+
     public MainViewModel() {
     }
 

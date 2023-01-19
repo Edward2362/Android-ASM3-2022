@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -74,9 +76,14 @@ public class ProfileFragmentController extends BaseController implements
 
     private MainViewModel mainViewModel;
     private LiveData<Customer> authCustomer;
-    private ArrayList<Book> sellingBooks;
-    private ArrayList<Order> orders;
-    private ArrayList<Review> reviews;
+    private MutableLiveData<ArrayList<Book>> sellingBooks;
+    private MutableLiveData<ArrayList<Order>> orders;
+    private MutableLiveData<ArrayList<Review>> reviews;
+
+    private ArrayList<Book> displayBooks;
+    private ArrayList<Order> displayOrders;
+    private ArrayList<Review> displayReviews;
+
     private String token;
     private GetAuthenticatedData getAuthenticatedData;
 
@@ -86,9 +93,13 @@ public class ProfileFragmentController extends BaseController implements
         this.mainViewModel = (MainViewModel) viewModel;
 
         authCustomer = mainViewModel.getAuthCustomer();
-        sellingBooks = mainViewModel.getBooks().getValue();
-        orders = new ArrayList<>();
-        reviews = new ArrayList<>();
+        sellingBooks = mainViewModel.getBooks();
+        orders = mainViewModel.getOrders();
+        reviews = mainViewModel.getReviews();
+
+        displayBooks = sellingBooks.getValue();
+        displayOrders = orders.getValue();
+        displayReviews = reviews.getValue();
     }
 
     // Render functions
@@ -100,21 +111,21 @@ public class ProfileFragmentController extends BaseController implements
             // for testing
             token = getToken();
 
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
-            orders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
+            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer() , "New Book",100000, 2, true));
 
-            reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            reviews.add(new Review("0", "ha lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            reviews.add(new Review("0", "hh no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            reviews.add(new Review("0", "hahahah no dan hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            reviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "ha lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "hh no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "hahahah no dan hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
+            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
             // end testing
 
             profileAvatarLayout = view.findViewById(R.id.profileAvatarLayout);
@@ -133,6 +144,14 @@ public class ProfileFragmentController extends BaseController implements
             orderAdapter = generateOrderAdapter();
             reviewAdapter = generateReviewAdapter();
 
+            sellingBooks.observe(getActivity(), new Observer<ArrayList<Book>>() {
+                @Override
+                public void onChanged(ArrayList<Book> books) {
+                    displayBooks.addAll(books);
+                    bookAdapter.notifyDataSetChanged();
+                }
+            });
+
             profileUsernameTxt.setText(authCustomer.getValue().getUsername());
             profileDataBtnGrp.check(R.id.sellingBtn);
             sellingRecView.setVisibility(View.VISIBLE);
@@ -145,6 +164,10 @@ public class ProfileFragmentController extends BaseController implements
             loadPurchased();
             loadFeedback();
         }
+    }
+
+    public void onResume() {
+        getCustomerProducts();
     }
 
     @Override
@@ -173,7 +196,7 @@ public class ProfileFragmentController extends BaseController implements
     public void onBookClick(int position, View view) {
         switch (view.getId()) {
             case R.id.productBody:
-                Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.get(position).get_id(), position);
+                Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.getValue().get(position).get_id(), position);
                 break;
         }
     }
@@ -229,7 +252,7 @@ public class ProfileFragmentController extends BaseController implements
 
     // Helpers
     private GenericAdapter<Book> generateBookAdapter() {
-        return new GenericAdapter<Book>(sellingBooks) {
+        return new GenericAdapter<Book>(displayBooks) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                 final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
@@ -247,7 +270,7 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     private GenericAdapter<Order> generateOrderAdapter() {
-        return new GenericAdapter<Order>(orders) {
+        return new GenericAdapter<Order>(displayOrders) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                 final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_item, parent, false);
@@ -266,7 +289,7 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     private GenericAdapter<Review> generateReviewAdapter() {
-        return new GenericAdapter<Review>(reviews) {
+        return new GenericAdapter<Review>(displayReviews) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                 final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_item, parent, false);
@@ -319,7 +342,13 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     // Request functions
-
+    public void getCustomerProducts() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getUploadedProducts);
+        getAuthenticatedData.setTaskType(Constant.getUploadedProductsTaskType);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.execute();
+    }
 
     // Navigation functions
     public void goToSetting() {
@@ -331,7 +360,10 @@ public class ProfileFragmentController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-
+        if (taskType.equals(Constant.getUploadedProductsTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
+            mainViewModel.setBooks(apiList.getList());
+        }
     }
 
     @Override

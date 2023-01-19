@@ -186,14 +186,6 @@ public class MainActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
-    public void getCustomerProducts() {
-        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
-        getAuthenticatedData.setEndPoint(Constant.getUploadedProducts);
-        getAuthenticatedData.setTaskType(Constant.getUploadedProductsTaskType);
-        getAuthenticatedData.setToken(token);
-        getAuthenticatedData.execute();
-    }
-
     // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -265,6 +257,12 @@ public class MainActivityController extends BaseController implements
                     mainViewModel.setAuthCustomer(customer);
                 }
             }
+            if (requestCode == Constant.manageBookActivityCode) {
+                if (data.getExtras().get(Constant.isUploadKey).equals(Constant.isUploadKey)) {
+                    Book book = (Book) data.getExtras().getSerializable(Constant.productKey);
+                    Helper.goToBookDetail(getContext(), getActivity(), book.get_id(), 0);
+                }
+            }
         }
     }
 
@@ -274,10 +272,6 @@ public class MainActivityController extends BaseController implements
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
             mainViewModel.setAuthCustomer(customer);
-
-            if (customer != null) {
-                getCustomerProducts();
-            }
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
 //            categories = apiList.getList();
@@ -291,9 +285,6 @@ public class MainActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             mainViewModel.setNotifications(apiList.getList());
-        } else if (taskType.equals(Constant.getUploadedProductsTaskType)) {
-            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
-            mainViewModel.setBooks(apiList.getList());
         }
     }
 

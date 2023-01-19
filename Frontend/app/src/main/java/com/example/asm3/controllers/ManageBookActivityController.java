@@ -450,7 +450,12 @@ public class ManageBookActivityController extends BaseController implements
     @Override
     public void onFinished(String message, String taskType) {
         if (taskType.equals(Constant.uploadBookTaskType)) {
-            getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent());
+            ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
+            Intent intent = getActivity().getIntent();
+            Log.d("TAG", "onFinished: test " + apiData.getData().getName());
+            intent.putExtra(Constant.productKey, apiData.getData());
+            intent.putExtra(Constant.isUploadKey, Constant.isUploadKey);
+            getActivity().setResult(Activity.RESULT_OK, intent);
             getActivity().finish();
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
@@ -499,12 +504,12 @@ public class ManageBookActivityController extends BaseController implements
             productView.setImageBitmap(productPhoto);
         } else if (taskType.equals(Constant.updateBookTaskType)) {
             Intent intent = new Intent(getContext(), ProductDetailActivity.class);
-            intent.putExtra(Constant.isUpdateKey, Constant.isUpdatedCode);
+            intent.putExtra(Constant.isUpdateKey, Constant.isUpdateKey);
             getActivity().setResult(getActivity().RESULT_OK, intent);
             getActivity().finish();
         } else if (taskType.equals(Constant.deleteBookTaskType)) {
             Intent intent = new Intent(getContext(), ProductDetailActivity.class);
-            intent.putExtra(Constant.isRemoveKey, Constant.isRemovedCode);
+            intent.putExtra(Constant.isRemoveKey, Constant.isRemoveKey);
             getActivity().setResult(getActivity().RESULT_OK, intent);
             getActivity().finish();
         }

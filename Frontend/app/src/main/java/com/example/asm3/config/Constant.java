@@ -47,6 +47,7 @@ public class Constant {
     public static String isUpdateKey = "isUpdate";
     public static String isRemoveKey = "isRemove";
     public static String productIdKey = "productId";
+    public static String productKey = "product";
     public static String booksArrPositionKey = "booksArrPosition";
 
     public static final int mainActivityCode = 000;
@@ -59,8 +60,9 @@ public class Constant {
     public static final int checkoutActivityCode = 70;
 
     public static final int uploadCode = 700;
-    public static final int isUpdatedCode = 105;
-    public static final int isRemovedCode = 115;
+    public static final int isUploadCode = 305;
+    public static final int isUpdatedCode = 310;
+    public static final int isRemovedCode = 315;
 
     public static String getAllCategoriesTaskType = "getAllCategories";
     public static String getSubCategoriesTaskType = "getSubCategories";
