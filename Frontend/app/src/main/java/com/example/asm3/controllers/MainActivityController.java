@@ -117,6 +117,7 @@ public class MainActivityController extends BaseController implements
             }
         });
         if (isAuth()) {
+            Log.d(TAG, "onInit: test customer");
             getAuthCustomer();
         }
         getAllCategories();

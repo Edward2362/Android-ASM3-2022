@@ -17,6 +17,7 @@ public interface AsyncTaskCallBack {
     public static void verifyMessage(Context context, String message, String taskType, AsyncTaskCallBack callBack) {
         try {
             JSONObject jsonObject = new JSONObject(message);
+            Log.d(TAG, "verifyMessage: " + message);
             if (jsonObject.getBoolean(ApiService.errorKey)) {
                 callBack.onError(taskType);
             } else {

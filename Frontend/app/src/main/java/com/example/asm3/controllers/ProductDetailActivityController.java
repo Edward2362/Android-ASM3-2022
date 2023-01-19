@@ -17,6 +17,7 @@ import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Book;
@@ -122,10 +123,22 @@ public class ProductDetailActivityController extends BaseController implements
             book = apiData.getData();
 
             if (customer != null) {
-
+                if (customer.get_id().equals(book.getCustomer().get_id())) {
+                    detailUpdateCartBtn.setVisibility(View.VISIBLE);
+                    detailAddCartBtn.setVisibility(View.GONE);
+                }
             }
 
-
+            detailBookNameTxt.setText(book.getName());
+            detailBookYearTxt.setText(String.valueOf(book.getPublishedAt()));
+            detailBookDescriptionTxt.setText(book.getDescription());
+            detailBookPriceTxt.setText(String.valueOf(book.getPrice()));
+            detailBookImg.setImageBitmap(Helper.stringToBitmap(book.getImage()));
+            if (book.isNew()) {
+                detailBookConditionTxt.setText("new");
+            } else {
+                detailBookConditionTxt.setText("used");
+            }
         } else if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();

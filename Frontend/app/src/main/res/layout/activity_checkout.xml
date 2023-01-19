@@ -9,7 +9,7 @@
     tools:context=".CheckoutActivity">
 
     <com.example.asm3.custom.components.TopBarView
-        android:id="@+id/cartTopBar"
+        android:id="@+id/checkoutTopBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight=".12"
@@ -23,13 +23,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="22dp">
+            android:layout_marginHorizontal="22dp"
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 app:cardElevation="2dp"
                 app:contentPadding="20dp">
 
@@ -43,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Delivery address"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"/>
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
 
                     <TextView
                         android:id="@+id/addressDetailTxt"
@@ -51,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:text="Address detail"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -74,7 +75,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Payment"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"/>
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
 
                     <RadioButton
                         android:layout_width="match_parent"
@@ -82,7 +83,7 @@
                         android:layout_marginTop="5dp"
                         android:checked="true"
                         android:text="Pay by cash"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
@@ -105,14 +106,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Order"
-                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"/>
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/orderRecView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginHorizontal="10dp"/>
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="5dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -126,7 +127,7 @@
                             android:layout_marginTop="5dp"
                             android:gravity="right"
                             android:text="Delivery date"
-                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
                         <TextView
                             android:id="@+id/orderTotalPriceTxt"
@@ -135,7 +136,7 @@
                             android:layout_marginTop="5dp"
                             android:gravity="right"
                             android:text="Order total"
-                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -144,13 +145,18 @@
         </LinearLayout>
     </ScrollView>
 
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dividerColor="@color/md_theme_light_primary"/>
+
     <Button
         android:id="@+id/checkoutBtn"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
         android:layout_marginHorizontal="22dp"
         android:layout_marginVertical="5dp"
+        android:layout_weight="0.1"
         android:text="Place this order" />
 
 
