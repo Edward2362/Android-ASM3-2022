@@ -15,11 +15,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.ManageBookActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
@@ -155,7 +153,7 @@ public class HomeFragmentController extends BaseController implements
     public void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox) {
         boolean newStatus = false;
         switch (view.getId()) {
-            case R.id.subCateBody:
+            case R.id.addresses:
                 newStatus = !subCateCheckBox.isChecked();
                 subCateCheckBox.setChecked(newStatus);
                 break;

@@ -357,7 +357,6 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:scaleType="centerCrop"
-                            app:cardBackgroundColor="@color/md_theme_dark_background"
                             app:layout_constraintDimensionRatio="W, 1"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
@@ -368,7 +367,7 @@
                                 android:id="@+id/productImage"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/ic_baseline_book_24"
+                                android:src="@drawable/ic_action_name"
                                 app:layout_constraintDimensionRatio="W,1:1" />
 
                         </com.google.android.material.card.MaterialCardView>

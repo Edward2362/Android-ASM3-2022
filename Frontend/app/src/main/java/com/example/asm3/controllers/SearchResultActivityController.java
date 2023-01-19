@@ -126,7 +126,7 @@ public class SearchResultActivityController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.backButton:
-            case R.id.searchView:
+            case R.id.searchViewAddress:
                 // send back query
                 getActivity().finish();
                 break;

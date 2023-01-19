@@ -2,6 +2,7 @@ package com.example.asm3;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,5 +36,4 @@ public class AccountSettingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         accountSettingActivityController.onActivityResult(requestCode, resultCode, data);
     }
-
 }

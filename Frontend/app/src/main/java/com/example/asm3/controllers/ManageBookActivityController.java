@@ -1,7 +1,5 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -9,9 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.ManageBookActivity;
 import com.example.asm3.ProductDetailActivity;
+
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
 import com.example.asm3.base.controller.BaseController;
-import com.example.asm3.base.localStorage.LocalFileController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.DeleteAuthenticatedData;
 import com.example.asm3.base.networking.services.GetData;
@@ -148,6 +146,7 @@ public class ManageBookActivityController extends BaseController implements
 
             if (isUpload()) {
                 manageTopBar.setSubPage("Post Book");
+                productPhoto = ((BitmapDrawable) productView.getDrawable()).getBitmap();
                 uploadProduct.setVisibility(View.VISIBLE);
             } else {
                 manageTopBar.setSubPage("Update Book");
@@ -163,7 +162,7 @@ public class ManageBookActivityController extends BaseController implements
     public void onSubCateClick(int position, View view, MaterialCheckBox subCateCheckBox) {
         boolean newStatus = false;
         switch (view.getId()) {
-            case R.id.subCateBody:
+            case R.id.addresses:
                 newStatus = !subCateCheckBox.isChecked();
                 subCateCheckBox.setChecked(newStatus);
                 break;

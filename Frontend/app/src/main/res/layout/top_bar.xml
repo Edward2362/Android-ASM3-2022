@@ -16,7 +16,7 @@
         app:iconGravity="start" />
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+        android:id="@+id/searchViewAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

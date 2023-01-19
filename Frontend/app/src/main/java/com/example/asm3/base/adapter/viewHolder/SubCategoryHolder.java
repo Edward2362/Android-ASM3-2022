@@ -19,7 +19,7 @@ public class SubCategoryHolder extends RecyclerView.ViewHolder implements View.O
 
     public SubCategoryHolder(@NonNull View itemView, OnSelectListener onSelectListener) {
         super(itemView);
-        subCateBody = itemView.findViewById(R.id.subCateBody);
+        subCateBody = itemView.findViewById(R.id.addresses);
         subCateTxt = itemView.findViewById(R.id.subCateTxt);
         subCateCheckBox = itemView.findViewById(R.id.subCateCheckBox);
         this.onSelectListener = onSelectListener;
