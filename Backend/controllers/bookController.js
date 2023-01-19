@@ -241,8 +241,8 @@ const saveProduct = async (req, response) => {
 			await customers[0].save();
 		} else {
 			return response.json({
-				message: "Error",
-				error: true,
+				message: "",
+				error: false,
 				data: [],
 			});
 		}
@@ -342,8 +342,8 @@ const removeCustomerCart = async (req, response) => {
 				error: true,
 				data: [],
 			});
-		} 
-		customers[0].cart.splice(index,1);
+		}
+		customers[0].cart.splice(index, 1);
 		await customers[0].save();
 
 		return response.json({
@@ -390,6 +390,6 @@ module.exports = {
 	saveProduct,
 	suggestProduct,
 	searchProduct,
-	getCustomerCart, 
-	removeCustomerCart
+	getCustomerCart,
+	removeCustomerCart,
 };

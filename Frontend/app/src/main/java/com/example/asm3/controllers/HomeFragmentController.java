@@ -107,9 +107,8 @@ public class HomeFragmentController extends BaseController implements
         authCustomer.observe(getActivity(), new Observer<Customer>() {
             @Override
             public void onChanged(Customer customer) {
-                Log.d(TAG, "onChanged: test change nha");
                 if (authCustomer.getValue() != null) {
-                    helloTxt.setText("Hello " + customer.getUsername() + ", mahhh!");
+                    helloTxt.setText("Hi " + customer.getUsername() + ", mahhh!");
                     loginNavBtn.setVisibility(View.GONE);
                     postBookBtn.setVisibility(View.VISIBLE);
                 } else {

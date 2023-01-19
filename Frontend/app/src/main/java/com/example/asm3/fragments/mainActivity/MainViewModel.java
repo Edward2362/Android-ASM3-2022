@@ -1,11 +1,14 @@
 package com.example.asm3.fragments.mainActivity;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.asm3.R;
 import com.example.asm3.custom.components.TopBarView;
+import com.example.asm3.fragments.authenticationActivity.LoginFragment;
+import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
@@ -26,6 +29,9 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Book>> books = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<ArrayList<Review>> reviews = new MutableLiveData<>(new ArrayList<>());
     private final MutableLiveData<ArrayList<Order>> orders = new MutableLiveData<>(new ArrayList<>());
+
+    private final MutableLiveData<FragmentManager> fragmentManager = new MutableLiveData<>();
+    private final MutableLiveData<HomeFragment> homeFragment = new MutableLiveData<>();
 
 
     public MainViewModel() {
@@ -64,6 +70,14 @@ public class MainViewModel extends ViewModel {
         return menu;
     }
 
+    public MutableLiveData<FragmentManager> getFragmentManager() {
+        return fragmentManager;
+    }
+
+    public MutableLiveData<HomeFragment> getHomeFragment() {
+        return homeFragment;
+    }
+
     public void setCateArray(ArrayList<Category> newCate) {
         categories.setValue(newCate);
     }
@@ -97,5 +111,13 @@ public class MainViewModel extends ViewModel {
 
     public void setOrders(ArrayList<Order> newOrders) {
         orders.setValue(newOrders);
+    }
+
+    public void setFragmentManager(FragmentManager newFragmentManager){
+        fragmentManager.setValue(newFragmentManager);
+    }
+
+    public void setHomeFragment(HomeFragment newHomeFragment) {
+        homeFragment.setValue(newHomeFragment);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.asm3.CartActivity;
@@ -66,6 +68,7 @@ public class ProductDetailActivityController extends BaseController implements
     }
 
     // Render functions
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onInit() {
         detailTopBar = getActivity().findViewById(R.id.detailTopBar);
@@ -117,9 +120,8 @@ public class ProductDetailActivityController extends BaseController implements
                 if (!isAuth()) {
                     Helper.goToLogin(getContext(), getActivity());
                 } else {
-                    if (!checkAddToCart()) {
-                        saveProduct(productId, 1);
-                    }
+                    Log.d("TAG", "onClick: Test hehe");
+                    saveProduct(productId, 1);
                 }
                 break;
             case R.id.detailUpdateCartBtn:
@@ -212,7 +214,7 @@ public class ProductDetailActivityController extends BaseController implements
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
         } else if (taskType.equals(Constant.saveProductTaskType)) {
-            getActivity().finish();
+            Helper.goToCart(getContext(), getActivity());
         }
     }
 

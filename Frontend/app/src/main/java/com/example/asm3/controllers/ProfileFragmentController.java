@@ -81,6 +81,7 @@ public class ProfileFragmentController extends BaseController implements
     private MutableLiveData<ArrayList<Book>> sellingBooks;
     private MutableLiveData<ArrayList<Order>> orders;
     private MutableLiveData<ArrayList<Review>> reviews;
+    private int mainLayoutId = R.id.mainActivity_fragmentContainerView;
 
     private ArrayList<Book> displayBooks;
     private ArrayList<Order> displayOrders;
@@ -262,6 +263,10 @@ public class ProfileFragmentController extends BaseController implements
                 break;
             case R.id.userLogoutBtn:
                 getLocalFileController().writeFile(new ArrayList<>());
+                mainViewModel.setAuthCustomer(null);
+                Helper.loadFragment(mainViewModel.getFragmentManager().getValue(),
+                        mainViewModel.getHomeFragment().getValue(),
+                        "home", mainLayoutId);
                 Helper.goToLogin(getContext(),getActivity());
                 break;
             case R.id.profileEmailTxt:

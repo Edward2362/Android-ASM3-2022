@@ -63,8 +63,6 @@ public class SaleProgressActivityController extends BaseController implements
         // onClickListener
         backBtn.setOnClickListener(this);
 
-        sales.add(new Order("000", "10/10/2022", "Delivering",
-                new Customer("Kiki"), "The Lake", 140000, 3, false));
         // adapter
         salesAdapter = generateOrderAdapter();
         salesRecView.setAdapter(salesAdapter);

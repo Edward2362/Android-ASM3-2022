@@ -108,6 +108,9 @@ public class MainActivityController extends BaseController implements
 
         getData = new GetData(context, this);
         getAuthenticatedData = new GetAuthenticatedData(context, this);
+
+        mainViewModel.setFragmentManager(fragmentManager);
+        mainViewModel.setHomeFragment(homeFragment);
     }
 
     // Render functions
