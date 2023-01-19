@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -449,6 +450,7 @@ public class ManageBookActivityController extends BaseController implements
     @Override
     public void onFinished(String message, String taskType) {
         if (taskType.equals(Constant.uploadBookTaskType)) {
+            getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent());
             getActivity().finish();
         } else if (taskType.equals(Constant.getAllCategoriesTaskType)) {
             ApiList<Category> apiList = ApiList.fromJSON(ApiList.getData(message), Category.class);
