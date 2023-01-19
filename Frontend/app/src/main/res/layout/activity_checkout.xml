@@ -11,124 +11,147 @@
     <com.example.asm3.custom.components.TopBarView
         android:id="@+id/cartTopBar"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="0dp"
         android:layout_weight=".12"
         android:paddingHorizontal="5dp" />
 
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="2dp"
-        android:layout_marginVertical="20dp"
-        android:layout_weight="1"
-        app:cardElevation="2dp"
-        app:contentPadding="20dp">
+        android:layout_weight="1">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/deliveryAddressTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Delivery address"/>
-
-            <TextView
-                android:id="@+id/addressDetailTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Address detail"/>
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="2dp"
-        android:layout_marginVertical="20dp"
-        android:layout_weight="1"
-        app:cardElevation="2dp"
-        app:contentPadding="20dp">
-        <LinearLayout
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/paymentTxt"
+            android:layout_marginHorizontal="22dp">
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Payment"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Pay by cash"
-                android:checked="true"/>
-        </LinearLayout>
+                app:cardElevation="2dp"
+                app:contentPadding="20dp">
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="2dp"
-        android:layout_marginVertical="20dp"
-        android:layout_weight="1"
-        app:cardElevation="2dp"
-        app:contentPadding="20dp">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/orderTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Order"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/orderRecView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_weight="1" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/deliveryDateTxt"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Delivery date"
-                    android:gravity="right"/>
-                <TextView
-                    android:id="@+id/orderTotalPriceTxt"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/deliveryAddressTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delivery address"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"/>
+
+                    <TextView
+                        android:id="@+id/addressDetailTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Address detail"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardElevation="2dp"
+                app:contentPadding="20dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:text="Order total"/>
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/paymentTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Payment"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"/>
+
+                    <RadioButton
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:checked="true"
+                        android:text="Pay by cash"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardElevation="2dp"
+                app:contentPadding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/orderTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Order"
+                        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/orderRecView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginHorizontal="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/deliveryDateTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="right"
+                            android:text="Delivery date"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+
+                        <TextView
+                            android:id="@+id/orderTotalPriceTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="right"
+                            android:text="Order total"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
+    </ScrollView>
 
-    </com.google.android.material.card.MaterialCardView>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
     <Button
         android:id="@+id/checkoutBtn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Place this order"
-        />
-</LinearLayout>
-
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:layout_marginHorizontal="22dp"
+        android:layout_marginVertical="5dp"
+        android:text="Place this order" />
 
 
 </LinearLayout>
