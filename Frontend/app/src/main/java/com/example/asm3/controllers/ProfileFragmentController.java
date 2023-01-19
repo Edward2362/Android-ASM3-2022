@@ -85,8 +85,10 @@ public class ProfileFragmentController extends BaseController implements
         this.view = view;
         this.mainViewModel = (MainViewModel) viewModel;
 
-        authCustomer = mainViewModel.getAuthCustomer();
-        sellingBooks = mainViewModel.getBooks().getValue();
+        if(isOnline()) {
+            authCustomer = mainViewModel.getAuthCustomer();
+            sellingBooks = mainViewModel.getBooks().getValue();
+        }
         orders = new ArrayList<>();
         reviews = new ArrayList<>();
     }
@@ -94,6 +96,7 @@ public class ProfileFragmentController extends BaseController implements
     // Render functions
     @Override
     public void onInit() {
+        if(!isOnline()) return;
         if (!isAuth()) {
             Helper.goToLogin(getContext(), getActivity());
         } else {
@@ -171,6 +174,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onBookClick(int position, View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.productBody:
                 Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.get(position).get_id(), position);
@@ -180,6 +187,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.orderBody:
                 Log.d(TAG, "onOrderClick: test " + position);
@@ -193,6 +204,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onAvatarClick(int position, View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.reviewUserImgLayout:
                 Log.d(TAG, "onAvatarClick: test " + position);
@@ -202,6 +217,10 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onClick(View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.settingProfileBtn:
                 goToSetting();

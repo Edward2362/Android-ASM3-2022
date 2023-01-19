@@ -112,11 +112,15 @@ public class SearchResultActivityController extends BaseController implements
         });
 
         filterProgressBar.setVisibility(View.VISIBLE);
-        getSearchResults(queryInput);
+        if(isOnline()) getSearchResults(queryInput);
     }
 
     @Override
     public void onBookClick(int position, View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         Log.d(TAG, "onBookClick: book clicked " + searchResults.get(position).getName());
         Helper.goToBookDetail(getContext(), getActivity(), searchResults.get(position).get_id(), position);
     }
@@ -135,9 +139,17 @@ public class SearchResultActivityController extends BaseController implements
                 getActivity().finish();
                 break;
             case R.id.cartButton:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 Helper.goToCart(getContext(), getActivity());
                 break;
             case R.id.filterBtn:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 FilterBottomSheetFragment bottomSheet = new FilterBottomSheetFragment();
                 bottomSheet.show(getActivity().getSupportFragmentManager(), "filterBottomSheet");
                 break;

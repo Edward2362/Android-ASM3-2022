@@ -74,6 +74,7 @@ public class ManageBookActivityController extends BaseController implements
 
     private MaterialButtonToggleGroup categoriesBtnGrp;
     private TopBarView manageTopBar;
+    private Button backBtn;
     private TextView cateNotifyTxt, manageProductCateErrorTxt, manageProductSubCateErrorTxt;
     private View subCateTopDivider;
     private GenericAdapter<SubCategory> subCateAdapter;
@@ -100,7 +101,6 @@ public class ManageBookActivityController extends BaseController implements
     // render functions
     @Override
     public void onInit() {
-
         if (!isAuth()) {
             Helper.goToLogin(getContext(), getActivity());
         } else {
@@ -108,6 +108,7 @@ public class ManageBookActivityController extends BaseController implements
             getAllCategories();
 
             manageTopBar = getActivity().findViewById(R.id.manageTopBar);
+            backBtn = getActivity().findViewById(R.id.backButton);
             categoriesBtnGrp = getActivity().findViewById(R.id.manageProductCategoriesBtnGrp);
             subCateRecView = getActivity().findViewById(R.id.manageProductSubCateRecView);
             cateNotifyTxt = getActivity().findViewById(R.id.manageProductCateNotifyTxt);
@@ -391,16 +392,31 @@ public class ManageBookActivityController extends BaseController implements
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.backButton:
+                getActivity().finish();
+                break;
             case R.id.productImageLayout:
                 getImageFromGallery();
                 break;
             case R.id.uploadProduct:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 onUploadProduct();
                 break;
             case R.id.updateProduct:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 onUpdateProduct();
                 break;
             case R.id.removeProduct:
+                if(!isOnline()) {
+                    showConnectDialog();
+                    return;
+                }
                 onRemoveProduct();
                 break;
         }

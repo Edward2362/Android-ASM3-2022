@@ -38,6 +38,7 @@ public class SearchFragmentController extends BaseController implements
         SearchView.OnQueryTextListener,
         SearchSuggestionHolder.OnSelectListener {
 
+    private SearchView searchView;
     private LinearProgressIndicator progressBar;
     private GenericAdapter<String> searchAdapter;
     private RecyclerView searchSuggestionRecView;
@@ -63,9 +64,10 @@ public class SearchFragmentController extends BaseController implements
     // Render functions
     @Override
     public void onInit() {
-        topBar.getSearchView().setOnQueryTextListener(this);
+        searchView = topBar.getSearchView();
         searchSuggestionRecView = view.findViewById(R.id.searchSuggestionRecView);
         progressBar = view.findViewById(R.id.progressBar);
+        searchView.setOnQueryTextListener(this);
         searchSuggestionRecView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
         // for test
@@ -90,13 +92,20 @@ public class SearchFragmentController extends BaseController implements
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        //TODO: go to search result activity
+        if(!isOnline()) {
+            showConnectDialog();
+            return false;
+        }
         goToSearchResult(query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return false;
+        }
         if (!newText.isEmpty()) {
             progressBar.setVisibility(View.VISIBLE);
             searchSuggestionRecView.setVisibility(View.GONE);

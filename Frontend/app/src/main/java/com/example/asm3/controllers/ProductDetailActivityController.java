@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
@@ -24,6 +25,7 @@ import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Customer;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 public class ProductDetailActivityController extends BaseController implements
         AsyncTaskCallBack,
@@ -31,6 +33,9 @@ public class ProductDetailActivityController extends BaseController implements
     private GetData getData;
 
     private TopBarView detailTopBar;
+    private LinearProgressIndicator detailProgressBar;
+    private LinearLayout productDetailBody;
+    private LinearLayout detailActionBody;
     private Button backButton;
     private ImageView detailBookImg;
     private TextView detailBookYearTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt, detailBookConditionTxt, detailBookDescriptionTxt;
@@ -56,6 +61,9 @@ public class ProductDetailActivityController extends BaseController implements
     public void onInit() {
         detailTopBar = getActivity().findViewById(R.id.detailTopBar);
         backButton = detailTopBar.getBackButton();
+        productDetailBody = getActivity().findViewById(R.id.productDetailBody);
+        detailActionBody = getActivity().findViewById(R.id.detailActionBody);
+        detailProgressBar = getActivity().findViewById(R.id.detailProgressBar);
         detailBookImg = getActivity().findViewById(R.id.detailBookImg);
         detailBookNameTxt = getActivity().findViewById(R.id.detailBookNameTxt);
         detailBookYearTxt = getActivity().findViewById(R.id.detailBookYearTxt);
@@ -155,6 +163,9 @@ public class ProductDetailActivityController extends BaseController implements
             } else {
                 detailBookConditionTxt.setText("used");
             }
+            productDetailBody.setVisibility(View.VISIBLE);
+            detailActionBody.setVisibility(View.VISIBLE);
+            detailProgressBar.setVisibility(View.GONE);
         } else if (taskType.equals(Constant.getCustomer)) {
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();

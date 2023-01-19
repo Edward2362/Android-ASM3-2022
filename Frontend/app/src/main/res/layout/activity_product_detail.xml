@@ -14,10 +14,19 @@
         android:layout_weight=".12"
         android:paddingHorizontal="5dp" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/detailProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:indeterminate="true"/>
+
     <LinearLayout
+        android:id="@+id/productDetailBody"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:visibility="invisible">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -165,9 +174,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/detailActionBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"

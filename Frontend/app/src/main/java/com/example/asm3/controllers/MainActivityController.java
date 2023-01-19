@@ -30,6 +30,7 @@ import com.example.asm3.fragments.mainActivity.HomeFragment;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.fragments.mainActivity.NotificationFragment;
 import com.example.asm3.fragments.mainActivity.ProfileFragment;
+import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
 import com.example.asm3.fragments.mainActivity.SearchFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
@@ -41,6 +42,7 @@ import com.example.asm3.models.Order;
 import com.example.asm3.models.Review;
 import com.example.asm3.models.SubCategory;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
@@ -122,11 +124,14 @@ public class MainActivityController extends BaseController implements
                 Helper.setBadge(notifications, mainViewModel);
             }
         });
-        if (isAuth()) {
-            Log.d(TAG, "onInit: test customer");
-            getAuthCustomer();
+
+        if(isOnline()) {
+            if (isAuth()) {
+                Log.d(TAG, "onInit: test customer");
+                getAuthCustomer();
+            }
+            getAllCategories();
         }
-        getAllCategories();
     }
 
     public void onResume() {
@@ -137,6 +142,10 @@ public class MainActivityController extends BaseController implements
 
     @Override
     public void onClick(View view) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return;
+        }
         switch (view.getId()) {
             case R.id.cartButton:
                 if (!isAuth()) {
@@ -197,6 +206,10 @@ public class MainActivityController extends BaseController implements
     // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(!isOnline()) {
+            showConnectDialog();
+            return false;
+        }
         switch (item.getItemId()) {
             case R.id.homeNav:
                 topBar.setMainPage("GoGoat");
