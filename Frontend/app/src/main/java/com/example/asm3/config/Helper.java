@@ -145,7 +145,6 @@ public class Helper {
         } catch(Exception exception) {
             exception.getMessage();
         }
-
         return bitmap;
     }
 

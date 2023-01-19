@@ -337,5 +337,6 @@ public class ProfileFragmentController extends BaseController implements
     public void onError(String taskType) {
 
     }
-// Getter and Setter
+
+    // Getter and Setter
 }
