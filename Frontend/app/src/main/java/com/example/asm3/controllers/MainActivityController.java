@@ -129,8 +129,9 @@ public class MainActivityController extends BaseController implements
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
         if(isNewUser()){
-            Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-            getActivity().startActivityForResult(intent, Constant.isNewUser);
+            Toast.makeText(getContext(), "welcome ", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(getContext(), AuthenticationActivity.class);
+//            getActivity().startActivityForResult(intent, Constant.isNewUser);
         }
 
         notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
@@ -217,7 +218,7 @@ public class MainActivityController extends BaseController implements
     }
     public boolean isNewUser() {
         String path = getContext().getFilesDir().getAbsolutePath();
-        File dataFile = new File(path + "/user.txt");
+        File dataFile = new File(path + "/token.txt");
         return !dataFile.exists();
     }
     // Navigation functions
