@@ -123,10 +123,10 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/orderRecView"
-                        android:visibility="invisible"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp" />
+                        android:layout_marginTop="5dp"
+                        android:visibility="invisible" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -142,6 +142,26 @@
                             android:text="Delivery date: "
                             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/couponLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:hint="Published year">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/couponEt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:lines="1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
                         <TextView
                             android:id="@+id/orderTotalPriceTxt"
                             android:layout_width="match_parent"
@@ -149,10 +169,10 @@
                             android:layout_marginTop="5dp"
                             android:gravity="left"
                             android:text="Order total: "
-                            android:textSize="20sp"
-                            android:textStyle="bold"
+                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
                             android:textColor="@color/md_theme_light_primary"
-                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
                 </LinearLayout>
