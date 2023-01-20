@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -46,6 +47,7 @@ import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
+import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.Customer;
 
 import com.example.asm3.R;
@@ -73,106 +75,104 @@ import okhttp3.Response;
 public class AccountSettingActivityController extends BaseController implements AsyncTaskCallBack,
         SearchView.OnQueryTextListener, AddressHolder.OnSelectListener, View.OnClickListener {
 
+    private TopBarView settingTopBar;
     private PostAuthenticatedData postAuthenticatedData;
     private Bitmap photo;
-    private Button testButton;
-    private ImageView testImageView;
-    private Button getImageButton, saveDataButton;
-    private EditText userName, userCurrentPass, userNewPass;
+    private Button settingSaveBtn, backBtn;
+    private EditText settingUsernameTxt, settingCurrentPasswordTxt, settingNewPasswordTxt;
     private Customer authCustomer;
     private long lastTextEdit = 0;
     private RecyclerView addressesRecView;
-    private SearchView searchView;
+    private SearchView searchViewAddress;
     private Handler handler = new Handler();
     private ArrayList<String> addressesList;
     private GenericAdapter<String> addressAdapter;
     private LocationManager locationManager;
     private String token, address;
 
-    public AccountSettingActivityController(Context context, FragmentActivity activity){
+    public AccountSettingActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void onInit(){
-        testButton = (Button) getActivity().findViewById(R.id.accountSettingActivity_testButton);
-        saveDataButton = (Button) getActivity().findViewById(R.id.accountSettingActivity_submitChange);
-        testImageView = (ImageView) getActivity().findViewById(R.id.accountSettingActivity_testImageView);
-        getImageButton = (Button) getActivity().findViewById(R.id.accountSettingActivity_getImageButton);
-        userName = (EditText) getActivity().findViewById(R.id.AccountSettingUserName);
-        userCurrentPass = (EditText) getActivity().findViewById(R.id.AccountSettingCurrentPassword);
-        userNewPass = (EditText) getActivity().findViewById(R.id.AccountSettingNewPassword);
-        searchView = (SearchView) getActivity().findViewById(R.id.searchViewAddress);
-        addressesRecView = (RecyclerView) getActivity().findViewById(R.id.addressResults);
+    public void onInit() {
+        settingTopBar = getActivity().findViewById(R.id.settingTopBar);
+        backBtn = settingTopBar.getBackButton();
+        settingSaveBtn = getActivity().findViewById(R.id.settingSaveBtn);
+        settingUsernameTxt = getActivity().findViewById(R.id.settingUsernameTxt);
+        settingCurrentPasswordTxt = getActivity().findViewById(R.id.settingCurrentPasswordTxt);
+        settingNewPasswordTxt = getActivity().findViewById(R.id.settingNewPasswordTxt);
+        searchViewAddress = getActivity().findViewById(R.id.searchViewAddress);
+        addressesRecView = getActivity().findViewById(R.id.addressResultsRecView);
+
+        settingTopBar.setSubPage("Settings");
+
         Intent intent = getActivity().getIntent();
         authCustomer = (Customer) intent.getSerializableExtra("data");
-        //Log.d("", "onInit: test" + authCustomer.getUsername());
-        userName.setText(authCustomer.getUsername());
+
+        settingUsernameTxt.setText(authCustomer.getUsername());
         addressesList = new ArrayList<>();
         addressAdapter = generateAddressAdaptor();
         addressesRecView.setAdapter(addressAdapter);
         addressesRecView.setLayoutManager(new LinearLayoutManager(getContext()));
         //set searchView to be visible and set Text in the searchView by default => user address
-        searchView.setIconifiedByDefault(false);
-        searchView.setQuery(authCustomer.getAddress(),false);
-        searchView.setOnQueryTextListener(this);
-        if(isAuth()){
+        searchViewAddress.setIconifiedByDefault(false);
+        searchViewAddress.setQuery(authCustomer.getAddress(), false);
+        searchViewAddress.setOnQueryTextListener(this);
+        if (isAuth()) {
             token = getToken();
         }
-        testButton.setOnClickListener(this);
-        getImageButton.setOnClickListener(this);
-        saveDataButton.setOnClickListener(this);
+        settingSaveBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.accountSettingActivity_testButton:
-                openCamera();
+        switch (view.getId()) {
+            case R.id.backButton:
+                getActivity().finish();
                 break;
-            case R.id.accountSettingActivity_getImageButton:
-                getImageFromGallery();
-                break;
-            case R.id.accountSettingActivity_submitChange:
-                String address = Helper.deAccent(searchView.getQuery().toString());
+            case R.id.settingSaveBtn:
+                String address = Helper.deAccent(searchViewAddress.getQuery().toString());
                 address = address.replaceAll("Đ", "D");
                 address = address.replaceAll("đ", "d");
-                updateCustomerInfo(userName.getText().toString(),address);
+                updateCustomerInfo(settingUsernameTxt.getText().toString(), address);
                 //changePassword(userCurrentPass.getText().toString(),userNewPass.getText().toString());
                 break;
         }
     }
 
-    public void updateCustomerInfo(String username,String address){
+    public void updateCustomerInfo(String username, String address) {
         try {
-            if(isAuth()){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Customer.usernameKey,username);
-            jsonObject.put(Customer.addressKey,address);
-            postAuthenticatedData = new PostAuthenticatedData(getContext(),this);
-            postAuthenticatedData.setEndPoint(Constant.setCustomerData);
-            postAuthenticatedData.setTaskType(Constant.setCustomerDataTaskType);
-            postAuthenticatedData.setToken(token);
-            postAuthenticatedData.execute(jsonObject);
+            if (isAuth()) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(Customer.usernameKey, username);
+                jsonObject.put(Customer.addressKey, address);
+                postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+                postAuthenticatedData.setEndPoint(Constant.setCustomerData);
+                postAuthenticatedData.setTaskType(Constant.setCustomerDataTaskType);
+                postAuthenticatedData.setToken(token);
+                postAuthenticatedData.execute(jsonObject);
             }
-        } catch (JSONException exception){
+        } catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
 
-    public void changePassword(String currentPassword, String newPassword){
+    public void changePassword(String currentPassword, String newPassword) {
         try {
-            if(isAuth()){
+            if (isAuth()) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put(Customer.newPasswordKey, newPassword);
                 jsonObject.put(Customer.currentPasswordKey, currentPassword);
-                postAuthenticatedData = new PostAuthenticatedData(getContext(),this);
+                postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
                 postAuthenticatedData.setEndPoint(Constant.changePassword);
                 postAuthenticatedData.setTaskType(Constant.changePasswordTaskType);
                 postAuthenticatedData.setToken(token);
                 postAuthenticatedData.execute(jsonObject);
             }
-        } catch (JSONException exception){
+        } catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
@@ -200,10 +200,11 @@ public class AccountSettingActivityController extends BaseController implements 
             }
         }
     }
+
     public void onRequestPermissionsResult(int requestCode, @NonNull int[] grantResults) {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Intent intent;
-            switch (requestCode){
+            switch (requestCode) {
                 case Constant.cameraPermissionCode:
                     intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     getActivity().startActivityForResult(intent, Constant.cameraRequest);
@@ -226,14 +227,14 @@ public class AccountSettingActivityController extends BaseController implements 
             switch (requestCode) {
                 case Constant.cameraRequest:
                     photo = (Bitmap) data.getExtras().get("data");
-                    testImageView.setImageBitmap(photo);
+//                    testImageView.setImageBitmap(photo);
                     break;
                 case Constant.galleryRequest:
                     try {
                         final Uri imageUri = data.getData();
                         final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                         photo = BitmapFactory.decodeStream(imageStream);
-                        testImageView.setImageBitmap(photo);
+//                        testImageView.setImageBitmap(photo);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                         Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -246,10 +247,10 @@ public class AccountSettingActivityController extends BaseController implements 
     }
 
     @Override
-    public void onFinished(String message,String taskType){
-        if (taskType.equals(Constant.setCustomerDataTaskType)){
+    public void onFinished(String message, String taskType) {
+        if (taskType.equals(Constant.setCustomerDataTaskType)) {
 
-        }else if(taskType.equals(Constant.changePasswordTaskType)){
+        } else if (taskType.equals(Constant.changePasswordTaskType)) {
 
         }
     }
@@ -275,11 +276,11 @@ public class AccountSettingActivityController extends BaseController implements 
             handler.removeCallbacksAndMessages(null);
             handler.postDelayed(new Runnable() {
                 @Override
-                public void run(){
+                public void run() {
                     fetchUrl(newText);
                     //return func here
                     //getSuggestions(newText);
-                    Log.d("error","huhu");
+                    Log.d("error", "huhu");
                     // TODO: put these 2 lines in onFinished, a fetching function will be called here
                 }
             }, 1000);
@@ -289,8 +290,9 @@ public class AccountSettingActivityController extends BaseController implements 
         }
         return true;
     }
+
     // Helper
-    private GenericAdapter<String> generateAddressAdaptor(){
+    private GenericAdapter<String> generateAddressAdaptor() {
         return new GenericAdapter<String>(addressesList) {
             @Override
             public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
@@ -307,19 +309,20 @@ public class AccountSettingActivityController extends BaseController implements 
     }
 
     @Override
-    public void onAddressClick(int position, View view, TextView textView) {
-        switch (view.getId()){
-            case R.id.addressResults:
+    public void onAddressClick(int position, View view, String address) {
+        switch (view.getId()) {
+            case R.id.addresses:
                 Log.d("TAG", "onAddressClick: test" + position);
-                searchView.setQuery(textView.getText().toString(),false);
+                searchViewAddress.setQuery(address, false);
         }
     }
-    public void fetchUrl(String query){
+
+    public void fetchUrl(String query) {
         OkHttpClient client = new OkHttpClient();
         String myString = query.replaceAll(" ", "%2C");
         Log.d("TAG", "fetchUrl: query" + myString);
         ArrayList<String> newAddressesList = new ArrayList<>();
-        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+query+"&location=15.9031%2C-105.8067&radius=9999999&key=AIzaSyCYVs0ybSzlvpLQ6VoaNfAVsh7YhG4gk18";
+        String url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + query + "&location=15.9031%2C-105.8067&radius=9999999&key=AIzaSyCYVs0ybSzlvpLQ6VoaNfAVsh7YhG4gk18";
 
         Request request = new Request.Builder()
                 .url(url)
@@ -342,7 +345,7 @@ public class AccountSettingActivityController extends BaseController implements 
                         for (int i = 0; i < jsonArray.length(); i++) {
                             String temp = jsonArray.getJSONObject(i).getString("formatted_address");
                             newAddressesList.add(temp);
-                            Log.d("TAG", "onResponse: test" +  jsonArray.getJSONObject(i).getString("formatted_address"));
+                            Log.d("TAG", "onResponse: test" + jsonArray.getJSONObject(i).getString("formatted_address"));
                         }
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
@@ -352,10 +355,10 @@ public class AccountSettingActivityController extends BaseController implements 
                         public void run() {
                             addressesList.clear();
                             ArrayList<String> results;
-                            if(newAddressesList.size()>=5){
-                                results = (ArrayList<String>) newAddressesList.subList(0,5);
+                            if (newAddressesList.size() >= 5) {
+                                results = new ArrayList<>(newAddressesList.subList(0, 5));
                                 addressesList.addAll(results);
-                            }else{
+                            } else {
                                 addressesList.addAll(newAddressesList);
                             }
                             addressAdapter.notifyDataSetChanged();
