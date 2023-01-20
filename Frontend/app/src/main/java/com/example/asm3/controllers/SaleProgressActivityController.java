@@ -257,7 +257,7 @@ public class SaleProgressActivityController extends BaseController implements
             sales.clear();
             sales.addAll(apiList.getList());
             salesAdapter.notifyDataSetChanged();
-            salesProgressBar.setVisibility(View.GONE);
+            salesProgressBar.setVisibility(View.INVISIBLE);
         } else if (taskType.equals(Constant.updateStatusOrderTaskType)){
 
         }

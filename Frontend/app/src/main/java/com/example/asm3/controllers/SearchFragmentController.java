@@ -45,7 +45,7 @@ public class SearchFragmentController extends BaseController implements
     private LinearProgressIndicator progressBar;
     private GenericAdapter<String> searchAdapter;
     private RecyclerView searchSuggestionRecView;
-    private View view;
+    private View view, searchResultNotifyLayout;
     private TopBarView topBar;
     private GetData getData;
 
@@ -70,6 +70,7 @@ public class SearchFragmentController extends BaseController implements
         searchView = topBar.getSearchView();
         searchSuggestionRecView = view.findViewById(R.id.searchSuggestionRecView);
         progressBar = view.findViewById(R.id.progressBar);
+        searchResultNotifyLayout = view.findViewById(R.id.searchResultNotifyLayout);
         searchView.setOnQueryTextListener(this);
         searchSuggestionRecView.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
@@ -178,10 +179,15 @@ public class SearchFragmentController extends BaseController implements
             }
             searchSuggestions.clear();
             searchSuggestions.addAll(newSuggestion);
-            Log.d("error","haha");
             searchAdapter.notifyDataSetChanged();
             progressBar.setVisibility(View.GONE);
             searchSuggestionRecView.setVisibility(View.VISIBLE);
+
+//            if (searchSuggestions.isEmpty()){
+//                searchResultNotifyLayout.setVisibility(View.VISIBLE);
+//            } else {
+//                searchSuggestionRecView.setVisibility(View.VISIBLE);
+//            }
         }
     }
 

@@ -146,7 +146,10 @@ public class RegisterFragmentController extends BaseController implements
 
     @Override
     public void onError(String taskType) {
-
+        if (taskType.equals(Constant.register)) {
+            emailRegisLayout.setErrorEnabled(true);
+            emailRegisLayout.setError("Email have already used!");
+        }
     }
 
     // Getter and Setter
