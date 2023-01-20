@@ -2,7 +2,8 @@ const Book = require("../models/Book");
 
 const Customer = require("../models/Customer");
 const Constants = require("../constants/Constants");
-const { response } = require("express");
+
+const {Types} = require("mongoose");
 
 const uploadBook = async (req, response) => {
 	const bookInput = {
@@ -86,7 +87,7 @@ const deleteBook = async (req, response) => {
 		let productIndex = -1;
 		cart = cart.concat(customers[i].cart);
 		for (let j = 0; j < cart.length; j++) {
-			if (cart[j].product === req.params.id) {
+			if (cart[j].product.toString() === req.params.id) {
 				productIndex = j;
 			}
 		}
@@ -236,11 +237,11 @@ const saveProduct = async (req, response) => {
 		const customers = await Customer.find({ _id: customerId });
 		if (
 			customers[0].cart.findIndex((element) => {
-				return input.product == element.product;
+				return input.product == element.product.toString();
 			}) === -1
 		) {
 			customers[0].cart.push({
-				product: input.product,
+				product: Types.ObjectId(input.product),
 				quantity: input.quantity,
 			});
 			await customers[0].save();
@@ -339,7 +340,7 @@ const removeCustomerCart = async (req, response) => {
 			_id: customerId,
 		}).populate("cart.product");
 		let index = customers[0].cart.findIndex((element) => {
-			return productId == element.product._id;
+			return productId == element.product._id.toString();
 		});
 		if (index === -1) {
 			return response.json({
@@ -375,15 +376,7 @@ const removeDuplicate = (array) => {
 	}
 	return products;
 };
-const haveSameElements = (subCategories, subCategoryIds) => {
-	let isSameElement = false;
-	for (let i = 0; i < subCategories.length; i++) {
-		if (subCategoryIds.includes(subCategories[i].name)) {
-			isSameElement = true;
-		}
-	}
-	return isSameElement;
-};
+
 
 module.exports = {
 	uploadBook,

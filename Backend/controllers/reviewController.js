@@ -76,7 +76,7 @@ const getAllCustomerReviews = async (req, response) => {
     const reviews = await Review.find({}).populate("order");
     let customerReviews = [];
     for (let i=0;i<reviews.length;i++){
-        if (reviews[i].order.seller == customerId) {
+        if (reviews[i].order.seller.toString() === customerId.toString()) {
             customerReviews.push(reviews[i]);
         }
     }
