@@ -25,22 +25,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Gallery" />
+    <Button
+        android:id="@+id/accountSettingActivity_submitChange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save" />
 
     <EditText
-        android:id="@+id/userName"
+        android:id="@+id/AccountSettingUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:text="username" />
 
     <EditText
-        android:id="@+id/userAddress"
+        android:id="@+id/AccountSettingCurrentPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:text="password" />
+    <EditText
+        android:id="@+id/AccountSettingNewPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Add new Password" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewAddress"

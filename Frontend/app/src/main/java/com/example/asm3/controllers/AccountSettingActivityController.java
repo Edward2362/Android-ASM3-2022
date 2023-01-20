@@ -45,6 +45,7 @@ import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.models.Customer;
 
 import com.example.asm3.R;
@@ -59,6 +60,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.text.Normalizer;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -69,14 +71,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AccountSettingActivityController extends BaseController implements AsyncTaskCallBack,
-        SearchView.OnQueryTextListener, AddressHolder.OnSelectListener {
+        SearchView.OnQueryTextListener, AddressHolder.OnSelectListener, View.OnClickListener {
 
     private PostAuthenticatedData postAuthenticatedData;
     private Bitmap photo;
     private Button testButton;
     private ImageView testImageView;
-    private Button getImageButton;
-    private EditText userName, userAddress, userEmail;
+    private Button getImageButton, saveDataButton;
+    private EditText userName, userCurrentPass, userNewPass;
     private Customer authCustomer;
     private long lastTextEdit = 0;
     private RecyclerView addressesRecView;
@@ -85,6 +87,7 @@ public class AccountSettingActivityController extends BaseController implements 
     private ArrayList<String> addressesList;
     private GenericAdapter<String> addressAdapter;
     private LocationManager locationManager;
+    private String token, address;
 
     public AccountSettingActivityController(Context context, FragmentActivity activity){
         super(context, activity);
@@ -93,37 +96,51 @@ public class AccountSettingActivityController extends BaseController implements 
     @Override
     public void onInit(){
         testButton = (Button) getActivity().findViewById(R.id.accountSettingActivity_testButton);
+        saveDataButton = (Button) getActivity().findViewById(R.id.accountSettingActivity_submitChange);
         testImageView = (ImageView) getActivity().findViewById(R.id.accountSettingActivity_testImageView);
         getImageButton = (Button) getActivity().findViewById(R.id.accountSettingActivity_getImageButton);
-        userName = (EditText) getActivity().findViewById(R.id.userName);
-        userAddress = (EditText) getActivity().findViewById(R.id.userAddress);
+        userName = (EditText) getActivity().findViewById(R.id.AccountSettingUserName);
+        userCurrentPass = (EditText) getActivity().findViewById(R.id.AccountSettingCurrentPassword);
+        userNewPass = (EditText) getActivity().findViewById(R.id.AccountSettingNewPassword);
         searchView = (SearchView) getActivity().findViewById(R.id.searchViewAddress);
         addressesRecView = (RecyclerView) getActivity().findViewById(R.id.addressResults);
         Intent intent = getActivity().getIntent();
         authCustomer = (Customer) intent.getSerializableExtra("data");
-        Log.d("", "onInit: test" + authCustomer.getUsername());
+        //Log.d("", "onInit: test" + authCustomer.getUsername());
+        userName.setText(authCustomer.getUsername());
         addressesList = new ArrayList<>();
         addressAdapter = generateAddressAdaptor();
         addressesRecView.setAdapter(addressAdapter);
         addressesRecView.setLayoutManager(new LinearLayoutManager(getContext()));
         //set searchView to be visible and set Text in the searchView by default => user address
         searchView.setIconifiedByDefault(false);
-        searchView.setQuery("test",false);
+        searchView.setQuery(authCustomer.getAddress(),false);
         searchView.setOnQueryTextListener(this);
+        if(isAuth()){
+            token = getToken();
+        }
+        testButton.setOnClickListener(this);
+        getImageButton.setOnClickListener(this);
+        saveDataButton.setOnClickListener(this);
+    }
 
-
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.accountSettingActivity_testButton:
                 openCamera();
-            }
-        });
-        getImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.accountSettingActivity_getImageButton:
                 getImageFromGallery();
-            }
-        });
+                break;
+            case R.id.accountSettingActivity_submitChange:
+                String address = Helper.deAccent(searchView.getQuery().toString());
+                address = address.replaceAll("Đ", "D");
+                address = address.replaceAll("đ", "d");
+                updateCustomerInfo(userName.getText().toString(),address);
+                //changePassword(userCurrentPass.getText().toString(),userNewPass.getText().toString());
+                break;
+        }
     }
 
     public void updateCustomerInfo(String username,String address){
@@ -135,7 +152,7 @@ public class AccountSettingActivityController extends BaseController implements 
             postAuthenticatedData = new PostAuthenticatedData(getContext(),this);
             postAuthenticatedData.setEndPoint(Constant.setCustomerData);
             postAuthenticatedData.setTaskType(Constant.setCustomerDataTaskType);
-            postAuthenticatedData.setToken(getToken());
+            postAuthenticatedData.setToken(token);
             postAuthenticatedData.execute(jsonObject);
             }
         } catch (JSONException exception){
@@ -143,15 +160,16 @@ public class AccountSettingActivityController extends BaseController implements 
         }
     }
 
-    public void changePassword(String newPassword){
+    public void changePassword(String currentPassword, String newPassword){
         try {
             if(isAuth()){
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put(Customer.passwordKey,newPassword);
+                jsonObject.put(Customer.newPasswordKey, newPassword);
+                jsonObject.put(Customer.currentPasswordKey, currentPassword);
                 postAuthenticatedData = new PostAuthenticatedData(getContext(),this);
                 postAuthenticatedData.setEndPoint(Constant.changePassword);
                 postAuthenticatedData.setTaskType(Constant.changePasswordTaskType);
-                postAuthenticatedData.setToken(getToken());
+                postAuthenticatedData.setToken(token);
                 postAuthenticatedData.execute(jsonObject);
             }
         } catch (JSONException exception){
@@ -231,8 +249,9 @@ public class AccountSettingActivityController extends BaseController implements 
     public void onFinished(String message,String taskType){
         if (taskType.equals(Constant.setCustomerDataTaskType)){
 
-        }
+        }else if(taskType.equals(Constant.changePasswordTaskType)){
 
+        }
     }
 
     @Override
@@ -347,4 +366,5 @@ public class AccountSettingActivityController extends BaseController implements 
             }
         });
     }
+
 }
