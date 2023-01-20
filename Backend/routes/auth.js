@@ -14,6 +14,9 @@ router.post("/login", authController.login);
 router.post("/setData", authMiddleware.verifyToken, authController.setCustomerData);
 router.post("/changePassword", authMiddleware.verifyToken, authController.changePassword);
 router.post("/changeAvatar", authMiddleware.verifyToken,authController.changeAvatar);
+router.post("/increaseCartQuantity", authMiddleware.verifyToken,authController.increaseCartQuantity);
+router.post("/decreaseCartQuantity", authMiddleware.verifyToken,authController.decreaseCartQuantity);
+
 
 
 

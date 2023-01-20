@@ -171,6 +171,52 @@ const setCustomerData = async (req, response) => {
   }
 };
 
+const increaseCartQuantity = async (req, response) => {
+  try {
+    const customerId = req.customer.customerId;
+    const input = req.body;
+    const customers = await Customer.find({
+      _id: customerId
+    });
+    const productIndex = customers[0].cart.findIndex((element) => {
+      return input.product == element.product;
+    });
+    customers[0].cart[productIndex].quantity = customers[0].cart[productIndex].quantity + 1;
+    await customers[0].save();
+    return response.json({
+      message: "",
+      error: false,
+      data: customers
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+const decreaseCartQuantity = async (req, response) => {
+  try {
+    const customerId = req.customer.customerId;
+    const input = req.body;
+    const customers = await Customer.find({
+      _id: customerId
+    });
+    const productIndex = customers[0].cart.findIndex((element) => {
+      return input.product == element.product;
+    });
+    customers[0].cart[productIndex].quantity = customers[0].cart[productIndex].quantity - 1;
+    await customers[0].save();
+    return response.json({
+      message: "",
+      error: false,
+      data: customers
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
 
 const changePassword = async (req, response) => {
   try {
@@ -237,5 +283,7 @@ module.exports = {
   getCustomerData,
   setCustomerData,
   changePassword,
-  changeAvatar
+  changeAvatar,
+  increaseCartQuantity,
+  decreaseCartQuantity
 };
