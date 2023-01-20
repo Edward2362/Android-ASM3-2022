@@ -53,6 +53,7 @@ public class SearchResultActivityController extends BaseController implements
     private ArrayList<Book> searchResults;
     private ArrayList<String> searchSubcategories;
     private String searchCategory;
+    private View searchResultNotifyLayout;
     private boolean isCategorySearch = false;
 
 
@@ -78,6 +79,7 @@ public class SearchResultActivityController extends BaseController implements
         filterBtn = getActivity().findViewById(R.id.filterBtn);
         filterProgressBar = getActivity().findViewById(R.id.filterProgressBar);
         searchResultRecView = getActivity().findViewById(R.id.searchResultRecView);
+        searchResultNotifyLayout = getActivity().findViewById(R.id.searchResultNotifyLayout);
 
         resultViewModel.setFilterProgressBar(filterProgressBar);
         // set topBar here
@@ -221,7 +223,6 @@ public class SearchResultActivityController extends BaseController implements
     @Override
     public void onFinished(String message, String taskType) {
         filterProgressBar.setVisibility(View.INVISIBLE);
-        searchResultRecView.setVisibility(View.VISIBLE);
         if (taskType.equals(Constant.searchProductTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             searchResults.clear();
@@ -232,6 +233,11 @@ public class SearchResultActivityController extends BaseController implements
             searchResults.clear();
             searchResults.addAll(apiList.getList());
             searchResultAdapter.notifyDataSetChanged();
+        }
+        if (searchResults.isEmpty()) {
+            searchResultNotifyLayout.setVisibility(View.VISIBLE);
+        } else {
+            searchResultRecView.setVisibility(View.VISIBLE);
         }
     }
 
