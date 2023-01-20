@@ -115,19 +115,26 @@ public class ProfileActivityController extends BaseController implements
         sellingBooks.observe(getActivity(), new Observer<ArrayList<Book>>() {
             @Override
             public void onChanged(ArrayList<Book> books) {
-                displayBooks.clear();
-                displayBooks.addAll(books);
-                bookAdapter.notifyDataSetChanged();
+                if (books.isEmpty()) {
+                    publicProfileSellingRecView.setVisibility(View.GONE);
+                    profileProgressBar.setVisibility(View.VISIBLE);
+                } else {
+                    displayBooks.clear();
+                    displayBooks.addAll(books);
+                    bookAdapter.notifyDataSetChanged();
+                    publicProfileSellingRecView.setVisibility(View.VISIBLE);
+                    profileProgressBar.setVisibility(View.GONE);
+                }
             }
         });
 
         // get extras
-//        Intent intent = getActivity().getIntent();
-//        publicCustomerId = intent.getStringExtra(Constant.publicProfileIdKey);
+        Intent intent = getActivity().getIntent();
+        publicCustomerId = intent.getStringExtra(Constant.publicProfileIdKey);
 
-        // testing
-        publicCustomer = new Customer("001", "roo@gmal.com", "nijndc@1", "Roo", "12 Baker St", "user", 4, new ArrayList<CartItem>(), "");
-        bindData();
+//        // testing
+//        publicCustomer = new Customer("001", "roo@gmal.com", "nijndc@1", "Roo", "12 Baker St", "user", 4, new ArrayList<CartItem>(), "");
+//        bindData();
 
         publicProfileAvatarLayout.setOnClickListener(this);
         publicProfileDataBtnGrp.setOnClickListener(this);
@@ -182,7 +189,7 @@ public class ProfileActivityController extends BaseController implements
         }
         switch (view.getId()) {
             case R.id.productBody:
-                Helper.goToBookDetail(getContext(), getActivity(), sellingBooks.get(position).get_id(), position);
+                Helper.goToBookDetail(getContext(), getActivity(), displayBooks.get(position).get_id(), position);
                 break;
         }
     }
