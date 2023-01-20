@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.asm3.CartActivity;
 import com.example.asm3.MainActivity;
 import com.example.asm3.ManageBookActivity;
+import com.example.asm3.ProfileActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
@@ -114,6 +115,7 @@ public class ProductDetailActivityController extends BaseController implements
                 break;
             case R.id.detailSellerTxt:
                 Log.d("TAG", "onClick: test seller ");
+                goToSellerProfile();
                 break;
             case R.id.detailAddCartBtn:
                 Log.d("TAG", "onClick: test cart ");
@@ -181,6 +183,12 @@ public class ProductDetailActivityController extends BaseController implements
         Intent intent = new Intent(getContext(), ManageBookActivity.class);
         intent.putExtra(Constant.productIdKey, book.get_id());
         getActivity().startActivityForResult(intent, Constant.manageBookActivityCode);
+    }
+
+    private void goToSellerProfile() {
+        Intent intent = new Intent(getContext(), ProfileActivity.class);
+        //intent.putExtra(Constant.publicProfileIdKey, book.getCustomer().get_id());
+        getActivity().startActivity(intent);
     }
 
     // Callback functions
