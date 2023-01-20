@@ -24,6 +24,10 @@ public class ProfileFragment extends Fragment {
     public ProfileFragment() {
     }
 
+    public ProfileFragmentController getProfileFragmentController() {
+        return profileFragmentController;
+    }
+
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();

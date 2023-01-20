@@ -3,12 +3,13 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-    public static String baseDomain = "http://10.247.192.153:9000"; //
+    public static String baseDomain = "http://10.0.2.2:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
     public static String setCustomerData = "/api/auth/setData";
     public static String changePassword = "/api/auth/changePassword";
+    public static String changeAvatar = "/api/auth/changeAvatar";
     public static String getAllCategories = "/api/category/getAllCategories";
     public static String getSubCategories = "/api/subCategory/getSubCategories";
     public static String uploadBook = "/api/book/uploadBook";
@@ -27,6 +28,7 @@ public class Constant {
     public static String getCustomerOrders = "/api/order/getCustomerOrders";
     public static String getSellingOrders = "/api/order/getSellingOrders";
     public static String tokenFile = "token.txt";
+
 
     public static final Pattern emailPattern =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -93,6 +95,7 @@ public class Constant {
     public static String generateOrdersTaskType = "generateOrders";
     public static String getCustomerOrdersTaskType = "getCustomerOrders";
     public static String getSellingOrdersTaskType = "getSellingOrders";
+    public static String changeAvatarTaskType = "changeAvatar";
 
 
     public static final int cameraPermissionCode = 105;
