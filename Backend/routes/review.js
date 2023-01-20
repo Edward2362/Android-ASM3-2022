@@ -6,6 +6,8 @@ const reviewController = require("../controllers/reviewController");
 router.post("/uploadReview", authMiddleware.verifyToken, reviewController.uploadReview);
 router.get("/getReviews", authMiddleware.verifyToken, reviewController.getReviews);
 router.get("/getAllReviews", reviewController.getAllReviews);
+router.get("/getAllPublicCustomerReviews/:customerId", reviewController.getAllPublicCustomerReviews);
+
 router.get("/getAllCustomerReviews", authMiddleware.verifyToken, reviewController.getAllCustomerReviews);
 
 

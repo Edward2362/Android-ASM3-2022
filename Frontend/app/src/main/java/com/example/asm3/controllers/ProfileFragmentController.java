@@ -605,7 +605,6 @@ public class ProfileFragmentController extends BaseController implements
         } else if (taskType.equals(Constant.uploadReviewTaskType)) {
 
         } else if (taskType.equals(Constant.getAllCustomerReviewsTaskType)) {
-            Log.d("dada", "jojojo");
             ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message), Review.class);
             mainViewModel.setReviews(apiList.getList());
         }

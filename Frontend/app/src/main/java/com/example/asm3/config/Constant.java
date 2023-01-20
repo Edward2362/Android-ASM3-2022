@@ -3,7 +3,7 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-    public static String baseDomain = "http://192.168.1.4:9000"; //
+    public static String baseDomain = "http://10.0.2.2:9000"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
@@ -26,6 +26,7 @@ public class Constant {
     public static String saveProduct = "/api/book/saveProduct";
     public static String uploadReview = "/api/review/uploadReview";
     public static String getReview = "/api/review/getReview";
+    public static String getPublicCustomerProducts = "/api/book/getPublicCustomerProducts";
     public static String getCart = "/api/book/getCart";
     public static String removeCart = "/api/book/removeCart";
     public static String orderProducts = "/api/order/orderProducts";
@@ -34,6 +35,7 @@ public class Constant {
     public static String getSellingOrders = "/api/order/getSellingOrders";
     public static String updateStatusOrder = "/api/order/updateStatusOrder";
     public static String getProfileCustomer = "/api/auth/getProfileCustomer";
+    public static String getAllPublicCustomerReviews = "/api/review/getAllPublicCustomerReviews";
     public static String getAllCustomerReviews = "/api/review/getAllCustomerReviews";
     public static String tokenFile = "token.txt";
 
@@ -106,6 +108,7 @@ public class Constant {
     public static String getCartTaskType = "getCart";
     public static String removeCartTaskType = "removeCart";
     public static String uploadReviewTaskType = "uploadReview";
+    public static String getPublicCustomerProductsTaskType = "getPublicCustomerProducts";
     public static String getReviewTaskType = "getReview";
     public static String orderProductsTaskType = "orderProducts";
     public static String generateOrdersTaskType = "generateOrders";
@@ -115,6 +118,7 @@ public class Constant {
     public static String updateStatusOrderTaskType = "updateStatusOrder";
     public static String increaseCartQuantityTaskType = "increaseCartQuantity";
     public static String decreaseCartQuantityTaskType = "decreaseCartQuantity";
+    public static String getAllPublicCustomerReviewsTaskType = "getAllPublicCustomerReviews";
     public static String getProfileCustomerTaskType = "getProfileCustomer";
     public static String getAllCustomerReviewsTaskType = "getAllCustomerReviews";
 
