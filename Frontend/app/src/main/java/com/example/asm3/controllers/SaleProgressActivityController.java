@@ -170,12 +170,17 @@ public class SaleProgressActivityController extends BaseController implements
                 orderHolder.getOrderBookTxt().setText(item.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + item.getQuantity());
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
-                orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
+                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.getBookImage()));
+                if (item.isHasReview()) {
+                    orderHolder.getOrderStatusTxt().setText("Status: Reviewed");
+                } else {
+                    orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
+                }
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
                 orderHolder.getOrderLocationLayout().setVisibility(View.VISIBLE);
                 if (item.getStatus().equalsIgnoreCase("completed") ||
-                        item.getStatus().equalsIgnoreCase("reviewed")) {
+                        item.isHasReview()) {
                     orderHolder.getOrderBody().setOnClickListener(null);
                 }
                 if (Helper.isDarkTheme(getContext())) {
@@ -186,7 +191,7 @@ public class SaleProgressActivityController extends BaseController implements
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_shipping));
                     if (item.getStatus().equalsIgnoreCase("completed"))
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_completed));
-                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                    if (item.isHasReview())
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_reviewed));
                 } else {
                     orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_onSurface));
@@ -196,7 +201,7 @@ public class SaleProgressActivityController extends BaseController implements
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_shipping));
                     if (item.getStatus().equalsIgnoreCase("completed"))
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_completed));
-                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                    if (item.isHasReview())
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_reviewed));
                 }
             }

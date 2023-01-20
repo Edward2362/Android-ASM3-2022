@@ -257,16 +257,16 @@ public class ProfileFragmentController extends BaseController implements
         }
     }
 
-    public void uploadReview(String content,float rating,String orderId) {
-        try{
+    public void uploadReview(String content, float rating, String orderId) {
+        try {
             postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
             postAuthenticatedData.setEndPoint(Constant.uploadReview);
             postAuthenticatedData.setTaskType(Constant.uploadReviewTaskType);
             postAuthenticatedData.setToken(token);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Review.contentKey,content);
-            jsonObject.put(Review.ratingKey,rating);
-            jsonObject.put(Constant.orderIdKey,orderId);
+            jsonObject.put(Review.contentKey, content);
+            jsonObject.put(Review.ratingKey, rating);
+            jsonObject.put(Constant.orderIdKey, orderId);
             postAuthenticatedData.execute(jsonObject);
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
@@ -405,7 +405,7 @@ public class ProfileFragmentController extends BaseController implements
                 float rating = reviewDialogBody.getRatingBar().getRating();
                 String userReviewTxt = reviewDialogBody.getReviewTxt().getText().toString();
                 Log.d(TAG, "onClick: dialog rating = " + rating);
-                uploadReview(userReviewTxt,rating,selectedOrderId);
+                uploadReview(userReviewTxt, rating, selectedOrderId);
                 Log.d(TAG, "onClick: dialog rating = " + rating);
                 Log.d(TAG, "onClick: dialog user review text = " + userReviewTxt);
                 break;
@@ -450,12 +450,16 @@ public class ProfileFragmentController extends BaseController implements
 //                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.get));
                 orderHolder.getOrderBookTxt().setText(item.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + item.getQuantity());
-                orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
+                if (item.isHasReview()) {
+                    orderHolder.getOrderStatusTxt().setText("Status: Reviewed");
+                } else {
+                    orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
+                }
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
                 orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.getBookImage()));
-                if (!item.getStatus().equalsIgnoreCase("completed")) {
+                if (!item.getStatus().equalsIgnoreCase("completed") || item.isHasReview()) {
                     orderHolder.getOrderBody().setOnClickListener(null);
                 }
                 if (Helper.isDarkTheme(getContext())) {
@@ -466,7 +470,7 @@ public class ProfileFragmentController extends BaseController implements
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_shipping));
                     if (item.getStatus().equalsIgnoreCase("completed"))
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_completed));
-                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                    if (item.isHasReview())
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_reviewed));
                 } else {
                     orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_onSurface));
@@ -476,7 +480,7 @@ public class ProfileFragmentController extends BaseController implements
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_shipping));
                     if (item.getStatus().equalsIgnoreCase("completed"))
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_completed));
-                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                    if (item.isHasReview())
                         orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_reviewed));
                 }
             }
@@ -598,7 +602,7 @@ public class ProfileFragmentController extends BaseController implements
         } else if (taskType.equals(Constant.uploadReviewTaskType)) {
 
         } else if (taskType.equals(Constant.getAllCustomerReviewsTaskType)) {
-            Log.d("dada","jojojo");
+            Log.d("dada", "jojojo");
             ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message), Review.class);
             mainViewModel.setReviews(apiList.getList());
         }
