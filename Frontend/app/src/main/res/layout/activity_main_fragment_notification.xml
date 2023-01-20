@@ -11,11 +11,13 @@
         android:id="@+id/notifRecView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/notifNotifyLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/goatGrazingImage"
@@ -23,7 +25,6 @@
             android:layout_height="0dp"
             android:layout_margin="80dp"
             android:src="@drawable/goat_grazing"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -38,7 +39,6 @@
             android:text="Nothing to see here..."
             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline5"
             android:textColor="@color/md_theme_light_primary"
-            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/goatGrazingImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>

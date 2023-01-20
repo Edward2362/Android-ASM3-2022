@@ -180,8 +180,7 @@ public class ProfileFragmentController extends BaseController implements
                         displayOrders.clear();
                         displayOrders.addAll(customerOrders);
                         orderAdapter.notifyDataSetChanged();
-                        purchasedRecView.setVisibility(View.VISIBLE);
-                        profileNotifyLayout.setVisibility(View.GONE);
+
                     }
                 }
             });

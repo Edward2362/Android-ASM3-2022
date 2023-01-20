@@ -54,6 +54,7 @@ public class ProfileActivityController extends BaseController implements
         ReviewHolder.OnSelectListener,
         AsyncTaskCallBack {
     // views
+    private View publicProfileNotifyLayout;
     private TopBarView publicProfileTopBar;
     private Button backBtn;
     private LinearProgressIndicator profileProgressBar;
@@ -92,6 +93,7 @@ public class ProfileActivityController extends BaseController implements
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onInit() {
+        publicProfileNotifyLayout = getActivity().findViewById(R.id.publicProfileNotifyLayout);
         publicProfileTopBar = getActivity().findViewById(R.id.publicProfileTopBar);
         backBtn = publicProfileTopBar.getBackButton();
         profileProgressBar = getActivity().findViewById(R.id.profileProgressBar);
@@ -117,13 +119,13 @@ public class ProfileActivityController extends BaseController implements
             public void onChanged(ArrayList<Book> books) {
                 if (books.isEmpty()) {
                     publicProfileSellingRecView.setVisibility(View.GONE);
-                    profileProgressBar.setVisibility(View.VISIBLE);
+                    publicProfileNotifyLayout.setVisibility(View.VISIBLE);
                 } else {
                     displayBooks.clear();
                     displayBooks.addAll(books);
                     bookAdapter.notifyDataSetChanged();
                     publicProfileSellingRecView.setVisibility(View.VISIBLE);
-                    profileProgressBar.setVisibility(View.GONE);
+                    publicProfileNotifyLayout.setVisibility(View.GONE);
                 }
             }
         });
@@ -136,6 +138,7 @@ public class ProfileActivityController extends BaseController implements
 //        publicCustomer = new Customer("001", "roo@gmal.com", "nijndc@1", "Roo", "12 Baker St", "user", 4, new ArrayList<CartItem>(), "");
 //        bindData();
 
+        backBtn.setOnClickListener(this);
         publicProfileAvatarLayout.setOnClickListener(this);
         publicProfileDataBtnGrp.setOnClickListener(this);
         publicProfileEmailTxt.setOnClickListener(this);
@@ -146,14 +149,19 @@ public class ProfileActivityController extends BaseController implements
 
     @Override
     public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+        publicProfileNotifyLayout.setVisibility(View.VISIBLE);
         switch (group.getCheckedButtonId()) {
             case R.id.publicProfileSellingBtn:
-                publicProfileSellingRecView.setVisibility(View.VISIBLE);
-                publicProfileFeedbackRecView.setVisibility(View.GONE);
+                if (!sellingBooks.getValue().isEmpty()) {
+                    publicProfileSellingRecView.setVisibility(View.VISIBLE);
+                    publicProfileNotifyLayout.setVisibility(View.GONE);
+                }
                 break;
             case R.id.publicProfileFeedbackBtn:
-                publicProfileSellingRecView.setVisibility(View.GONE);
-                publicProfileFeedbackRecView.setVisibility(View.VISIBLE);
+                if (!reviews.getValue().isEmpty()) {
+                    publicProfileFeedbackRecView.setVisibility(View.VISIBLE);
+                    publicProfileNotifyLayout.setVisibility(View.GONE);
+                }
                 break;
         }
     }
