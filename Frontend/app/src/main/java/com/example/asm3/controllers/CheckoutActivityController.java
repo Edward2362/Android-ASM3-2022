@@ -83,7 +83,12 @@ public class CheckoutActivityController extends BaseController implements
 
         }
 
-        couponEt.set
+        couponEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+
+            }
+        });
     }
 
     public void orderProducts() {
