@@ -1,13 +1,20 @@
 package com.example.asm3.controllers;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +58,9 @@ public class CheckoutActivityController extends BaseController implements
     private Customer customer;
     private View checkoutProgressBar;
     private ArrayList<Order> orders;
+    private float newTotalPrice = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public CheckoutActivityController(Context context, FragmentActivity activity){
         super(context,activity);
         topBar = getActivity().findViewById(R.id.checkoutTopBar);
@@ -80,13 +89,23 @@ public class CheckoutActivityController extends BaseController implements
         } else {
             token = getToken();
             getAuthCustomer();
-
         }
 
-        couponEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        couponEt.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View view, boolean b) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Log.d(TAG, "afterTextChanged: " + editable.toString());
+                if(editable.toString().equals("HAPPYNEWYEAR")){
+                    newTotalPrice -= 100000;
+                    if(newTotalPrice < 0) newTotalPrice = 0;
+                    orderTotalPriceTxt.setText("Order total: " + newTotalPrice + " đ");
+                }
             }
         });
     }
@@ -166,7 +185,6 @@ public class CheckoutActivityController extends BaseController implements
             orders.clear();
             orders.addAll(apiList.getList());
             orderAdapter.notifyDataSetChanged();
-            float newTotalPrice = 0;
             for (int i = 0; i < apiList.getList().size(); i++) {
                 newTotalPrice = newTotalPrice + apiList.getList().get(i).getBookPrice()* apiList.getList().get(i).getQuantity();
             }
