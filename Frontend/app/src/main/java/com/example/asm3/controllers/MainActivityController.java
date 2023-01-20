@@ -23,6 +23,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.AuthenticationActivity;
+import com.example.asm3.NewUserActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
@@ -129,8 +130,8 @@ public class MainActivityController extends BaseController implements
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
         if(isNewUser()){
-            Intent intent = new Intent(getContext(), AuthenticationActivity.class);
-            getActivity().startActivityForResult(intent, Constant.isNewUser);
+            Intent intent = new Intent(getContext(), NewUserActivity.class);
+            getActivity().startActivity(intent);
         }
 
         notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
@@ -217,7 +218,7 @@ public class MainActivityController extends BaseController implements
     }
     public boolean isNewUser() {
         String path = getContext().getFilesDir().getAbsolutePath();
-        File dataFile = new File(path + "/user.txt");
+        File dataFile = new File(path + "/token.txt");
         return !dataFile.exists();
     }
     // Navigation functions
