@@ -39,6 +39,7 @@ import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
+import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.CartItem;
 import com.example.asm3.models.Category;
@@ -150,6 +151,8 @@ public class ProfileActivityController extends BaseController implements
 //             books = getBooks();
 //             reviews = getReviews();
             getProfileCustomer(publicCustomerId);
+            getPublicCustomerProducts(publicCustomerId);
+            getAllPublicCustomerReviews(publicCustomerId);
         }
     }
 
@@ -286,6 +289,7 @@ public class ProfileActivityController extends BaseController implements
         publicProfileBody.setVisibility(View.VISIBLE);
         publicProfileUsernameTxt.setText(publicCustomer.getUsername());
         publicProfileEmailTxt.setText(publicCustomer.getEmail());
+        publicProfileAvatarImg.setImageBitmap(Helper.stringToBitmap(publicCustomer.getAvatar()));
         publicProfileDataBtnGrp.check(R.id.publicProfileSellingBtn);
         publicProfileSellingRecView.setVisibility(View.VISIBLE);
     }
@@ -299,6 +303,19 @@ public class ProfileActivityController extends BaseController implements
 
     }
 
+    public void getPublicCustomerProducts(String id) {
+        getData = new GetData(getContext(),this);
+        getData.setEndPoint(Constant.getPublicCustomerProducts + "/" + id);
+        getData.setTaskType(Constant.getPublicCustomerProductsTaskType);
+        getData.execute();
+    }
+
+    public void getAllPublicCustomerReviews(String id){
+        getData = new GetData(getContext(),this);
+        getData.setEndPoint(Constant.getAllPublicCustomerReviews + "/" + id);
+        getData.setTaskType(Constant.getAllCustomerReviewsTaskType);
+        getData.execute();
+    }
 
     // Navigation functions
 
@@ -311,6 +328,13 @@ public class ProfileActivityController extends BaseController implements
             publicCustomer = apiData.getData();
             bindData();
             profileProgressBar.setVisibility(View.GONE);
+        } else if (taskType.equals(Constant.getPublicCustomerProductsTaskType)){
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
+            sellingBooks.setValue(apiList.getList());
+        } else if (taskType.equals(Constant.getAllPublicCustomerReviewsTaskType)){
+            Log.d("dadadsa",message);
+            ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message),Review.class);
+            reviews.setValue(apiList.getList());
         }
     }
 

@@ -205,6 +205,23 @@ const getUploadedProducts = async (req, response) => {
 	}
 };
 
+const getPublicCustomerProducts = async (req, response) => {
+	try {
+		const customerId = req.params.customerId;
+
+		const products = await Book.find({ customer: customerId });
+
+		return response.json({
+			message: "",
+			error: false,
+			data: products
+		});
+	} catch (error) {
+		console.log(error);
+		process.exit(1);
+	}
+};
+
 const getProduct = async (req, response) => {
 	try {
 		const productId = req.params.productId;
@@ -390,4 +407,5 @@ module.exports = {
 	searchProduct,
 	getCustomerCart,
 	removeCustomerCart,
+	getPublicCustomerProducts
 };

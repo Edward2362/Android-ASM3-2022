@@ -15,7 +15,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        onInit();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            onInit();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
