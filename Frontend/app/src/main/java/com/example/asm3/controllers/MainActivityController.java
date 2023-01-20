@@ -221,6 +221,7 @@ public class MainActivityController extends BaseController implements
         File dataFile = new File(path + "/token.txt");
         return !dataFile.exists();
     }
+
     // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

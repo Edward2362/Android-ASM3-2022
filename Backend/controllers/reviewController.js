@@ -54,8 +54,25 @@ const getAllReviews = async (req, response) => {
       }); 
 };
 
+const getAllCustomerReviews = async (req, response) => {
+    const customerId = req.customer.customerId;
+    const reviews = await Review.find({}).populate("order");
+    let customerReviews = [];
+    for (let i=0;i<reviews.length;i++){
+        if (reviews[i].order.seller == customerId) {
+            customerReviews.push(reviews[i]);
+        }
+    }
+    return response.json({
+        message: "",
+        error: false,
+        data: customerReviews
+      }); 
+};
+
 module.exports = {
     uploadReview,
     getReviews,
-    getAllReviews
+    getAllReviews,
+    getAllCustomerReviews
 }

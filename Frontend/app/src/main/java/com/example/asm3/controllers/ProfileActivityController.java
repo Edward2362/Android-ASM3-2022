@@ -34,9 +34,11 @@ import com.example.asm3.base.adapter.viewHolder.BookHolder;
 import com.example.asm3.base.adapter.viewHolder.ReviewHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
+import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.CartItem;
 import com.example.asm3.models.Category;
@@ -72,6 +74,7 @@ public class ProfileActivityController extends BaseController implements
     private ArrayList<Review> displayReviews;
     private GenericAdapter<Book> bookAdapter;
     private GenericAdapter<Review> reviewAdapter;
+    private GetData getData;
 
     // data
     private String publicCustomerId;
@@ -83,10 +86,6 @@ public class ProfileActivityController extends BaseController implements
         displayBooks = sellingBooks.getValue();
         displayReviews = reviews.getValue();
 
-        if (isOnline()) {
-            // books = getBooks();
-            // reviews = getReviews();
-        }
     }
 
     // Render functions
@@ -145,6 +144,13 @@ public class ProfileActivityController extends BaseController implements
 
         loadSelling();
         loadFeedback();
+
+
+        if (isOnline()) {
+//             books = getBooks();
+//             reviews = getReviews();
+            getProfileCustomer(publicCustomerId);
+        }
     }
 
     @Override
@@ -278,7 +284,6 @@ public class ProfileActivityController extends BaseController implements
 
     private void bindData() {
         publicProfileBody.setVisibility(View.VISIBLE);
-
         publicProfileUsernameTxt.setText(publicCustomer.getUsername());
         publicProfileEmailTxt.setText(publicCustomer.getEmail());
         publicProfileDataBtnGrp.check(R.id.publicProfileSellingBtn);
@@ -286,6 +291,13 @@ public class ProfileActivityController extends BaseController implements
     }
 
     // Request functions
+    public void getProfileCustomer(String id) {
+        getData = new GetData(getContext(),this);
+        getData.setEndPoint(Constant.getProfileCustomer + "/" + id);
+        getData.setTaskType(Constant.getProfileCustomerTaskType);
+        getData.execute();
+
+    }
 
 
     // Navigation functions
@@ -294,9 +306,12 @@ public class ProfileActivityController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-
-        bindData();
-        profileProgressBar.setVisibility(View.GONE);
+        if (taskType.equals(Constant.getProfileCustomerTaskType)){
+            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message),Customer.class);
+            publicCustomer = apiData.getData();
+            bindData();
+            profileProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

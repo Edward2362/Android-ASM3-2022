@@ -55,7 +55,7 @@ public class ProductDetailActivityController extends BaseController implements
     private Book book;
     private int bookId;
     private Intent intent;
-    private String token;
+    private String token, sellerId;
     private Customer customer;
     private GetAuthenticatedData getAuthenticatedData;
     private PostAuthenticatedData postAuthenticatedData;
@@ -199,7 +199,7 @@ public class ProductDetailActivityController extends BaseController implements
 
     private void goToSellerProfile() {
         Intent intent = new Intent(getContext(), ProfileActivity.class);
-        //intent.putExtra(Constant.publicProfileIdKey, book.getCustomer().get_id());
+        intent.putExtra(Constant.publicProfileIdKey, sellerId);
         getActivity().startActivity(intent);
     }
 
@@ -218,6 +218,7 @@ public class ProductDetailActivityController extends BaseController implements
             }
             Log.d("tag",book.getCustomer().getUsername());
 
+            sellerId = book.getCustomer().get_id();
             detailSellerTxt.setText(book.getCustomer().getUsername());
             detailBookNameTxt.setText(book.getName());
             detailBookYearTxt.setText("Published year: " + book.getPublishedAt());

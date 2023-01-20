@@ -31,7 +31,7 @@ public class Review implements Serializable {
         this.isOrderPopulated = isOrderPopulated;
     }
 
-    public static String idKey = "id";
+    public static String idKey = "_id";
     public static String contentKey = "content";
     public static String dateKey = "date";
     public static String ratingKey = "rating";
