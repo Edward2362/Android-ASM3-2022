@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,7 @@ public class CartActivityController extends BaseController implements
     private GenericAdapter<CartItem> cartItemsAdapter;
     private String token;
     private GetAuthenticatedData getAuthenticatedData;
+    private PostAuthenticatedData postAuthenticatedData;
     private DeleteAuthenticatedData deleteAuthenticatedData;
     private Customer customer;
     private MutableLiveData<Float> totalPrice = new MutableLiveData<>();
@@ -64,7 +66,9 @@ public class CartActivityController extends BaseController implements
     public CartActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
         topBar = getActivity().findViewById(R.id.cartTopBar);
-        topBar.setSubPage("Your Cart");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            topBar.setSubPage("Your Cart");
+        }
         cartItems = new ArrayList<>();
     }
 
@@ -123,6 +127,34 @@ public class CartActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
+    public void increaseCartQuantity(String id) {
+        try{
+            postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+            postAuthenticatedData.setEndPoint(Constant.increaseCartQuantity);
+            postAuthenticatedData.setToken(token);
+            postAuthenticatedData.setTaskType(Constant.increaseCartQuantityTaskType);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Constant.productKey,id);
+            postAuthenticatedData.execute(jsonObject);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+    }
+
+    public void decreaseCartQuantity(String id) {
+        try{
+            postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+            postAuthenticatedData.setEndPoint(Constant.decreaseCartQuantity);
+            postAuthenticatedData.setToken(token);
+            postAuthenticatedData.setTaskType(Constant.decreaseCartQuantityTaskType);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Constant.productKey,id);
+            postAuthenticatedData.execute(jsonObject);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+    }
+
     public void removeCart(String id) {
         deleteAuthenticatedData = new DeleteAuthenticatedData(getContext(), this);
         deleteAuthenticatedData.setEndPoint(Constant.removeCart + "/" + id);
@@ -173,6 +205,7 @@ public class CartActivityController extends BaseController implements
                 totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
                 cartItems.set(position, chosenCart);
                 cartItemsAdapter.notifyItemChanged(position);
+                increaseCartQuantity(chosenCart.getProduct().get_id());
                 break;
             case R.id.orderDownBtn:
                 if (chosenCart.getQuantity() > 1) {
@@ -181,6 +214,7 @@ public class CartActivityController extends BaseController implements
                     totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
                     cartItems.set(position, chosenCart);
                     cartItemsAdapter.notifyItemChanged(position);
+                    decreaseCartQuantity(chosenCart.getProduct().get_id());
                 } else {
                     removeCart(chosenCart.getProduct().get_id());
                     totalPrice.setValue(totalPrice.getValue() - chosenCart.getProduct().getPrice() * chosenCart.getQuantity());
@@ -242,6 +276,10 @@ public class CartActivityController extends BaseController implements
             cartRecView.setVisibility(View.VISIBLE);
             cartProgressBar.setVisibility(View.INVISIBLE);
         } else if (taskType.equals(Constant.removeCartTaskType)) {
+
+        } else if (taskType.equals(Constant.increaseCartQuantityTaskType)) {
+
+        } else if (taskType.equals(Constant.decreaseCartQuantityTaskType)) {
 
         }
 

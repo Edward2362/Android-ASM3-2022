@@ -10,6 +10,8 @@ public class Constant {
     public static String setCustomerData = "/api/auth/setData";
     public static String changePassword = "/api/auth/changePassword";
     public static String changeAvatar = "/api/auth/changeAvatar";
+    public static String increaseCartQuantity = "/api/auth/increaseCartQuantity";
+    public static String decreaseCartQuantity = "/api/auth/decreaseCartQuantity";
     public static String getAllCategories = "/api/category/getAllCategories";
     public static String getSubCategories = "/api/subCategory/getSubCategories";
     public static String uploadBook = "/api/book/uploadBook";
@@ -96,6 +98,8 @@ public class Constant {
     public static String getCustomerOrdersTaskType = "getCustomerOrders";
     public static String getSellingOrdersTaskType = "getSellingOrders";
     public static String changeAvatarTaskType = "changeAvatar";
+    public static String increaseCartQuantityTaskType = "increaseCartQuantity";
+    public static String decreaseCartQuantityTaskType = "decreaseCartQuantity";
 
 
     public static final int cameraPermissionCode = 105;
