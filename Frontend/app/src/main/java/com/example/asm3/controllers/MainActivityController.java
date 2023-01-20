@@ -50,6 +50,7 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -127,6 +128,10 @@ public class MainActivityController extends BaseController implements
         cartBtn.setOnClickListener(this);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
+        if(isNewUser()){
+            Intent intent = new Intent(getContext(), AuthenticationActivity.class);
+            getActivity().startActivityForResult(intent, Constant.isNewUser);
+        }
 
         notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
             @Override
@@ -210,7 +215,11 @@ public class MainActivityController extends BaseController implements
         getAuthenticatedData.setTaskType(Constant.getCustomer);
         getAuthenticatedData.execute();
     }
-
+    public boolean isNewUser() {
+        String path = getContext().getFilesDir().getAbsolutePath();
+        File dataFile = new File(path + "/user.txt");
+        return !dataFile.exists();
+    }
     // Navigation functions
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
