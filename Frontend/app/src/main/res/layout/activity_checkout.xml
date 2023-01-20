@@ -133,31 +133,22 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/deliveryDateTxt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:gravity="left"
-                            android:text="Delivery date: "
-                            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/couponLayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:hint="Published year">
+                            android:layout_marginVertical="15dp"
+                            android:hint="Enter coupon code here">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/couponEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="number"
+                                android:inputType="textCapWords"
                                 android:lines="1"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body2" />
+                                android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
