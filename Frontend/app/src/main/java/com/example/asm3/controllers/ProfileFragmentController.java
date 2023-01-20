@@ -404,6 +404,7 @@ public class ProfileFragmentController extends BaseController implements
             case -1: // submit
                 float rating = reviewDialogBody.getRatingBar().getRating();
                 String userReviewTxt = reviewDialogBody.getReviewTxt().getText().toString();
+                Log.d(TAG, "onClick: dialog rating = " + rating);
                 uploadReview(userReviewTxt,rating,selectedOrderId);
                 Log.d(TAG, "onClick: dialog rating = " + rating);
                 Log.d(TAG, "onClick: dialog user review text = " + userReviewTxt);
