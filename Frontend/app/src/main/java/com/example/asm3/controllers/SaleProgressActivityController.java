@@ -4,7 +4,9 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,11 +133,23 @@ public class SaleProgressActivityController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
-        if (sales.get(position).getStatus().equalsIgnoreCase("completed") ||
-                sales.get(position).getStatus().equalsIgnoreCase("reviewed"))
-            return;
-        saleClicked = position;
-        showDialog(sales.get(position).getStatus());
+        switch (view.getId()) {
+            case R.id.orderBody:
+                if (sales.get(position).getStatus().equalsIgnoreCase("completed") ||
+                        sales.get(position).getStatus().equalsIgnoreCase("reviewed"))
+                    return;
+                saleClicked = position;
+                showDialog(sales.get(position).getStatus());
+                break;
+            case R.id.orderLocationBtn:
+                Log.d(TAG, "onOrderClick: test "+ position);
+                String uri = "geo:0,0?q=1600+Amphitheatre+Parkway%2C+CA";
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                getActivity().startActivity(intent);
+                break;
+        }
+
     }
 
     // Helpers
@@ -156,6 +170,7 @@ public class SaleProgressActivityController extends BaseController implements
                 orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
+                orderHolder.getOrderLocationLayout().setVisibility(View.VISIBLE);
                 if (Helper.isDarkTheme(getContext())) {
                     orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_onPrimaryContainer));
                     if (item.getStatus().equalsIgnoreCase("packaging"))

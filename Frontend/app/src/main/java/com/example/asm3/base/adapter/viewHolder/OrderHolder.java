@@ -17,8 +17,8 @@ public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClick
     private CardView orderBody;
     private ImageView orderBookImg;
     private TextView orderBookTxt, orderQuantityTxt, orderStatusTxt, orderPriceTxt;
-    private Button orderDeleteBtn, orderIncreaseBtn, orderDownBtn;
-    private View orderQuantityActionLayout, orderDeleteLayout;
+    private Button orderDeleteBtn, orderIncreaseBtn, orderDownBtn, orderLocationBtn;
+    private View orderQuantityActionLayout, orderDeleteLayout, orderLocationLayout;
     private OnSelectListener onSelectListener;
 
     public OrderHolder(@NonNull View itemView, OnSelectListener onSelectListener) {
@@ -34,12 +34,15 @@ public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClick
         orderDeleteLayout = itemView.findViewById(R.id.orderDeleteLayout);
         orderIncreaseBtn = itemView.findViewById(R.id.orderIncreaseBtn);
         orderDownBtn = itemView.findViewById(R.id.orderDownBtn);
+        orderLocationBtn = itemView.findViewById(R.id.orderLocationBtn);
+        orderLocationLayout = itemView.findViewById(R.id.orderLocationLayout);
         this.onSelectListener = onSelectListener;
 
         orderBody.setOnClickListener(this);
         orderDeleteBtn.setOnClickListener(this);
         orderIncreaseBtn.setOnClickListener(this);
         orderDownBtn.setOnClickListener(this);
+        orderLocationBtn.setOnClickListener(this);
     }
 
     @Override
@@ -81,6 +84,10 @@ public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClick
 
     public View getOrderDeleteLayout() {
         return orderDeleteLayout;
+    }
+
+    public View getOrderLocationLayout() {
+        return orderLocationLayout;
     }
 
     public interface OnSelectListener {
