@@ -170,6 +170,22 @@ public class ProfileFragmentController extends BaseController implements
                 }
             });
 
+            orders.observe(getActivity(), new Observer<ArrayList<Order>>() {
+                @Override
+                public void onChanged(ArrayList<Order> customerOrders) {
+                    if (customerOrders.isEmpty()) {
+                        purchasedRecView.setVisibility(View.GONE);
+                        profileNotifyLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        displayOrders.clear();
+                        displayOrders.addAll(customerOrders);
+                        orderAdapter.notifyDataSetChanged();
+                        purchasedRecView.setVisibility(View.VISIBLE);
+                        profileNotifyLayout.setVisibility(View.GONE);
+                    }
+                }
+            });
+
             profileUsernameTxt.setText(authCustomer.getValue().getUsername());
             profileEmailTxt.setText(authCustomer.getValue().getEmail());
             profileDataBtnGrp.check(R.id.sellingBtn);
@@ -188,7 +204,10 @@ public class ProfileFragmentController extends BaseController implements
     }
 
     public void onResume() {
-        if (isOnline()) getCustomerProducts();
+        if (isOnline()) {
+            getCustomerProducts();
+            getCustomerOrders();
+        }
     }
 
     @Override
@@ -423,6 +442,14 @@ public class ProfileFragmentController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
+    public void getCustomerOrders() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getCustomerOrders);
+        getAuthenticatedData.setTaskType(Constant.getCustomerOrdersTaskType);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.execute();
+    }
+
     // Navigation functions
     public void goToSetting() {
         Intent intent = new Intent(getContext(), AccountSettingActivity.class);
@@ -436,6 +463,9 @@ public class ProfileFragmentController extends BaseController implements
         if (taskType.equals(Constant.getUploadedProductsTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             mainViewModel.setBooks(apiList.getList());
+        } else if (taskType.equals(Constant.getCustomerOrdersTaskType)) {
+            ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
+            mainViewModel.setOrders(apiList.getList());
         }
     }
 
