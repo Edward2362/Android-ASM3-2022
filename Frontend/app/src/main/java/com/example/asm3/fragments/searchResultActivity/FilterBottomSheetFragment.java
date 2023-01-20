@@ -10,10 +10,12 @@ import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.R;
+import com.example.asm3.config.Constant;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.radiobutton.MaterialRadioButton;
@@ -22,6 +24,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
     private RadioGroup filterRadioGroup;
     private MaterialRadioButton conditionNewUsedBtn, conditionUsedNewBtn, ratingHighLowBtn, ratingLowHighBtn, priceHighLowBtn, priceLowHighBtn;
     private ResultViewModel resultViewModel;
+    private String currentFilter;
 
     public FilterBottomSheetFragment() {
     }
@@ -30,7 +33,8 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resultViewModel = new ViewModelProvider(requireActivity()).get(ResultViewModel.class);
-
+        currentFilter = resultViewModel.getFilterType().getValue();
+        Log.d("TAG", "onCreate: test " + currentFilter);
     }
 
     @Override
@@ -50,31 +54,50 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
         priceLowHighBtn = view.findViewById(R.id.priceLowHighBtn);
 
         filterRadioGroup.setOnCheckedChangeListener(this);
+//        if (currentFilter.equals(Constant.conditionNewUsedKey)) {
+//            conditionNewUsedBtn.setChecked(true);
+//        } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
+//            conditionUsedNewBtn.setChecked(true);
+//        } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
+//            ratingHighLowBtn.setChecked(true);
+//        } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
+//            ratingLowHighBtn.setChecked(true);
+//        } else if (currentFilter.equals(Constant.priceHighLowKey)) {
+//            priceHighLowBtn.setChecked(true);
+//        } else if (currentFilter.equals(Constant.priceLowHighKey)) {
+//            priceLowHighBtn.setChecked(true);
+//        }
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         switch (i) {
-            case 0:
-                resultViewModel.setFilterType("conditionNewUsed");
+            case R.id.conditionNewUsedBtn:
+                resultViewModel.setFilterType(Constant.conditionNewUsedKey);
+                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
-            case 1:
-                resultViewModel.setFilterType("conditionUsedNew");
+            case R.id.conditionUsedNewBtn:
+                resultViewModel.setFilterType(Constant.conditionUsedNewKey);
+                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
-            case 2:
-                resultViewModel.setFilterType("ratingHighLow");
+            case R.id.ratingHighLowBtn:
+                resultViewModel.setFilterType(Constant.ratingHighLowKey);
+                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
-            case 3:
-                resultViewModel.setFilterType("ratingLowHigh");
+            case R.id.ratingLowHighBtn:
+                resultViewModel.setFilterType(Constant.ratingLowHighKey);
+                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
-            case 4:
-                resultViewModel.setFilterType("priceHighLow");
+            case R.id.priceHighLowBtn:
+                resultViewModel.setFilterType(Constant.priceHighLowKey);
+                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
-            case 5:
-                resultViewModel.setFilterType("priceLowHigh");
+            case R.id.priceLowHighBtn:
+                resultViewModel.setFilterType(Constant.priceLowHighKey);
+                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
         }
-
+        Log.d("TAG", "onCreate: test " + resultViewModel.getFilterType().getValue());
         Log.d("TAG", "onCheckedChanged: test " + resultViewModel.getFilterProgressBar().getValue());
         resultViewModel.getFilterProgressBar().getValue().setVisibility(View.VISIBLE);
         dismiss();

@@ -8,7 +8,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 public class ResultViewModel extends ViewModel {
-    private final MutableLiveData<String> filterType = new MutableLiveData<>();
+    private final MutableLiveData<String> filterType = new MutableLiveData<>("");
     private final MutableLiveData<FragmentManager> fragmentManager = new MutableLiveData<>();
     private final MutableLiveData<BottomSheetDialogFragment> filterBottomSheetFragment = new MutableLiveData<>();
     private final MutableLiveData<LinearProgressIndicator> filterProgressBar = new MutableLiveData<>();

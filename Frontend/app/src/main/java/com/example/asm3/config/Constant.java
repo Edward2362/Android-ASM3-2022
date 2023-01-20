@@ -72,6 +72,12 @@ public class Constant {
     public static String subCategorySearchKey = "subCategorySearch";
     public static String isCategorySearchKey = "isCategorySearch";
     public static String booksArrPositionKey = "booksArrPosition";
+    public static String conditionNewUsedKey = "conditionNewUsed";
+    public static String conditionUsedNewKey = "conditionUsedNew";
+    public static String ratingHighLowKey = "ratingHighLow";
+    public static String ratingLowHighKey = "ratingLowHigh";
+    public static String priceHighLowKey = "priceHighLow";
+    public static String priceLowHighKey = "priceLowHigh";
 
     public static final int mainActivityCode = 000;
     public static final int authActivityCode = 100;

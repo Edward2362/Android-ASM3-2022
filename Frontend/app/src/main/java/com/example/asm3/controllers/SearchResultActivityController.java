@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -105,6 +106,24 @@ public class SearchResultActivityController extends BaseController implements
 
         // for test
         // end test
+        resultViewModel.getFilterType().observe(getActivity(), new Observer<String>() {
+            @Override
+            public void onChanged(String currentFilter) {
+//                if (currentFilter.equals(Constant.conditionNewUsedKey)) {
+//                    conditionNewUsedBtn.setChecked(true);
+//                } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
+//                    conditionUsedNewBtn.setChecked(true);
+//                } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
+//                    ratingHighLowBtn.setChecked(true);
+//                } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
+//                    ratingLowHighBtn.setChecked(true);
+//                } else if (currentFilter.equals(Constant.priceHighLowKey)) {
+//                    priceHighLowBtn.setChecked(true);
+//                } else if (currentFilter.equals(Constant.priceLowHighKey)) {
+//                    priceLowHighBtn.setChecked(true);
+//                }
+            }
+        });
 
         //adapter
         searchResultAdapter = generateSearchResultAdapter();
