@@ -82,6 +82,7 @@ public class ProfileFragmentController extends BaseController implements
     private MutableLiveData<ArrayList<Order>> orders;
     private MutableLiveData<ArrayList<Review>> reviews;
     private int mainLayoutId = R.id.mainActivity_fragmentContainerView;
+    private int checkedBtnId = R.id.sellingBtn;
 
     private ArrayList<Book> displayBooks;
     private ArrayList<Order> displayOrders;
@@ -164,8 +165,10 @@ public class ProfileFragmentController extends BaseController implements
                         displayBooks.clear();
                         displayBooks.addAll(books);
                         bookAdapter.notifyDataSetChanged();
-                        sellingRecView.setVisibility(View.VISIBLE);
-                        profileNotifyLayout.setVisibility(View.GONE);
+                        if (checkedBtnId == R.id.sellingBtn) {
+                            sellingRecView.setVisibility(View.VISIBLE);
+                            profileNotifyLayout.setVisibility(View.GONE);
+                        }
                     }
                 }
             });
@@ -176,12 +179,18 @@ public class ProfileFragmentController extends BaseController implements
                     displayOrders.clear();
                     displayOrders.addAll(customerOrders);
                     orderAdapter.notifyDataSetChanged();
+                    if (checkedBtnId == R.id.purchasedBtn) {
+                        purchasedRecView.setVisibility(View.VISIBLE);
+                        profileNotifyLayout.setVisibility(View.GONE);
+                    }
                 }
             });
 
+
+
             profileUsernameTxt.setText(authCustomer.getValue().getUsername());
             profileEmailTxt.setText(authCustomer.getValue().getEmail());
-            profileDataBtnGrp.check(R.id.sellingBtn);
+            profileDataBtnGrp.check(checkedBtnId);
 
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
@@ -209,20 +218,27 @@ public class ProfileFragmentController extends BaseController implements
         sellingRecView.setVisibility(View.GONE);
         feedbackRecView.setVisibility(View.GONE);
         purchasedRecView.setVisibility(View.GONE);
+        Log.d(TAG, "onButtonChecked: test " + checkedId);
+        Log.d(TAG, "onButtonChecked:R.id.sellingBtn test " + R.id.sellingBtn);
+        Log.d(TAG, "onButtonChecked:R.id.purchasedBtn test " + R.id.purchasedBtn);
+        Log.d(TAG, "onButtonChecked:R.id.feedbackBtn test " + R.id.feedbackBtn);
         switch (group.getCheckedButtonId()) {
             case R.id.sellingBtn:
+                checkedBtnId = R.id.sellingBtn;
                 if (!sellingBooks.getValue().isEmpty()) {
                     sellingRecView.setVisibility(View.VISIBLE);
                     profileNotifyLayout.setVisibility(View.GONE);
                 }
                 break;
             case R.id.purchasedBtn:
+                checkedBtnId = R.id.purchasedBtn;
                 if (!orders.getValue().isEmpty()) {
                     purchasedRecView.setVisibility(View.VISIBLE);
                     profileNotifyLayout.setVisibility(View.GONE);
                 }
                 break;
             case R.id.feedbackBtn:
+                checkedBtnId = R.id.feedbackBtn;
                 if (!reviews.getValue().isEmpty()) {
                     feedbackRecView.setVisibility(View.VISIBLE);
                     profileNotifyLayout.setVisibility(View.GONE);
