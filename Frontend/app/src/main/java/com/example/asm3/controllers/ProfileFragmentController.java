@@ -173,16 +173,9 @@ public class ProfileFragmentController extends BaseController implements
             orders.observe(getActivity(), new Observer<ArrayList<Order>>() {
                 @Override
                 public void onChanged(ArrayList<Order> customerOrders) {
-                    if (customerOrders.isEmpty()) {
-                        purchasedRecView.setVisibility(View.GONE);
-                        profileNotifyLayout.setVisibility(View.VISIBLE);
-                    } else {
                         displayOrders.clear();
                         displayOrders.addAll(customerOrders);
                         orderAdapter.notifyDataSetChanged();
-                        purchasedRecView.setVisibility(View.VISIBLE);
-                        profileNotifyLayout.setVisibility(View.GONE);
-                    }
                 }
             });
 

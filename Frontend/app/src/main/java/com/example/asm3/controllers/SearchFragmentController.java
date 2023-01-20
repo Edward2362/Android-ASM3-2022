@@ -118,7 +118,7 @@ public class SearchFragmentController extends BaseController implements
                 @Override
                 public void run() {
                     getSuggestions(newText);
-                    Log.d("error","huhu");
+                    Log.d("error","newText " + newText);
                     // TODO: put these 2 lines in onFinished, a fetching function will be called here
                 }
             }, 1000);
@@ -171,10 +171,13 @@ public class SearchFragmentController extends BaseController implements
         if(taskType.equals(Constant.suggestProductTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
             ArrayList<Book> products = apiList.getList();
-            searchSuggestions.clear();
+            ArrayList<String> newSuggestion = new ArrayList<>();
+            newSuggestion.clear();
             for (int i=0; i<products.size(); i++) {
-                searchSuggestions.add(products.get(i).getName());
+                newSuggestion.add(products.get(i).getName());
             }
+            searchSuggestions.clear();
+            searchSuggestions.addAll(newSuggestion);
             Log.d("error","haha");
             searchAdapter.notifyDataSetChanged();
             progressBar.setVisibility(View.GONE);
