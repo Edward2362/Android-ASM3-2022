@@ -146,7 +146,8 @@ public class SaleProgressActivityController extends BaseController implements
                 break;
             case R.id.orderLocationBtn:
                 Log.d(TAG, "onOrderClick: test "+ position);
-                String uri = "geo:0,0?q=1600+Amphitheatre+Parkway%2C+CA";
+                String address = sales.get(position).getBuyer().getAddress();
+                String uri = "geo:0,0?q=" + address;
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
                 intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                 getActivity().startActivity(intent);
