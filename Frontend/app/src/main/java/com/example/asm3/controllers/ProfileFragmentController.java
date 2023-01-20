@@ -98,6 +98,7 @@ public class ProfileFragmentController extends BaseController implements
     private MutableLiveData<ArrayList<Review>> reviews;
     private int mainLayoutId = R.id.mainActivity_fragmentContainerView;
     private int checkedBtnId = R.id.sellingBtn;
+    private int selectedOrderIdInt = 0;
 
     private ArrayList<Book> displayBooks;
     private ArrayList<Order> displayOrders;
@@ -333,6 +334,7 @@ public class ProfileFragmentController extends BaseController implements
                 Log.d(TAG, "onOrderClick: test " + position);
                 showDialog();
                 selectedOrderId = displayOrders.get(position).get_id();
+                selectedOrderIdInt = position;
                 break;
             case R.id.orderDeleteBtn:
                 Log.d(TAG, "onOrderClick: test delete " + position);
@@ -406,6 +408,8 @@ public class ProfileFragmentController extends BaseController implements
                 String userReviewTxt = reviewDialogBody.getReviewTxt().getText().toString();
                 Log.d(TAG, "onClick: dialog rating = " + rating);
                 uploadReview(userReviewTxt, rating, selectedOrderId);
+                displayOrders.get(selectedOrderIdInt).setHasReview(true);
+                orderAdapter.notifyItemChanged(selectedOrderIdInt);
                 Log.d(TAG, "onClick: dialog rating = " + rating);
                 Log.d(TAG, "onClick: dialog user review text = " + userReviewTxt);
                 break;
