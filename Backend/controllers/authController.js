@@ -195,7 +195,7 @@ const increaseCartQuantity = async (req, response) => {
       _id: customerId
     });
     const productIndex = customers[0].cart.findIndex((element) => {
-      return input.product == element.product;
+      return input.product === element.product.toString();
     });
     customers[0].cart[productIndex].quantity = customers[0].cart[productIndex].quantity + 1;
     await customers[0].save();
@@ -218,7 +218,7 @@ const decreaseCartQuantity = async (req, response) => {
       _id: customerId
     });
     const productIndex = customers[0].cart.findIndex((element) => {
-      return input.product == element.product;
+      return input.product === element.product.toString();
     });
     customers[0].cart[productIndex].quantity = customers[0].cart[productIndex].quantity - 1;
     await customers[0].save();
