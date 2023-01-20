@@ -267,7 +267,7 @@ const suggestProduct = async (req, response) => {
 				data: [],
 			});
 		}
-		let products = await Book.find({ name: { $regex: input.queryInput } });
+		let products = await Book.find({ name: { $regex: new RegExp(input.queryInput.toLowerCase(), "i")} });
 		products = removeDuplicate(products);
 		return response.json({
 			message: "",
@@ -290,7 +290,7 @@ const searchProduct = async (req, response) => {
 				data: [],
 			});
 		}
-		let products = await Book.find({ name: { $regex: input.queryInput } });
+		let products = await Book.find({ name: { $regex: new RegExp(input.queryInput.toLowerCase(), "i") } });
 		return response.json({
 			message: "",
 			error: false,

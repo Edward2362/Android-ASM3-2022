@@ -41,6 +41,8 @@ public class Customer implements Serializable {
     public static String avatarKey = "avatar";
     public static String tokenKey = "token";
     public static String customerRole = "CUSTOMER_ROLE";
+    public static String newPasswordKey = "newPassword";
+    public static String currentPasswordKey = "currentPassword";
 
     public Customer(String _id, String email, String password, String username, String address, String role, float ratings, ArrayList<CartItem> cart, String avatar) {
         this._id = _id;

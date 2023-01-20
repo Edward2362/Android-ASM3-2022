@@ -175,22 +175,25 @@ const setCustomerData = async (req, response) => {
 const changePassword = async (req, response) => {
   try {
     const input = req.body;
-    const password = input.password;
+    const newPassword = input.newPassword;
+    const currentPassword = input.currentPassword;
     const customerId = req.customer.customerId;
-    const newPassword = await bcryptjs.hash(password,10);
-    const customer = await Customer.findOneAndUpdate({_id: customerId},{$set: {password: newPassword}}, {new: true});
-    if (customer === undefined || customer === null) {
+    const customers = await Customer.find({_id: customerId});
+    let oldPassword = customers[0].password;
+    if (!(await bcryptjs.compare(currentPassword, oldPassword))) {
       return response.json({
         message: "Error",
         error: true,
         data: []
       });
     }
-    
+    const hashNewPassword = await bcryptjs.hash(newPassword,10);
+    customers[0].password = hashNewPassword;
+    await customers[0].save();
     return response.json({
       message: "",
       error: false,
-      data: [customer]
+      data: customers
     })
   } catch (error) {
     console.log(error);
@@ -199,10 +202,40 @@ const changePassword = async (req, response) => {
 
 };
 
+const changeAvatar = async (req, response) =>{
+  try {
+    const customerId = req.customer.id;
+    const input = req.body;
+    const userImg = input.avatar;
+    const customerData = {
+      avatar: userImg
+    };
+    const customer = await Customer.findOneAndUpdate({_id: customerId}, {$set: customerData}, {new: true});
+
+    if (customer === undefined || customer === null) {
+      return response.json({
+        message: "Error",
+        error: true,
+        data: []
+      });
+    }
+
+    return response.json({
+      message: "",
+      error: false,
+      data: [customer]
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
 module.exports = {
   register,
   login,
   getCustomerData,
   setCustomerData,
-  changePassword
+  changePassword,
+  changeAvatar
 };

@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.text.Normalizer;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -161,6 +162,12 @@ public class Helper {
 
         }
         return isEmpty;
+    }
+    public static String deAccent(String str) {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
 
 }
