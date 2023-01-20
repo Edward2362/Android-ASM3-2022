@@ -21,8 +21,11 @@ import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.OrderHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
+import com.example.asm3.base.networking.services.GetAuthenticatedData;
+import com.example.asm3.config.Constant;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
+import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -42,6 +45,8 @@ public class SaleProgressActivityController extends BaseController implements
     private GenericAdapter<Order> salesAdapter;
     private ArrayList<Order> sales;
     private MaterialAlertDialogBuilder builder;
+    private String token;
+    private GetAuthenticatedData getAuthenticatedData;
 
     public SaleProgressActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
@@ -68,7 +73,14 @@ public class SaleProgressActivityController extends BaseController implements
         salesRecView.setAdapter(salesAdapter);
         salesRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        if(isOnline()) getSalesInProgress();
+        if(isOnline()) {
+            if (!isAuth()) {
+
+            } else {
+                token = getToken();
+                getSalesInProgress();
+            }
+        }
     }
 
     @Override
@@ -136,6 +148,11 @@ public class SaleProgressActivityController extends BaseController implements
 
     // Request functions
     private void getSalesInProgress() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getSellingOrders);
+        getAuthenticatedData.setTaskType(Constant.getSellingOrdersTaskType);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.execute();
     }
 
     // Navigation functions
@@ -144,8 +161,13 @@ public class SaleProgressActivityController extends BaseController implements
     // Calback functions
     @Override
     public void onFinished(String message, String taskType) {
-
-        salesProgressBar.setVisibility(View.GONE);
+        if (taskType.equals(Constant.getSellingOrdersTaskType)) {
+            ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
+            sales.clear();
+            sales.addAll(apiList.getList());
+            salesAdapter.notifyDataSetChanged();
+            salesProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

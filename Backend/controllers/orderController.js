@@ -68,7 +68,43 @@ const orderProducts = async (req, response) => {
         data: orders
       });
     };
+
+  const getCustomerOrders = async (req, response) => {
+    try {
+      const customerId = req.customer.customerId;
+
+      const orders = await Order.find({buyer: customerId});
+
+      return response.json({
+        message: "",
+        error: false,
+        data: orders
+      });
+    } catch(error) {
+      console.log(error);
+      process.exit(1);
+    }
+  };
+
+  const getSellingOrders = async (req, response) => {
+    try {
+      const customerId = req.customer.customerId;
+
+      const orders = await Order.find({seller: customerId});
+
+      return response.json({
+        message: "",
+        error: false,
+        data: orders
+      });
+    } catch(error) {
+      console.log(error);
+      process.exit(1);
+    }
+  };
 module.exports = {
   orderProducts,
-  generateOrders
+  generateOrders,
+  getCustomerOrders,
+  getSellingOrders
 };

@@ -40,10 +40,12 @@ public class CheckoutActivityController extends BaseController implements
     private Button backBtn, checkoutBtn;
     private String token;
     private RecyclerView orderRecView;
+    private TextView orderTotalPriceTxt, addressDetailTxt;
     private GenericAdapter<Order> orderAdapter;
     private GetAuthenticatedData getAuthenticatedData;
     private PostAuthenticatedData postAuthenticatedData;
     private Customer customer;
+    private View checkoutProgressBar;
     private ArrayList<Order> orders;
 
     public CheckoutActivityController(Context context, FragmentActivity activity){
@@ -58,6 +60,9 @@ public class CheckoutActivityController extends BaseController implements
         backBtn = topBar.getBackButton();
         backBtn.setOnClickListener(this);
 
+        addressDetailTxt = getActivity().findViewById(R.id.addressDetailTxt);
+        orderTotalPriceTxt = getActivity().findViewById(R.id.orderTotalPriceTxt);
+        checkoutProgressBar = getActivity().findViewById(R.id.checkoutProgressBar);
         checkoutBtn = getActivity().findViewById(R.id.checkoutBtn);
         checkoutBtn.setOnClickListener(this);
         orderRecView = getActivity().findViewById(R.id.orderRecView);
@@ -109,6 +114,8 @@ public class CheckoutActivityController extends BaseController implements
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Order order) {
                 OrderHolder orderHolder = (OrderHolder) holder;
+                orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.md_theme_light_onPrimary));
+                orderHolder.getOrderDeleteLayout().setVisibility(View.GONE);
                 orderHolder.getOrderBookTxt().setText(order.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + order.getQuantity());
                 orderHolder.getOrderPriceTxt().setText(order.getBookPrice()*order.getQuantity() + " đ");
@@ -140,12 +147,19 @@ public class CheckoutActivityController extends BaseController implements
             customer = apiData.getData();
             generateOrders();
         } else if (taskType.equals(Constant.orderProductsTaskType)) {
-
+            getActivity().finish();
         } else if (taskType.equals(Constant.generateOrdersTaskType)) {
             ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message),Order.class);
             orders.clear();
             orders.addAll(apiList.getList());
             orderAdapter.notifyDataSetChanged();
+            float newTotalPrice = 0;
+            for (int i = 0; i < apiList.getList().size(); i++) {
+                newTotalPrice = newTotalPrice + apiList.getList().get(i).getBookPrice()* apiList.getList().get(i).getQuantity();
+            }
+            orderTotalPriceTxt.setText("Order total: " + newTotalPrice + " đ");
+            checkoutProgressBar.setVisibility(View.INVISIBLE);
+            orderRecView.setVisibility(View.VISIBLE);
         }
     }
 

@@ -24,6 +24,8 @@ public class Constant {
     public static String removeCart = "/api/book/removeCart";
     public static String orderProducts = "/api/order/orderProducts";
     public static String generateOrders = "/api/order/generateOrders";
+    public static String getCustomerOrders = "/api/order/getCustomerOrders";
+    public static String getSellingOrders = "/api/order/getSellingOrders";
     public static String tokenFile = "token.txt";
 
     public static final Pattern emailPattern =
@@ -89,6 +91,8 @@ public class Constant {
     public static String removeCartTaskType = "removeCart";
     public static String orderProductsTaskType = "orderProducts";
     public static String generateOrdersTaskType = "generateOrders";
+    public static String getCustomerOrdersTaskType = "getCustomerOrders";
+    public static String getSellingOrdersTaskType = "getSellingOrders";
 
 
     public static final int cameraPermissionCode = 105;

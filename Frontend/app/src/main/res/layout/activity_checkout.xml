@@ -15,7 +15,7 @@
         android:layout_weight=".12"
         android:paddingHorizontal="5dp" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -23,13 +23,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="22dp"
+            android:layout_marginHorizontal="20dp"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
                 android:layout_marginTop="5dp"
                 app:cardElevation="2dp"
                 app:contentPadding="20dp">
@@ -43,6 +44,7 @@
                         android:id="@+id/deliveryAddressTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
                         android:text="Delivery address"
                         android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
 
@@ -61,6 +63,7 @@
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
                 android:layout_marginTop="20dp"
                 app:cardElevation="2dp"
                 app:contentPadding="20dp">
@@ -92,7 +95,9 @@
                 style="?attr/materialCardViewElevatedStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="2dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
                 app:cardElevation="2dp"
                 app:contentPadding="20dp">
 
@@ -105,14 +110,22 @@
                         android:id="@+id/orderTxt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
                         android:text="Order"
                         android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/orderRecView"
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/checkoutProgressBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
+                        android:indeterminate="true"
+                        android:visibility="visible" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/orderRecView"
+                        android:visibility="invisible"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="5dp" />
 
                     <LinearLayout
@@ -125,8 +138,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:gravity="right"
-                            android:text="Delivery date"
+                            android:gravity="left"
+                            android:text="Delivery date: "
                             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
                         <TextView
@@ -134,8 +147,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:gravity="right"
-                            android:text="Order total"
+                            android:gravity="left"
+                            android:text="Order total: "
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/md_theme_light_primary"
                             android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
 
                     </LinearLayout>
@@ -143,20 +159,19 @@
 
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:dividerColor="@color/md_theme_light_primary"/>
+        app:dividerColor="@color/md_theme_light_primary" />
 
     <Button
         android:id="@+id/checkoutBtn"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="22dp"
         android:layout_marginVertical="5dp"
-        android:layout_weight="0.1"
         android:text="Place this order" />
 
 
