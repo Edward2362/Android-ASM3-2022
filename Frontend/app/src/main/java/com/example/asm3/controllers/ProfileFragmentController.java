@@ -236,11 +236,14 @@ public class ProfileFragmentController extends BaseController implements
             authCustomer.observe(getActivity(), new Observer<Customer>() {
                 @Override
                 public void onChanged(Customer customer) {
-                    profileUsernameTxt.setText(authCustomer.getValue().getUsername());
-                    profileEmailTxt.setText(authCustomer.getValue().getEmail());
+                    if (authCustomer.getValue() != null) {
 
-                    if (!authCustomer.getValue().getAvatar().equals("")) {
-                        profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
+                        profileUsernameTxt.setText(authCustomer.getValue().getUsername());
+                        profileEmailTxt.setText(authCustomer.getValue().getEmail());
+
+                        if (!authCustomer.getValue().getAvatar().equals("")) {
+                            profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
+                        }
                     }
                 }
             });
@@ -349,7 +352,7 @@ public class ProfileFragmentController extends BaseController implements
                 goToSetting();
                 break;
             case R.id.profileAvatarLayout:
-                Log.d("test","here");
+                Log.d("test", "here");
                 getImageFromGallery();
                 break;
             case R.id.userLogoutBtn:
@@ -398,7 +401,6 @@ public class ProfileFragmentController extends BaseController implements
     }
 
 
-
     // Helpers
     private GenericAdapter<Book> generateBookAdapter() {
         return new GenericAdapter<Book>(displayBooks) {
@@ -438,7 +440,7 @@ public class ProfileFragmentController extends BaseController implements
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
-                if (!item.getStatus().equalsIgnoreCase("completed")){
+                if (!item.getStatus().equalsIgnoreCase("completed")) {
                     orderHolder.getOrderBody().setOnClickListener(null);
                 }
                 if (Helper.isDarkTheme(getContext())) {
@@ -537,17 +539,17 @@ public class ProfileFragmentController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
-    public void changeAvatar(String customerAvatar){
-        try{
-            Log.d("test","no");
+    public void changeAvatar(String customerAvatar) {
+        try {
+            Log.d("test", "no");
             postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
             postAuthenticatedData.setEndPoint(Constant.changeAvatar);
             postAuthenticatedData.setTaskType(Constant.changeAvatarTaskType);
             postAuthenticatedData.setToken(token);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Customer.avatarKey,customerAvatar);
+            jsonObject.put(Customer.avatarKey, customerAvatar);
             postAuthenticatedData.execute(jsonObject);
-        } catch (JSONException jsonException){
+        } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
 
