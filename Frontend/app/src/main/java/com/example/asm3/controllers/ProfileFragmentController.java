@@ -89,6 +89,7 @@ public class ProfileFragmentController extends BaseController implements
     private GenericAdapter<Order> orderAdapter;
     private GenericAdapter<Review> reviewAdapter;
     private Bitmap customerPhoto;
+    private String selectedOrderId;
 
     private MainViewModel mainViewModel;
     private LiveData<Customer> authCustomer;
@@ -262,6 +263,22 @@ public class ProfileFragmentController extends BaseController implements
         }
     }
 
+    public void uploadReview(String content,float rating,String orderId) {
+        try{
+            postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+            postAuthenticatedData.setEndPoint(Constant.uploadReview);
+            postAuthenticatedData.setTaskType(Constant.uploadReviewTaskType);
+            postAuthenticatedData.setToken(token);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Review.contentKey,content);
+            jsonObject.put(Review.ratingKey,rating);
+            jsonObject.put(Constant.orderIdKey,orderId);
+            postAuthenticatedData.execute(jsonObject);
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+    }
+
     @Override
     public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
         profileNotifyLayout.setVisibility(View.VISIBLE);
@@ -321,6 +338,7 @@ public class ProfileFragmentController extends BaseController implements
             case R.id.orderBody:
                 Log.d(TAG, "onOrderClick: test " + position);
                 showDialog();
+                selectedOrderId = displayOrders.get(position).get_id();
                 break;
             case R.id.orderDeleteBtn:
                 Log.d(TAG, "onOrderClick: test delete " + position);
@@ -392,6 +410,7 @@ public class ProfileFragmentController extends BaseController implements
             case -1: // submit
                 float rating = reviewDialogBody.getRatingBar().getRating();
                 String userReviewTxt = reviewDialogBody.getReviewTxt().getText().toString();
+                uploadReview(userReviewTxt,rating,selectedOrderId);
                 Log.d(TAG, "onClick: dialog rating = " + rating);
                 Log.d(TAG, "onClick: dialog user review text = " + userReviewTxt);
                 break;
@@ -572,6 +591,8 @@ public class ProfileFragmentController extends BaseController implements
             ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
             mainViewModel.setOrders(apiList.getList());
         } else if (taskType.equals(Constant.changeAvatarTaskType)) {
+
+        } else if (taskType.equals(Constant.uploadReviewTaskType)) {
 
         }
     }

@@ -5,6 +5,8 @@ const reviewController = require("../controllers/reviewController");
 
 router.post("/uploadReview", authMiddleware.verifyToken, reviewController.uploadReview);
 router.get("/getReviews", authMiddleware.verifyToken, reviewController.getReviews);
+router.get("/getAllReviews", reviewController.getAllReviews);
+
 
 
 module.exports = router;
