@@ -51,6 +51,10 @@ public class SearchResultActivityController extends BaseController implements
     private RecyclerView searchResultRecView;
     private GenericAdapter<Book> searchResultAdapter;
     private ArrayList<Book> searchResults;
+    private ArrayList<String> searchSubcategories;
+    private String searchCategory;
+    private boolean isCategorySearch = false;
+
 
     private ResultViewModel resultViewModel;
 
@@ -81,9 +85,15 @@ public class SearchResultActivityController extends BaseController implements
 
         Intent intent = getActivity().getIntent();
 
-        queryInput = intent.getExtras().getString("query");
-        searchView.setQuery(queryInput, false);
-
+        if (intent.getExtras().get(Constant.isCategorySearchKey) == null) {
+            isCategorySearch = false;
+            queryInput = intent.getExtras().getString("query");
+            searchView.setQuery(queryInput, false);
+        } else {
+            isCategorySearch = true;
+            searchCategory = intent.getExtras().getString(Constant.categorySearchKey);
+            searchSubcategories = intent.getExtras().getStringArrayList(Constant.subCategorySearchKey);
+        }
         // set on click listener here
         filterBtn.setOnClickListener(this);
         backBtn.setOnClickListener(this);
@@ -114,7 +124,13 @@ public class SearchResultActivityController extends BaseController implements
 
     public void onResume() {
         filterProgressBar.setVisibility(View.VISIBLE);
-        if (isOnline()) getSearchResults(queryInput);
+        if (isOnline()) {
+            if (isCategorySearch) {
+                getProductsByCategoryAndSubcategories(searchCategory,searchSubcategories);
+            } else {
+                getSearchResults(queryInput);
+            }
+        }
     }
 
     @Override
@@ -186,6 +202,17 @@ public class SearchResultActivityController extends BaseController implements
         getData.execute();
     }
 
+    public void getProductsByCategoryAndSubcategories(String categoryName,ArrayList<String> subCategoriesList) {
+        String subCategoriesQuery = "";
+        for (int i=0;i<subCategoriesList.size();i++){
+            subCategoriesQuery = subCategoriesQuery + "&subCategory=" + subCategoriesList.get(i);
+        }
+        getData = new GetData(getContext(), this);
+        getData.setEndPoint(Constant.getProducts + "?category=" + categoryName + subCategoriesQuery);
+        getData.setTaskType(Constant.getProductsTaskType);
+        getData.execute();
+    }
+
     // Navigation functions
 
 
@@ -194,6 +221,11 @@ public class SearchResultActivityController extends BaseController implements
     public void onFinished(String message, String taskType) {
         filterProgressBar.setVisibility(View.INVISIBLE);
         if (taskType.equals(Constant.searchProductTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
+            searchResults.clear();
+            searchResults.addAll(apiList.getList());
+            searchResultAdapter.notifyDataSetChanged();
+        } else if (taskType.equals(Constant.getProductsTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             searchResults.clear();
             searchResults.addAll(apiList.getList());
