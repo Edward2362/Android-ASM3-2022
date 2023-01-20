@@ -204,7 +204,7 @@ const changePassword = async (req, response) => {
 
 const changeAvatar = async (req, response) =>{
   try {
-    const customerId = req.customer.id;
+    const customerId = req.customer.customerId;
     const input = req.body;
     const userImg = input.avatar;
     const customerData = {

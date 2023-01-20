@@ -5,10 +5,15 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -45,6 +50,8 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -252,6 +259,23 @@ public class MainActivityController extends BaseController implements
         return false;
     }
 
+    public void onRequestPermissionsResult(int requestCode, @NonNull int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Intent intent;
+            switch (requestCode) {
+                case Constant.galleryPermissionCode:
+                    intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    getActivity().startActivityForResult(intent, Constant.galleryRequest);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onNavigationItemReselected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -284,6 +308,9 @@ public class MainActivityController extends BaseController implements
                     Book book = (Book) data.getExtras().getSerializable(Constant.productKey);
                     Helper.goToBookDetail(getContext(), getActivity(), book.get_id(), 0);
                 }
+            }
+            if (requestCode == Constant.galleryRequest) {
+                profileFragment.getProfileFragmentController().onProfileFragmentActivityResult(data);
             }
         }
     }

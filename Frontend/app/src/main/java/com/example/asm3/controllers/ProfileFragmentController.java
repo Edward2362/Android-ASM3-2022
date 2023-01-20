@@ -2,11 +2,17 @@ package com.example.asm3.controllers;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -38,6 +45,7 @@ import com.example.asm3.base.adapter.viewHolder.ReviewHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
+import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
@@ -51,6 +59,11 @@ import com.example.asm3.models.Review;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ProfileFragmentController extends BaseController implements
@@ -75,6 +88,7 @@ public class ProfileFragmentController extends BaseController implements
     private GenericAdapter<Book> bookAdapter;
     private GenericAdapter<Order> orderAdapter;
     private GenericAdapter<Review> reviewAdapter;
+    private Bitmap customerPhoto;
 
     private MainViewModel mainViewModel;
     private LiveData<Customer> authCustomer;
@@ -90,6 +104,7 @@ public class ProfileFragmentController extends BaseController implements
 
     private String token;
     private GetAuthenticatedData getAuthenticatedData;
+    private PostAuthenticatedData postAuthenticatedData;
 
     public ProfileFragmentController(Context context, FragmentActivity activity, View view, ViewModel viewModel) {
         super(context, activity);
@@ -192,6 +207,10 @@ public class ProfileFragmentController extends BaseController implements
             profileEmailTxt.setText(authCustomer.getValue().getEmail());
             profileDataBtnGrp.check(checkedBtnId);
 
+            if (!authCustomer.getValue().getAvatar().equals("")) {
+                profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
+            }
+
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
             salesBtn.setOnClickListener(this);
@@ -209,6 +228,18 @@ public class ProfileFragmentController extends BaseController implements
         if (isOnline()) {
             getCustomerProducts();
             getCustomerOrders();
+        }
+    }
+
+    public void getImageFromGallery() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                getActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constant.galleryPermissionCode);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                getActivity().startActivityForResult(intent, Constant.galleryRequest);
+            }
         }
     }
 
@@ -302,6 +333,8 @@ public class ProfileFragmentController extends BaseController implements
                 goToSetting();
                 break;
             case R.id.profileAvatarLayout:
+                Log.d("test","here");
+                getImageFromGallery();
                 break;
             case R.id.userLogoutBtn:
                 getLocalFileController().writeFile(new ArrayList<>());
@@ -347,6 +380,8 @@ public class ProfileFragmentController extends BaseController implements
                 break;
         }
     }
+
+
 
     // Helpers
     private GenericAdapter<Book> generateBookAdapter() {
@@ -459,6 +494,22 @@ public class ProfileFragmentController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
+    public void changeAvatar(String customerAvatar){
+        try{
+            Log.d("test","no");
+            postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+            postAuthenticatedData.setEndPoint(Constant.changeAvatar);
+            postAuthenticatedData.setTaskType(Constant.changeAvatarTaskType);
+            postAuthenticatedData.setToken(token);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Customer.avatarKey,customerAvatar);
+            postAuthenticatedData.execute(jsonObject);
+        } catch (JSONException jsonException){
+            jsonException.printStackTrace();
+        }
+
+    }
+
     // Navigation functions
     public void goToSetting() {
         Intent intent = new Intent(getContext(), AccountSettingActivity.class);
@@ -475,6 +526,8 @@ public class ProfileFragmentController extends BaseController implements
         } else if (taskType.equals(Constant.getCustomerOrdersTaskType)) {
             ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
             mainViewModel.setOrders(apiList.getList());
+        } else if (taskType.equals(Constant.changeAvatarTaskType)) {
+
         }
     }
 
@@ -483,5 +536,18 @@ public class ProfileFragmentController extends BaseController implements
 
     }
 
+    public void onProfileFragmentActivityResult(Intent data) {
+        try {
+            final Uri imageUri = data.getData();
+            final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+            customerPhoto = BitmapFactory.decodeStream(imageStream);
+            customerPhoto = Bitmap.createScaledBitmap(customerPhoto, (int) (customerPhoto.getWidth() * 0.3), (int) (customerPhoto.getHeight() * 0.3), true);
+            profileAvatarImg.setImageBitmap(customerPhoto);
+            changeAvatar(Helper.bitmapToString(customerPhoto));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+        }
+    }
     // Getter and Setter
 }
