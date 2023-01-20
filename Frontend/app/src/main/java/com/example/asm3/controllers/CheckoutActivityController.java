@@ -27,6 +27,8 @@ import com.example.asm3.models.ApiList;
 import com.example.asm3.models.CartItem;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONObject;
 
@@ -39,6 +41,8 @@ public class CheckoutActivityController extends BaseController implements
     private TopBarView topBar;
     private Button backBtn, checkoutBtn;
     private String token;
+    private TextInputEditText couponEt;
+    private TextInputLayout couponLayout;
     private RecyclerView orderRecView;
     private TextView orderTotalPriceTxt, addressDetailTxt;
     private GenericAdapter<Order> orderAdapter;
@@ -60,6 +64,8 @@ public class CheckoutActivityController extends BaseController implements
         backBtn = topBar.getBackButton();
         backBtn.setOnClickListener(this);
 
+        couponEt = getActivity().findViewById(R.id.couponEt);
+        couponLayout = getActivity().findViewById(R.id.couponLayout);
         addressDetailTxt = getActivity().findViewById(R.id.addressDetailTxt);
         orderTotalPriceTxt = getActivity().findViewById(R.id.orderTotalPriceTxt);
         checkoutProgressBar = getActivity().findViewById(R.id.checkoutProgressBar);
@@ -76,6 +82,13 @@ public class CheckoutActivityController extends BaseController implements
             getAuthCustomer();
 
         }
+
+        couponEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+
+            }
+        });
     }
 
     public void orderProducts() {
