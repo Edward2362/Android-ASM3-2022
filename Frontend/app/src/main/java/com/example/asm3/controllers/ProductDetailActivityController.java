@@ -105,7 +105,12 @@ public class ProductDetailActivityController extends BaseController implements
         detailSellerTxt.setOnClickListener(this);
         detailAddCartBtn.setOnClickListener(this);
         detailUpdateCartBtn.setOnClickListener(this);
+    }
 
+    public void onResume() {
+        detailProgressBar.setVisibility(View.VISIBLE);
+        productDetailBody.setVisibility(View.INVISIBLE);
+        detailActionBody.setVisibility(View.INVISIBLE);
         if (getActivity().getIntent().getExtras().get(Constant.productIdKey) == null) {
             getActivity().finish();
         } else {
@@ -223,6 +228,7 @@ public class ProductDetailActivityController extends BaseController implements
             detailBookNameTxt.setText(book.getName());
             detailBookYearTxt.setText("Published year: " + book.getPublishedAt());
             detailBookDescriptionTxt.setText("Description: " + book.getDescription());
+            detailSellerRatingTxt.setText(String.valueOf(book.getCustomer().getRatings()));
             detailBookPriceTxt.setText(book.getPrice() + " đ");
             if (book.getQuantity() != 0) {
                 detailBookQuantityTxt.setText("Stock: " + book.getQuantity());

@@ -164,52 +164,6 @@ public class ProfileFragmentController extends BaseController implements
             orderAdapter = generateOrderAdapter();
             reviewAdapter = generateReviewAdapter();
 
-            sellingBooks.observe(getActivity(), new Observer<ArrayList<Book>>() {
-                @Override
-                public void onChanged(ArrayList<Book> books) {
-                    if (books.isEmpty()) {
-                        sellingRecView.setVisibility(View.GONE);
-                        profileNotifyLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        displayBooks.clear();
-                        displayBooks.addAll(books);
-                        bookAdapter.notifyDataSetChanged();
-                        if (checkedBtnId == R.id.sellingBtn) {
-                            sellingRecView.setVisibility(View.VISIBLE);
-                            profileNotifyLayout.setVisibility(View.GONE);
-                        }
-                    }
-                }
-            });
-
-            orders.observe(getActivity(), new Observer<ArrayList<Order>>() {
-                @Override
-                public void onChanged(ArrayList<Order> customerOrders) {
-                    displayOrders.clear();
-                    displayOrders.addAll(customerOrders);
-                    orderAdapter.notifyDataSetChanged();
-                    if (checkedBtnId == R.id.purchasedBtn) {
-                        purchasedRecView.setVisibility(View.VISIBLE);
-                        profileNotifyLayout.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-            reviews.observe(getActivity(), new Observer<ArrayList<Review>>() {
-                @Override
-                public void onChanged(ArrayList<Review> reviews) {
-                    displayReviews.clear();
-                    displayReviews.addAll(reviews);
-                    reviewAdapter.notifyDataSetChanged();
-                    if (checkedBtnId == R.id.feedbackBtn) {
-                        feedbackRecView.setVisibility(View.VISIBLE);
-                        profileNotifyLayout.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-            profileDataBtnGrp.check(checkedBtnId);
-
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
             salesBtn.setOnClickListener(this);
@@ -239,6 +193,52 @@ public class ProfileFragmentController extends BaseController implements
                         if (!authCustomer.getValue().getAvatar().equals("")) {
                             profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
                         }
+
+                        sellingBooks.observe(getActivity(), new Observer<ArrayList<Book>>() {
+                            @Override
+                            public void onChanged(ArrayList<Book> books) {
+                                if (books.isEmpty()) {
+                                    sellingRecView.setVisibility(View.GONE);
+                                    profileNotifyLayout.setVisibility(View.VISIBLE);
+                                } else {
+                                    displayBooks.clear();
+                                    displayBooks.addAll(books);
+                                    bookAdapter.notifyDataSetChanged();
+                                    if (checkedBtnId == R.id.sellingBtn) {
+                                        sellingRecView.setVisibility(View.VISIBLE);
+                                        profileNotifyLayout.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                        });
+
+                        orders.observe(getActivity(), new Observer<ArrayList<Order>>() {
+                            @Override
+                            public void onChanged(ArrayList<Order> customerOrders) {
+                                displayOrders.clear();
+                                displayOrders.addAll(customerOrders);
+                                orderAdapter.notifyDataSetChanged();
+                                if (checkedBtnId == R.id.purchasedBtn) {
+                                    purchasedRecView.setVisibility(View.VISIBLE);
+                                    profileNotifyLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+
+                        reviews.observe(getActivity(), new Observer<ArrayList<Review>>() {
+                            @Override
+                            public void onChanged(ArrayList<Review> reviews) {
+                                displayReviews.clear();
+                                displayReviews.addAll(reviews);
+                                reviewAdapter.notifyDataSetChanged();
+                                if (checkedBtnId == R.id.feedbackBtn) {
+                                    feedbackRecView.setVisibility(View.VISIBLE);
+                                    profileNotifyLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+
+                        profileDataBtnGrp.check(checkedBtnId);
                     }
                 }
             });

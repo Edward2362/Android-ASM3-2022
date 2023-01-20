@@ -124,6 +124,7 @@ public class SearchResultActivityController extends BaseController implements
 
     public void onResume() {
         filterProgressBar.setVisibility(View.VISIBLE);
+        searchResultRecView.setVisibility(View.INVISIBLE);
         if (isOnline()) {
             if (isCategorySearch) {
                 getProductsByCategoryAndSubcategories(searchCategory,searchSubcategories);
@@ -220,6 +221,7 @@ public class SearchResultActivityController extends BaseController implements
     @Override
     public void onFinished(String message, String taskType) {
         filterProgressBar.setVisibility(View.INVISIBLE);
+        searchResultRecView.setVisibility(View.VISIBLE);
         if (taskType.equals(Constant.searchProductTaskType)) {
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             searchResults.clear();

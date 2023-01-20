@@ -169,8 +169,17 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/checkoutSubmitProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"

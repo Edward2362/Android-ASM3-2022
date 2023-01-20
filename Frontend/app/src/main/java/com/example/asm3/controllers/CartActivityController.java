@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -200,12 +201,16 @@ public class CartActivityController extends BaseController implements
                 cartItemsAdapter.notifyItemRemoved(position);
                 break;
             case R.id.orderIncreaseBtn:
-                chosenCart.setQuantity(chosenCart.getQuantity() + 1);
-                totalPrice.setValue(totalPrice.getValue() + chosenCart.getProduct().getPrice());
-                totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
-                cartItems.set(position, chosenCart);
-                cartItemsAdapter.notifyItemChanged(position);
-                increaseCartQuantity(chosenCart.getProduct().get_id());
+                if (chosenCart.getQuantity() < chosenCart.getProduct().getQuantity()) {
+                    chosenCart.setQuantity(chosenCart.getQuantity() + 1);
+                    totalPrice.setValue(totalPrice.getValue() + chosenCart.getProduct().getPrice());
+                    totalOrderTxt.setText("Total: " + totalPrice.getValue() + " đ");
+                    cartItems.set(position, chosenCart);
+                    cartItemsAdapter.notifyItemChanged(position);
+                    increaseCartQuantity(chosenCart.getProduct().get_id());
+                } else {
+                    Toast.makeText(getContext(), "Out of Stock", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.orderDownBtn:
                 if (chosenCart.getQuantity() > 1) {

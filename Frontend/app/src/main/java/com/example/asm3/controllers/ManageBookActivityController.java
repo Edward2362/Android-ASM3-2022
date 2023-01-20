@@ -409,6 +409,8 @@ public class ManageBookActivityController extends BaseController implements
                     showConnectDialog();
                     return;
                 }
+                manageProgressBar.setVisibility(View.VISIBLE);
+                uploadProduct.setEnabled(false);
                 onUploadProduct();
                 break;
             case R.id.updateProduct:
@@ -416,6 +418,9 @@ public class ManageBookActivityController extends BaseController implements
                     showConnectDialog();
                     return;
                 }
+                manageProgressBar.setVisibility(View.VISIBLE);
+                updateProduct.setEnabled(false);
+                removeProduct.setEnabled(false);
                 onUpdateProduct();
                 break;
             case R.id.removeProduct:
@@ -423,6 +428,9 @@ public class ManageBookActivityController extends BaseController implements
                     showConnectDialog();
                     return;
                 }
+                manageProgressBar.setVisibility(View.VISIBLE);
+                updateProduct.setEnabled(false);
+                removeProduct.setEnabled(false);
                 onRemoveProduct();
                 break;
         }
@@ -524,7 +532,7 @@ public class ManageBookActivityController extends BaseController implements
 
             productPhoto = Helper.stringToBitmap(product.getImage());
             productView.setImageBitmap(productPhoto);
-            manageProgressBar.setVisibility(View.GONE);
+            manageProgressBar.setVisibility(View.INVISIBLE);
             bookInfoLayout.setVisibility(View.VISIBLE);
             bookUpdateLayout.setVisibility(View.VISIBLE);
             updateProduct.setVisibility(View.VISIBLE);

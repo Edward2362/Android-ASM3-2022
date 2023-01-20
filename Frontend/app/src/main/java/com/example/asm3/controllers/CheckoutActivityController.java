@@ -56,7 +56,7 @@ public class CheckoutActivityController extends BaseController implements
     private GetAuthenticatedData getAuthenticatedData;
     private PostAuthenticatedData postAuthenticatedData;
     private Customer customer;
-    private View checkoutProgressBar;
+    private View checkoutProgressBar, checkoutSubmitProgressBar;
     private ArrayList<Order> orders;
     private float newTotalPrice = 0;
 
@@ -78,12 +78,14 @@ public class CheckoutActivityController extends BaseController implements
         addressDetailTxt = getActivity().findViewById(R.id.addressDetailTxt);
         orderTotalPriceTxt = getActivity().findViewById(R.id.orderTotalPriceTxt);
         checkoutProgressBar = getActivity().findViewById(R.id.checkoutProgressBar);
+        checkoutSubmitProgressBar = getActivity().findViewById(R.id.checkoutSubmitProgressBar);
         checkoutBtn = getActivity().findViewById(R.id.checkoutBtn);
         checkoutBtn.setOnClickListener(this);
         orderRecView = getActivity().findViewById(R.id.orderRecView);
         orderAdapter = generateOrderAdapter();
         loadOrders();
-
+        checkoutSubmitProgressBar.setVisibility(View.INVISIBLE);
+        checkoutBtn.setEnabled(true);
         if (!isAuth()){
             Helper.goToLogin(getContext(),getActivity());
         } else {
@@ -168,6 +170,8 @@ public class CheckoutActivityController extends BaseController implements
                 getActivity().finish();
                 break;
             case R.id.checkoutBtn:
+                checkoutSubmitProgressBar.setVisibility(View.VISIBLE);
+                checkoutBtn.setEnabled(false);
                 orderProducts();
                 break;
         }

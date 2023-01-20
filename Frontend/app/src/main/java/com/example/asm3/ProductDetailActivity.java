@@ -18,6 +18,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         onInit();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        productDetailActivityController.onResume();
+    }
+
     public void onInit(){
         productDetailActivityController = new ProductDetailActivityController(ProductDetailActivity.this,this);
         productDetailActivityController.onInit();
