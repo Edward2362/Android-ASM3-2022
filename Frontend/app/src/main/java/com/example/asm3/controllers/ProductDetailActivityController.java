@@ -88,6 +88,17 @@ public class ProductDetailActivityController extends BaseController implements
         detailAddCartBtn = getActivity().findViewById(R.id.detailAddCartBtn);
         detailUpdateCartBtn = getActivity().findViewById(R.id.detailUpdateCartBtn);
 
+        if (Helper.isDarkTheme(getContext())) {
+            detailBookPriceTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_primary));
+            detailSellerTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_primary));
+            detailSellerRatingTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_primary));
+        } else {
+            detailBookPriceTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_primary));
+            detailSellerTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_primary));
+            detailSellerRatingTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_primary));
+
+        }
+
         detailTopBar.setSubPage("");
         backButton.setOnClickListener(this);
         detailSellerTxt.setOnClickListener(this);
