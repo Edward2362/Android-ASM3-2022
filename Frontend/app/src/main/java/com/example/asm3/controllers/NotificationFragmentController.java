@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class NotificationFragmentController extends BaseController implements
         NotificationHolder.OnSelectListener,
         AsyncTaskCallBack {
-    private View view;
+    private View view, notifNotifyLayout;
     private GenericAdapter<Notification> notifAdapter;
     private RecyclerView notifRecView;
 
@@ -54,11 +54,13 @@ public class NotificationFragmentController extends BaseController implements
     // Render functions
     @Override
     public void onInit() {
+        notifNotifyLayout = view.findViewById(R.id.notifNotifyLayout);
+        notifRecView = view.findViewById(R.id.notifRecView);
         if (!isAuth()) {
             Helper.goToLogin(getContext(), getActivity());
         } else {
             Helper.setBadge(notifications.getValue(), mainViewModel);
-            notifRecView = view.findViewById(R.id.notifRecView);
+
             notifAdapter = generateNotificationAdapter();
             notifRecView.setAdapter(notifAdapter);
             notifRecView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -67,7 +69,14 @@ public class NotificationFragmentController extends BaseController implements
                 public void onChanged(ArrayList<Notification> notifications) {
                     Log.d(TAG, "onChanged: Noti test");
                     Helper.setBadge(notifications, mainViewModel);
-                    notifAdapter.notifyDataSetChanged();
+                    if (notifications.isEmpty()) {
+                        notifNotifyLayout.setVisibility(View.VISIBLE);
+                        notifRecView.setVisibility(View.GONE);
+                    } else {
+                        notifNotifyLayout.setVisibility(View.GONE);
+                        notifRecView.setVisibility(View.VISIBLE);
+                        notifAdapter.notifyDataSetChanged();
+                    }
 
                 }
             });

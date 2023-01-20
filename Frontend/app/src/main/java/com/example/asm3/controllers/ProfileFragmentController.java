@@ -173,9 +173,9 @@ public class ProfileFragmentController extends BaseController implements
             orders.observe(getActivity(), new Observer<ArrayList<Order>>() {
                 @Override
                 public void onChanged(ArrayList<Order> customerOrders) {
-                        displayOrders.clear();
-                        displayOrders.addAll(customerOrders);
-                        orderAdapter.notifyDataSetChanged();
+                    displayOrders.clear();
+                    displayOrders.addAll(customerOrders);
+                    orderAdapter.notifyDataSetChanged();
                 }
             });
 
@@ -293,7 +293,7 @@ public class ProfileFragmentController extends BaseController implements
                 Helper.loadFragment(mainViewModel.getFragmentManager().getValue(),
                         mainViewModel.getHomeFragment().getValue(),
                         "home", mainLayoutId);
-                Helper.goToLogin(getContext(),getActivity());
+                Helper.goToLogin(getContext(), getActivity());
                 break;
             case R.id.profileEmailTxt:
                 String uriText =

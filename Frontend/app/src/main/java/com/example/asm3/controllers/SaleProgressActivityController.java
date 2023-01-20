@@ -98,9 +98,9 @@ public class SaleProgressActivityController extends BaseController implements
         switch (i){
             case 0: // packaging
                 break;
-            case 1: // processing
+            case 1: // shipping
                 break;
-            case 2: // shipping
+            case 2: // completed
                 break;
             case -1: // submit button
                 break;
@@ -132,12 +132,13 @@ public class SaleProgressActivityController extends BaseController implements
                 orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
+//                if(item.getStatus().equalsIgnoreCase("packaging"))
             }
         };
     }
 
     private void showDialog() {
-        final String[] listChoices = new String[]{"Packaging", "Processing", "Shipping"};
+        final String[] listChoices = new String[]{"Packaging", "Shipping", "Completed"};
         builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle("Update sale status").
                 setSingleChoiceItems(listChoices, 0, this).
