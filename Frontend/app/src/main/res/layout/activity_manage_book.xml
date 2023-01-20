@@ -373,7 +373,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/goat_confused"
-                                app:tint="@color/md_theme_light_primary"
                                 app:layout_constraintDimensionRatio="W,1:1" />
 
                         </com.google.android.material.card.MaterialCardView>
