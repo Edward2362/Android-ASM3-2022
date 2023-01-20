@@ -24,9 +24,9 @@ const uploadReview = async (req, response) => {
         let count = 0;
         let totalReviewRating = 0;
         for (let i=0; i < reviews.length; i++){
-            if (reviews[0].order.seller.toString() === sellerId.toString()) { 
+            if (reviews[i].order.seller.toString() === sellerId.toString()) { 
                 count = count + 1;
-                totalReviewRating = totalReviewRating + reviews[0].rating;
+                totalReviewRating = totalReviewRating + reviews[i].rating;
             }
         }
     
