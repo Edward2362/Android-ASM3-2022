@@ -240,6 +240,7 @@ public class CartActivityController extends BaseController implements
                 OrderHolder orderHolder = (OrderHolder) holder;
                 orderHolder.getOrderQuantityActionLayout().setVisibility(View.VISIBLE);
                 orderHolder.getOrderBookTxt().setText(cartItem.getProduct().getName());
+                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(cartItem.getProduct().getImage()));
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + cartItem.getQuantity());
                 orderHolder.getOrderPriceTxt().setText(cartItem.getProduct().getPrice() * cartItem.getQuantity() + " đ");
             }

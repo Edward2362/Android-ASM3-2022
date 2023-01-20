@@ -459,6 +459,7 @@ public class ProfileFragmentController extends BaseController implements
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
+                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.getBookImage()));
                 if (!item.getStatus().equalsIgnoreCase("completed")) {
                     orderHolder.getOrderBody().setOnClickListener(null);
                 }

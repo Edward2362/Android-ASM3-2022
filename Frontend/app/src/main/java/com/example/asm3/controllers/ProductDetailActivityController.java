@@ -49,7 +49,7 @@ public class ProductDetailActivityController extends BaseController implements
     private LinearLayout detailActionBody;
     private Button backButton;
     private ImageView detailBookImg;
-    private TextView detailBookYearTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt, detailBookConditionTxt, detailBookDescriptionTxt;
+    private TextView detailBookYearTxt, detailBookQuantityTxt, detailBookNameTxt, detailBookPriceTxt, detailSellerTxt, detailSellerRatingTxt, detailBookConditionTxt, detailBookDescriptionTxt;
     private Button detailAddCartBtn, detailUpdateCartBtn;
 
     private Book book;
@@ -87,6 +87,7 @@ public class ProductDetailActivityController extends BaseController implements
         detailBookDescriptionTxt = getActivity().findViewById(R.id.detailBookDescriptionTxt);
         detailAddCartBtn = getActivity().findViewById(R.id.detailAddCartBtn);
         detailUpdateCartBtn = getActivity().findViewById(R.id.detailUpdateCartBtn);
+        detailBookQuantityTxt = getActivity().findViewById(R.id.detailBookQuantityTxt);
 
         if (Helper.isDarkTheme(getContext())) {
             detailBookPriceTxt.setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_primary));
@@ -222,6 +223,12 @@ public class ProductDetailActivityController extends BaseController implements
             detailBookYearTxt.setText("Published year: " + book.getPublishedAt());
             detailBookDescriptionTxt.setText("Description: " + book.getDescription());
             detailBookPriceTxt.setText(book.getPrice() + " đ");
+            if (book.getQuantity() != 0) {
+                detailBookQuantityTxt.setText("Stock: " + book.getQuantity());
+            } else {
+                detailBookQuantityTxt.setText("Stock: Out of stock");
+                detailAddCartBtn.setEnabled(false);
+            }
             detailBookImg.setImageBitmap(Helper.stringToBitmap(book.getImage()));
             if (book.isNew()) {
                 detailBookConditionTxt.setText("Condition: new");

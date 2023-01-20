@@ -130,6 +130,7 @@ public class CheckoutActivityController extends BaseController implements
                 orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.md_theme_light_onPrimary));
                 orderHolder.getOrderDeleteLayout().setVisibility(View.GONE);
                 orderHolder.getOrderBookTxt().setText(order.getBookName());
+                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(order.getBookImage()));
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + order.getQuantity());
                 orderHolder.getOrderPriceTxt().setText(order.getBookPrice()*order.getQuantity() + " đ");
             }
