@@ -138,6 +138,7 @@ public class AccountSettingActivityController extends BaseController implements 
                 address = address.replaceAll("Đ", "D");
                 address = address.replaceAll("đ", "d");
                 updateCustomerInfo(settingUsernameTxt.getText().toString(), address);
+                getActivity().finish();
                 //changePassword(userCurrentPass.getText().toString(),userNewPass.getText().toString());
                 break;
         }

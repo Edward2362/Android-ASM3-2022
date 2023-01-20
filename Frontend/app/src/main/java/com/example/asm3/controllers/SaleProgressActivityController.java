@@ -135,9 +135,6 @@ public class SaleProgressActivityController extends BaseController implements
     public void onOrderClick(int position, View view) {
         switch (view.getId()) {
             case R.id.orderBody:
-                if (sales.get(position).getStatus().equalsIgnoreCase("completed") ||
-                        sales.get(position).getStatus().equalsIgnoreCase("reviewed"))
-                    return;
                 saleClicked = position;
                 showDialog(sales.get(position).getStatus());
                 break;
@@ -171,6 +168,10 @@ public class SaleProgressActivityController extends BaseController implements
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
                 orderHolder.getOrderLocationLayout().setVisibility(View.VISIBLE);
+                if (item.getStatus().equalsIgnoreCase("completed") ||
+                        item.getStatus().equalsIgnoreCase("reviewed")) {
+                    orderHolder.getOrderBody().setOnClickListener(null);
+                }
                 if (Helper.isDarkTheme(getContext())) {
                     orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_onPrimaryContainer));
                     if (item.getStatus().equalsIgnoreCase("packaging"))

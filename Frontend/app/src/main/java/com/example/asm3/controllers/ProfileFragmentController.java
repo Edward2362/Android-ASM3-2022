@@ -214,13 +214,7 @@ public class ProfileFragmentController extends BaseController implements
                 }
             });
 
-            profileUsernameTxt.setText(authCustomer.getValue().getUsername());
-            profileEmailTxt.setText(authCustomer.getValue().getEmail());
             profileDataBtnGrp.check(checkedBtnId);
-
-            if (!authCustomer.getValue().getAvatar().equals("")) {
-                profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
-            }
 
             profileAvatarLayout.setOnClickListener(this);
             settingProfileBtn.setOnClickListener(this);
@@ -239,6 +233,17 @@ public class ProfileFragmentController extends BaseController implements
         if (isOnline()) {
             getCustomerProducts();
             getCustomerOrders();
+            authCustomer.observe(getActivity(), new Observer<Customer>() {
+                @Override
+                public void onChanged(Customer customer) {
+                    profileUsernameTxt.setText(authCustomer.getValue().getUsername());
+                    profileEmailTxt.setText(authCustomer.getValue().getEmail());
+
+                    if (!authCustomer.getValue().getAvatar().equals("")) {
+                        profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
+                    }
+                }
+            });
         }
     }
 
@@ -424,12 +429,39 @@ public class ProfileFragmentController extends BaseController implements
 
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Order item) {
+                Log.d(TAG, "onBindData: " + item.getStatus());
                 OrderHolder orderHolder = (OrderHolder) holder;
 //                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.get));
                 orderHolder.getOrderBookTxt().setText(item.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + item.getQuantity());
+                orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
                 orderHolder.getOrderPriceTxt().setText(item.getBookPrice() + " đ");
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
+                orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
+                if (!item.getStatus().equalsIgnoreCase("completed")){
+                    orderHolder.getOrderBody().setOnClickListener(null);
+                }
+                if (Helper.isDarkTheme(getContext())) {
+                    orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_onPrimaryContainer));
+                    if (item.getStatus().equalsIgnoreCase("packaging"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_packaging));
+                    if (item.getStatus().equalsIgnoreCase("shipping"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_shipping));
+                    if (item.getStatus().equalsIgnoreCase("completed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_completed));
+                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_reviewed));
+                } else {
+                    orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_onSurface));
+                    if (item.getStatus().equalsIgnoreCase("packaging"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_packaging));
+                    if (item.getStatus().equalsIgnoreCase("shipping"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_shipping));
+                    if (item.getStatus().equalsIgnoreCase("completed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_completed));
+                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_reviewed));
+                }
             }
         };
     }
