@@ -201,7 +201,18 @@ public class ProfileFragmentController extends BaseController implements
                 }
             });
 
-
+            reviews.observe(getActivity(), new Observer<ArrayList<Review>>() {
+                @Override
+                public void onChanged(ArrayList<Review> reviews) {
+                    displayReviews.clear();
+                    displayReviews.addAll(reviews);
+                    reviewAdapter.notifyDataSetChanged();
+                    if (checkedBtnId == R.id.feedbackBtn) {
+                        feedbackRecView.setVisibility(View.VISIBLE);
+                        profileNotifyLayout.setVisibility(View.GONE);
+                    }
+                }
+            });
 
             profileUsernameTxt.setText(authCustomer.getValue().getUsername());
             profileEmailTxt.setText(authCustomer.getValue().getEmail());
