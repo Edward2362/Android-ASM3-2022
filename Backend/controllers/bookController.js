@@ -113,7 +113,7 @@ const deleteBook = async (req, response) => {
 const getProducts = async (req, response) => {
 	const input = req.query;
 
-	let products = await Book.find({});
+	let products = await Book.find({}).populate("category").populate("subCategory");
 
 	if (input.subCategory === undefined && input.category === undefined) {
 		return response.json({
@@ -152,8 +152,11 @@ const getProducts = async (req, response) => {
 			let product = products[i];
 
 			if (categories.includes(product.category.name)) {
-				if (haveSameElements(products[i].subCategory, subCategories)) {
-					filteredProducts.push(product);
+				for (let j=0;j<products[i].subCategory.length;j++) {
+					if (subCategories.includes(products[i].subCategory[j].name)) {
+						filteredProducts.push(product);
+						break;
+					}
 				}
 			}
 		}
@@ -168,9 +171,11 @@ const getProducts = async (req, response) => {
 	} else if (subCategories.length !== 0) {
 		for (let i = 0; i < products.length; ++i) {
 			let product = products[i];
-
-			if (haveSameElements(products[i].subCategory, subCategories)) {
-				filteredProducts.push(product);
+			for (let j=0;j<products[i].subCategory.length;j++) {
+				if (subCategories.includes(products[i].subCategory[j].name)) {
+					filteredProducts.push(product);
+					break;
+				}
 			}
 		}
 	}

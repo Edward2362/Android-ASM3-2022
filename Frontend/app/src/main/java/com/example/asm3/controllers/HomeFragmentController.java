@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.ManageBookActivity;
 import com.example.asm3.R;
+import com.example.asm3.SearchResultActivity;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
 import com.example.asm3.base.controller.BaseController;
@@ -46,6 +47,7 @@ public class HomeFragmentController extends BaseController implements
     private View view, subCateTopDivider, subCateBotDivider;
     private GenericAdapter<SubCategory> subCateAdapter;
     private RecyclerView subCateRecView;
+    private String selectedCategory;
 
     private MainViewModel mainViewModel;
     private LiveData<ArrayList<Category>> categories;
@@ -132,16 +134,19 @@ public class HomeFragmentController extends BaseController implements
                 displayList.clear();
                 displayList.addAll(foreign);
                 subCateAdapter.notifyDataSetChanged();
+                selectedCategory = "Foreign+Book";
                 break;
             case R.id.domesticCateBtn:
                 displayList.clear();
                 displayList.addAll(domestic);
                 subCateAdapter.notifyDataSetChanged();
+                selectedCategory = "Domestic+Book";
                 break;
             case R.id.textCateBtn:
                 displayList.clear();
                 displayList.addAll(text);
                 subCateAdapter.notifyDataSetChanged();
+                selectedCategory = "Text+Book";
                 break;
         }
         if (group.getCheckedButtonId() == -1) {
@@ -200,6 +205,17 @@ public class HomeFragmentController extends BaseController implements
                 goToManageBook();
                 break;
             case R.id.findBookBtn:
+                Intent intent = new Intent(getContext(), SearchResultActivity.class);
+                ArrayList<String> subCategoryArrayList = new ArrayList<String>();
+                for (int i=0;i<displayList.size();i++){
+                    if (displayList.get(i).isChosen()) {
+                        subCategoryArrayList.add(displayList.get(i).getName());
+                    }
+                }
+                intent.putExtra(Constant.categorySearchKey,selectedCategory);
+                intent.putExtra(Constant.subCategorySearchKey,subCategoryArrayList);
+                intent.putExtra(Constant.isCategorySearchKey,Constant.isCategorySearchCode);
+                getActivity().startActivityForResult(intent,Constant.searchResultActivityCode);
                 break;
         }
     }
