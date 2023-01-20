@@ -130,6 +130,22 @@ public class ProfileActivityController extends BaseController implements
             }
         });
 
+        reviews.observe(getActivity(), new Observer<ArrayList<Review>>() {
+            @Override
+            public void onChanged(ArrayList<Review> reviews) {
+                if (reviews.isEmpty()) {
+                    publicProfileSellingRecView.setVisibility(View.GONE);
+                    publicProfileNotifyLayout.setVisibility(View.VISIBLE);
+                } else {
+                    displayReviews.clear();
+                    displayReviews.addAll(reviews);
+                    reviewAdapter.notifyDataSetChanged();
+                    publicProfileFeedbackRecView.setVisibility(View.VISIBLE);
+                    publicProfileNotifyLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+
         // get extras
         Intent intent = getActivity().getIntent();
         publicCustomerId = intent.getStringExtra(Constant.publicProfileIdKey);
@@ -140,7 +156,7 @@ public class ProfileActivityController extends BaseController implements
 
         backBtn.setOnClickListener(this);
         publicProfileAvatarLayout.setOnClickListener(this);
-        publicProfileDataBtnGrp.setOnClickListener(this);
+        publicProfileDataBtnGrp.addOnButtonCheckedListener(this);
         publicProfileEmailTxt.setOnClickListener(this);
 
         loadSelling();
@@ -159,6 +175,9 @@ public class ProfileActivityController extends BaseController implements
     @Override
     public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
         publicProfileNotifyLayout.setVisibility(View.VISIBLE);
+        publicProfileSellingRecView.setVisibility(View.GONE);
+        publicProfileFeedbackRecView.setVisibility(View.GONE);
+        Log.d(TAG, "onButtonChecked: test " + isChecked);
         switch (group.getCheckedButtonId()) {
             case R.id.publicProfileSellingBtn:
                 if (!sellingBooks.getValue().isEmpty()) {
@@ -331,8 +350,8 @@ public class ProfileActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getPublicCustomerProductsTaskType)){
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
             sellingBooks.setValue(apiList.getList());
-        } else if (taskType.equals(Constant.getAllPublicCustomerReviewsTaskType)){
-            Log.d("dadadsa",message);
+        } else if (taskType.equals(Constant.getAllCustomerReviewsTaskType)){
+            Log.d("dadadsa ","test " + message);
             ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message),Review.class);
             reviews.setValue(apiList.getList());
         }
