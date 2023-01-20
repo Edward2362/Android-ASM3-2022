@@ -1,6 +1,7 @@
 const Review = require("../models/Review");
-
+const Order = require("../models/Order");
 const Constants = require("../constants/Constants");
+const Customer = require("../models/Customer");
 
 const uploadReview = async (req, response) => {
     try {
@@ -16,7 +17,23 @@ const uploadReview = async (req, response) => {
         });
 
         await review.save();
-
+        const orders = await Order.find({_id: input.orderId});
+        const sellerId = orders[0].seller;
+        const customers = await Customer.find({_id: sellerId});
+        const reviews = await Review.find({}).populate("order");
+        let count = 0;
+        let totalReviewRating = 0;
+        for (let i=0; i < reviews.length; i++){
+            if (reviews[0].order.seller.toString() === sellerId.toString()) { 
+                count = count + 1;
+                totalReviewRating = totalReviewRating + reviews[0].rating;
+            }
+        }
+    
+        customers[0].ratings = totalReviewRating/count;
+        await customers[0].save();
+        orders[0].hasReview = true;
+        await orders[0].save();
         return response.json({
             message: "",
             error: false,
