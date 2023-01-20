@@ -44,7 +44,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     // Helpers
     public void sendNotification(Context context) {
         builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.logo_android)
+                .setSmallIcon(R.drawable.goat_logo)
                 .setContentTitle("GoGoat")
                 .setContentText("You have 1 new notification!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);

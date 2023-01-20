@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
 import com.example.asm3.config.Constant;
+import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
 import com.example.asm3.models.ApiList;
@@ -47,6 +49,8 @@ public class SaleProgressActivityController extends BaseController implements
     private MaterialAlertDialogBuilder builder;
     private String token;
     private GetAuthenticatedData getAuthenticatedData;
+    private int saleClicked = -1;
+    private String status;
 
     public SaleProgressActivityController(Context context, FragmentActivity activity) {
         super(context, activity);
@@ -68,12 +72,21 @@ public class SaleProgressActivityController extends BaseController implements
         // onClickListener
         backBtn.setOnClickListener(this);
 
+        // testing
+        //String _id, String timestamp, String status, Customer buyer, Customer seller, String bookImage, String bookName, float bookPrice, int quantity, boolean hasReview
+        sales.add(new Order("00120", "12/02/2022", "packaging", new Customer(), new Customer(), "", "Doraemon", 20000F, 1, false));
+        sales.add(new Order("00110", "15/08/2022", "shipping", new Customer(), new Customer(), "", "Cinderella", 100000F, 1, false));
+        sales.add(new Order("00153", "08/10/2022", "completed", new Customer(), new Customer(), "", "Wonder", 235000F, 1, false));
+        sales.add(new Order("00120", "30/12/2022", "reviewed", new Customer(), new Customer(), "", "Pokemon", 40000F, 1, true));
+        salesRecView.setVisibility(View.VISIBLE);
+        // end test
+
         // adapter
         salesAdapter = generateOrderAdapter();
         salesRecView.setAdapter(salesAdapter);
         salesRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        if(isOnline()) {
+        if (isOnline()) {
             if (!isAuth()) {
 
             } else {
@@ -95,14 +108,21 @@ public class SaleProgressActivityController extends BaseController implements
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         Log.d(TAG, "onClick: in dialog " + i);
-        switch (i){
+        switch (i) {
             case 0: // packaging
+                status = "packaging";
                 break;
             case 1: // shipping
+                status = "shipping";
                 break;
             case 2: // completed
+                status = "completed";
                 break;
             case -1: // submit button
+                if (status != null) {
+                    sales.get(saleClicked).setStatus(status);
+                    salesAdapter.notifyItemChanged(saleClicked);
+                }
                 break;
             case -2: // cancel button
                 break;
@@ -111,7 +131,11 @@ public class SaleProgressActivityController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
-        showDialog();
+        if (sales.get(position).getStatus().equalsIgnoreCase("completed") ||
+                sales.get(position).getStatus().equalsIgnoreCase("reviewed"))
+            return;
+        saleClicked = position;
+        showDialog(sales.get(position).getStatus());
     }
 
     // Helpers
@@ -132,16 +156,40 @@ public class SaleProgressActivityController extends BaseController implements
                 orderHolder.getOrderStatusTxt().setText("Status: " + item.getStatus());
                 orderHolder.getOrderStatusTxt().setVisibility(View.VISIBLE);
                 orderHolder.getOrderDeleteBtn().setVisibility(View.GONE);
-//                if(item.getStatus().equalsIgnoreCase("packaging"))
+                if (Helper.isDarkTheme(getContext())) {
+                    orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_dark_onPrimaryContainer));
+                    if (item.getStatus().equalsIgnoreCase("packaging"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_packaging));
+                    if (item.getStatus().equalsIgnoreCase("shipping"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_shipping));
+                    if (item.getStatus().equalsIgnoreCase("completed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_completed));
+                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.dark_sale_status_reviewed));
+                } else {
+                    orderHolder.getOrderPriceTxt().setTextColor(getActivity().getResources().getColor(R.color.md_theme_light_onSurface));
+                    if (item.getStatus().equalsIgnoreCase("packaging"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_packaging));
+                    if (item.getStatus().equalsIgnoreCase("shipping"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_shipping));
+                    if (item.getStatus().equalsIgnoreCase("completed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_completed));
+                    if (item.getStatus().equalsIgnoreCase("reviewed"))
+                        orderHolder.getOrderBody().setCardBackgroundColor(getActivity().getResources().getColor(R.color.light_sale_status_reviewed));
+                }
             }
         };
     }
 
-    private void showDialog() {
+    private void showDialog(String status) {
+        int checkedItem = 0;
+        if (status.equalsIgnoreCase("packaging")) checkedItem = 0;
+        else if (status.equalsIgnoreCase("shipping")) checkedItem = 1;
+        else if (status.equalsIgnoreCase("completed")) checkedItem = 2;
         final String[] listChoices = new String[]{"Packaging", "Shipping", "Completed"};
         builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle("Update sale status").
-                setSingleChoiceItems(listChoices, 0, this).
+                setSingleChoiceItems(listChoices, checkedItem, this).
                 setPositiveButton(R.string.submit, this).
                 setNegativeButton(R.string.cancel, this).
                 create().show();
@@ -164,7 +212,7 @@ public class SaleProgressActivityController extends BaseController implements
     public void onFinished(String message, String taskType) {
         if (taskType.equals(Constant.getSellingOrdersTaskType)) {
             ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
-            sales.clear();
+//            sales.clear();
             sales.addAll(apiList.getList());
             salesAdapter.notifyDataSetChanged();
             salesProgressBar.setVisibility(View.GONE);

@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -168,6 +169,19 @@ public class Helper {
 
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(nfdNormalizedString).replaceAll("");
+    }
+
+    public static boolean isDarkTheme(Context context) {
+        int nightModeFlags = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+
+        switch (nightModeFlags) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                return true;
+            case Configuration.UI_MODE_NIGHT_NO:
+                return false;
+        }
+
+        return false;
     }
 
 }

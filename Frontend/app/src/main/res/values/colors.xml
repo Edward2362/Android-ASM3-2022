@@ -63,8 +63,12 @@
     <color name="md_theme_dark_scrim">#000000</color>
 
 
-    <color name="sale_status_packaging">@color/md_theme_light_primaryContainer</color>
-    <color name="sale_status_shipping">@color/md_theme_light_secondaryContainer</color>
-    <color name="sale_status_completed">@color/md_theme_light_tertiaryContainer</color>
-    <color name="sale_status_reviewed">@color/md_theme_light_surfaceVariant</color>
+    <color name="light_sale_status_packaging">@color/md_theme_light_primaryContainer</color>
+    <color name="light_sale_status_shipping">@color/md_theme_light_secondaryContainer</color>
+    <color name="light_sale_status_completed">@color/md_theme_light_tertiaryContainer</color>
+    <color name="light_sale_status_reviewed">@color/md_theme_light_surfaceVariant</color>
+    <color name="dark_sale_status_packaging">@color/md_theme_dark_primaryContainer</color>
+    <color name="dark_sale_status_shipping">@color/md_theme_dark_secondaryContainer</color>
+    <color name="dark_sale_status_completed">@color/md_theme_dark_tertiaryContainer</color>
+    <color name="dark_sale_status_reviewed">@color/md_theme_dark_surfaceVariant</color>
 </resources>
