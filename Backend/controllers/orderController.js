@@ -102,9 +102,40 @@ const orderProducts = async (req, response) => {
       process.exit(1);
     }
   };
+
+  const updateStatusOrder = async (req, response) => {
+    try {
+      const customerId = req.customer.customerId;
+      const input = req.body;
+      const orderData = {
+        status: input.status
+      };
+      const order = await Order.findOneAndUpdate({_id: input.orderId},{$set: orderData},{new: true});
+      if (order === undefined || order === null) {
+        return response.json({
+          message: "Error",
+          error: true,
+          data: []
+        });
+      }
+
+      return response.json({
+        message: "",
+        error: false,
+        data: [order]
+      });
+    } catch(error) {
+      console.log(error);
+      process.exit(1);
+    }
+  };
+
+
+
 module.exports = {
   orderProducts,
   generateOrders,
   getCustomerOrders,
-  getSellingOrders
+  getSellingOrders,
+  updateStatusOrder
 };

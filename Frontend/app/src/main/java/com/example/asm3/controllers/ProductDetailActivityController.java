@@ -215,7 +215,9 @@ public class ProductDetailActivityController extends BaseController implements
                     detailAddCartBtn.setVisibility(View.GONE);
                 }
             }
+            Log.d("tag",book.getCustomer().getUsername());
 
+            detailSellerTxt.setText(book.getCustomer().getUsername());
             detailBookNameTxt.setText(book.getName());
             detailBookYearTxt.setText("Published year: " + book.getPublishedAt());
             detailBookDescriptionTxt.setText("Description: " + book.getDescription());
