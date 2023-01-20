@@ -25,6 +25,7 @@ import com.example.asm3.base.adapter.viewHolder.OrderHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
 import com.example.asm3.base.networking.services.GetAuthenticatedData;
+import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
@@ -34,6 +35,9 @@ import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -51,6 +55,7 @@ public class SaleProgressActivityController extends BaseController implements
     private MaterialAlertDialogBuilder builder;
     private String token;
     private GetAuthenticatedData getAuthenticatedData;
+    private PostAuthenticatedData postAuthenticatedData;
     private int saleClicked = -1;
     private String status;
 
@@ -76,10 +81,10 @@ public class SaleProgressActivityController extends BaseController implements
 
         // testing
         //String _id, String timestamp, String status, Customer buyer, Customer seller, String bookImage, String bookName, float bookPrice, int quantity, boolean hasReview
-        sales.add(new Order("00120", "12/02/2022", "packaging", new Customer(), new Customer(), "", "Doraemon", 20000F, 1, false));
-        sales.add(new Order("00110", "15/08/2022", "shipping", new Customer(), new Customer(), "", "Cinderella", 100000F, 1, false));
-        sales.add(new Order("00153", "08/10/2022", "completed", new Customer(), new Customer(), "", "Wonder", 235000F, 1, false));
-        sales.add(new Order("00120", "30/12/2022", "reviewed", new Customer(), new Customer(), "", "Pokemon", 40000F, 1, true));
+//        sales.add(new Order("00120", "12/02/2022", "packaging", new Customer(), new Customer(), "", "Doraemon", 20000F, 1, false));
+//        sales.add(new Order("00110", "15/08/2022", "shipping", new Customer(), new Customer(), "", "Cinderella", 100000F, 1, false));
+//        sales.add(new Order("00153", "08/10/2022", "completed", new Customer(), new Customer(), "", "Wonder", 235000F, 1, false));
+//        sales.add(new Order("00120", "30/12/2022", "reviewed", new Customer(), new Customer(), "", "Pokemon", 40000F, 1, true));
         salesRecView.setVisibility(View.VISIBLE);
         // end test
 
@@ -112,18 +117,19 @@ public class SaleProgressActivityController extends BaseController implements
         Log.d(TAG, "onClick: in dialog " + i);
         switch (i) {
             case 0: // packaging
-                status = "packaging";
+                status = "Packaging";
                 break;
             case 1: // shipping
-                status = "shipping";
+                status = "Shipping";
                 break;
             case 2: // completed
-                status = "completed";
+                status = "Completed";
                 break;
             case -1: // submit button
                 if (status != null) {
                     sales.get(saleClicked).setStatus(status);
                     salesAdapter.notifyItemChanged(saleClicked);
+                    updateStatusOrder(sales.get(saleClicked).get_id(),status);
                 }
                 break;
             case -2: // cancel button
@@ -220,6 +226,21 @@ public class SaleProgressActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
+    public void updateStatusOrder(String orderId,String status) {
+        try {
+            postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
+            postAuthenticatedData.setEndPoint(Constant.updateStatusOrder);
+            postAuthenticatedData.setTaskType(Constant.updateStatusOrderTaskType);
+            postAuthenticatedData.setToken(token);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(Constant.orderIdKey,orderId);
+            jsonObject.put(Order.statusKey,status);
+            postAuthenticatedData.execute(jsonObject);
+        } catch (JSONException jsonException){
+            jsonException.printStackTrace();
+        }
+
+    }
     // Navigation functions
 
 
@@ -228,10 +249,12 @@ public class SaleProgressActivityController extends BaseController implements
     public void onFinished(String message, String taskType) {
         if (taskType.equals(Constant.getSellingOrdersTaskType)) {
             ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
-//            sales.clear();
+            sales.clear();
             sales.addAll(apiList.getList());
             salesAdapter.notifyDataSetChanged();
             salesProgressBar.setVisibility(View.GONE);
+        } else if (taskType.equals(Constant.updateStatusOrderTaskType)){
+
         }
     }
 

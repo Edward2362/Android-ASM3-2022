@@ -30,6 +30,7 @@ public class Constant {
     public static String generateOrders = "/api/order/generateOrders";
     public static String getCustomerOrders = "/api/order/getCustomerOrders";
     public static String getSellingOrders = "/api/order/getSellingOrders";
+    public static String updateStatusOrder = "/api/order/updateStatusOrder";
     public static String tokenFile = "token.txt";
 
 
@@ -55,6 +56,7 @@ public class Constant {
 
     public static String categoryKey = "category";
     public static String customerKey = "customerData";
+    public static String orderIdKey = "orderId";
     public static String publicProfileIdKey = "publicProfileId";
     public static String isUploadKey = "isUpload";
     public static String isUpdateKey = "isUpdate";
@@ -104,6 +106,7 @@ public class Constant {
     public static String getCustomerOrdersTaskType = "getCustomerOrders";
     public static String getSellingOrdersTaskType = "getSellingOrders";
     public static String changeAvatarTaskType = "changeAvatar";
+    public static String updateStatusOrderTaskType = "updateStatusOrder";
     public static String increaseCartQuantityTaskType = "increaseCartQuantity";
     public static String decreaseCartQuantityTaskType = "decreaseCartQuantity";
 
