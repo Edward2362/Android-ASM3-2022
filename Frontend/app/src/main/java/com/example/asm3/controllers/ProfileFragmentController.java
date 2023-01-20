@@ -142,13 +142,6 @@ public class ProfileFragmentController extends BaseController implements
 //            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
 //            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
 
-            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            displayReviews.add(new Review("0", "ha lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            displayReviews.add(new Review("0", "hh no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            displayReviews.add(new Review("0", "hahahah no dan hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
-            displayReviews.add(new Review("0", "hahahah no dai ghe truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha truyen hya lam nha", "22/02/2022", 3, new Customer("Quang"), new Order()));
             // end testing
 
             profileAvatarLayout = view.findViewById(R.id.profileAvatarLayout);
@@ -234,6 +227,7 @@ public class ProfileFragmentController extends BaseController implements
         if (isOnline()) {
             getCustomerProducts();
             getCustomerOrders();
+            getAllCustomerReviews();
             authCustomer.observe(getActivity(), new Observer<Customer>() {
                 @Override
                 public void onChanged(Customer customer) {
@@ -571,7 +565,14 @@ public class ProfileFragmentController extends BaseController implements
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
+    }
 
+    public void getAllCustomerReviews() {
+        getAuthenticatedData = new GetAuthenticatedData(getContext(), this);
+        getAuthenticatedData.setEndPoint(Constant.getAllCustomerReviews);
+        getAuthenticatedData.setTaskType(Constant.getAllCustomerReviewsTaskType);
+        getAuthenticatedData.setToken(token);
+        getAuthenticatedData.execute();
     }
 
     // Navigation functions
@@ -594,6 +595,9 @@ public class ProfileFragmentController extends BaseController implements
 
         } else if (taskType.equals(Constant.uploadReviewTaskType)) {
 
+        } else if (taskType.equals(Constant.getAllCustomerReviewsTaskType)) {
+            ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message), Review.class);
+            mainViewModel.setReviews(apiList.getList());
         }
     }
 

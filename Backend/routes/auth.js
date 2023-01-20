@@ -4,6 +4,8 @@ const authController = require("../controllers/authController");
 const authMiddleware = require("../middleware/auth");
 
 router.get("/getData", authMiddleware.verifyToken, authController.getCustomerData);
+router.get("/getProfileCustomer/:customerId", authController.getProfileCustomer);
+
 
 router.post("/register", authController.register);
 

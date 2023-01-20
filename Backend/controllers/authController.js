@@ -140,6 +140,22 @@ const getCustomerData = async (req, response) => {
     }
 };
 
+const getProfileCustomer = async (req, response) => {
+  try {
+    const customerId = req.params.customerId;
+    const customers = await Customer.find({
+      _id: customerId
+    });
+    return response.json({
+      message: "",
+      error: false,
+      data: customers
+    });
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
 
 const setCustomerData = async (req, response) => {
   try {
@@ -285,5 +301,6 @@ module.exports = {
   changePassword,
   changeAvatar,
   increaseCartQuantity,
-  decreaseCartQuantity
+  decreaseCartQuantity,
+  getProfileCustomer
 };

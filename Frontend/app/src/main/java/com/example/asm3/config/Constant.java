@@ -33,6 +33,8 @@ public class Constant {
     public static String getCustomerOrders = "/api/order/getCustomerOrders";
     public static String getSellingOrders = "/api/order/getSellingOrders";
     public static String updateStatusOrder = "/api/order/updateStatusOrder";
+    public static String getProfileCustomer = "/api/auth/getProfileCustomer";
+    public static String getAllCustomerReviews = "/api/review/getAllCustomerReviews";
     public static String tokenFile = "token.txt";
 
 
@@ -113,6 +115,8 @@ public class Constant {
     public static String updateStatusOrderTaskType = "updateStatusOrder";
     public static String increaseCartQuantityTaskType = "increaseCartQuantity";
     public static String decreaseCartQuantityTaskType = "decreaseCartQuantity";
+    public static String getProfileCustomerTaskType = "getProfileCustomer";
+    public static String getAllCustomerReviewsTaskType = "getAllCustomerReviews";
 
 
     public static final int cameraPermissionCode = 105;
