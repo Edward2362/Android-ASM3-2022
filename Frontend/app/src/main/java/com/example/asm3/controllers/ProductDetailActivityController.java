@@ -36,6 +36,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ProductDetailActivityController extends BaseController implements
@@ -228,7 +229,8 @@ public class ProductDetailActivityController extends BaseController implements
             detailBookNameTxt.setText(book.getName());
             detailBookYearTxt.setText("Published year: " + book.getPublishedAt());
             detailBookDescriptionTxt.setText("Description: " + book.getDescription());
-            detailSellerRatingTxt.setText(String.valueOf(book.getCustomer().getRatings()));
+            DecimalFormat df = new DecimalFormat("#.00");
+            detailSellerRatingTxt.setText(String.valueOf(Float.valueOf(df.format(book.getCustomer().getRatings()))));
             detailBookPriceTxt.setText(book.getPrice() + " đ");
             if (book.getQuantity() != 0) {
                 detailBookQuantityTxt.setText("Stock: " + book.getQuantity());

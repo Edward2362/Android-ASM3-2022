@@ -341,7 +341,7 @@ public class ProfileActivityController extends BaseController implements
     public void getAllPublicCustomerReviews(String id){
         getData = new GetData(getContext(),this);
         getData.setEndPoint(Constant.getAllPublicCustomerReviews + "/" + id);
-        getData.setTaskType(Constant.getAllCustomerReviewsTaskType);
+        getData.setTaskType(Constant.getAllPublicCustomerReviewsTaskType);
         getData.execute();
     }
 
@@ -359,7 +359,7 @@ public class ProfileActivityController extends BaseController implements
         } else if (taskType.equals(Constant.getPublicCustomerProductsTaskType)){
             ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
             sellingBooks.setValue(apiList.getList());
-        } else if (taskType.equals(Constant.getAllCustomerReviewsTaskType)){
+        } else if (taskType.equals(Constant.getAllPublicCustomerReviewsTaskType)){
             Log.d("dadadsa ","test " + message);
             ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message),Review.class);
             reviews.setValue(apiList.getList());
