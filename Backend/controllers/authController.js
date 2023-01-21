@@ -102,7 +102,7 @@ const login = async (req, response) => {
       },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "2h"
+        expiresIn: "7d"
       });
       
       customer.token = token;
