@@ -23,6 +23,10 @@ public class ReviewDialogBody extends LinearLayout {
         reviewUsername = findViewById(R.id.reviewUsername);
     }
 
+    public TextView getReviewUsername() {
+        return reviewUsername;
+    }
+
     public EditText getReviewTxt() {
         return reviewTxt;
     }

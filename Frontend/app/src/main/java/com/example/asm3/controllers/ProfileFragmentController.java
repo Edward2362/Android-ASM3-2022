@@ -136,14 +136,6 @@ public class ProfileFragmentController extends BaseController implements
             // for testing
             token = getToken();
 
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-//            displayOrders.add(new Order("Lord of the ring", "23/06/2000", "dang giao", new Customer(), "New Book", 100000, 2, true));
-
             // end testing
 
             profileAvatarLayout = view.findViewById(R.id.profileAvatarLayout);
@@ -334,7 +326,7 @@ public class ProfileFragmentController extends BaseController implements
         switch (view.getId()) {
             case R.id.orderBody:
                 Log.d(TAG, "onOrderClick: test " + position);
-                showDialog();
+                showDialog(displayOrders.get(position).getSeller().getUsername());
                 selectedOrderId = displayOrders.get(position).get_id();
                 selectedOrderIdInt = position;
                 break;
@@ -548,8 +540,9 @@ public class ProfileFragmentController extends BaseController implements
         feedbackRecView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void showDialog() {
+    private void showDialog(String sellerName) {
         reviewDialogBody = new ReviewDialogBody(getContext());
+        reviewDialogBody.getReviewUsername().setText(sellerName);
         builder = new MaterialAlertDialogBuilder(getContext());
         builder.setView(reviewDialogBody).
                 setPositiveButton(R.string.submit, this).

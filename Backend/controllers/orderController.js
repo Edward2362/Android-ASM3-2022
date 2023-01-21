@@ -73,7 +73,7 @@ const orderProducts = async (req, response) => {
     try {
       const customerId = req.customer.customerId;
 
-      const orders = await Order.find({buyer: customerId});
+      const orders = await Order.find({buyer: customerId}).populate("seller");
 
       return response.json({
         message: "",
