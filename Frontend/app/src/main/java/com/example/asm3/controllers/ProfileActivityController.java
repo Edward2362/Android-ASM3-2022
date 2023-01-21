@@ -76,6 +76,7 @@ public class ProfileActivityController extends BaseController implements
     private GenericAdapter<Book> bookAdapter;
     private GenericAdapter<Review> reviewAdapter;
     private GetData getData;
+    private int checkedBtnId = R.id.publicProfileSellingBtn;
 
     // data
     private String publicCustomerId;
@@ -124,8 +125,10 @@ public class ProfileActivityController extends BaseController implements
                     displayBooks.clear();
                     displayBooks.addAll(books);
                     bookAdapter.notifyDataSetChanged();
-                    publicProfileSellingRecView.setVisibility(View.VISIBLE);
-                    publicProfileNotifyLayout.setVisibility(View.GONE);
+                    if (checkedBtnId == R.id.publicProfileSellingBtn) {
+                        publicProfileSellingRecView.setVisibility(View.VISIBLE);
+                        publicProfileNotifyLayout.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -140,8 +143,10 @@ public class ProfileActivityController extends BaseController implements
                     displayReviews.clear();
                     displayReviews.addAll(reviews);
                     reviewAdapter.notifyDataSetChanged();
-                    publicProfileFeedbackRecView.setVisibility(View.VISIBLE);
-                    publicProfileNotifyLayout.setVisibility(View.GONE);
+                    if (checkedBtnId == R.id.publicProfileFeedbackBtn) {
+                        publicProfileFeedbackRecView.setVisibility(View.VISIBLE);
+                        publicProfileNotifyLayout.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -169,6 +174,7 @@ public class ProfileActivityController extends BaseController implements
             getProfileCustomer(publicCustomerId);
             getPublicCustomerProducts(publicCustomerId);
             getAllPublicCustomerReviews(publicCustomerId);
+            publicProfileDataBtnGrp.check(R.id.publicProfileSellingBtn);
         }
     }
 
