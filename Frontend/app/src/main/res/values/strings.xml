@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">asm3</string>
+    <string name="app_name">GoGoat</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="notification">Notification</string>
+    <string name="profile">Profile</string>
+    <string name="cart_title">Your cart</string>
+    <string name="new_product">New</string>
+    <string name="used_product">Used</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="filter_sort_condition">Sort by condition</string>
+    <string name="filter_new_used">New → Used</string>
+    <string name="filter_used_new">Used → New</string>
+    <string name="filter_sort_price">Sort by price</string>
+    <string name="filter_high_low">High → Low</string>
+    <string name="filter_low_high">Low → High</string>
+    <string name="filter_sort_rating">Sort by rating</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_connection_message">Please connect to the internet for your best app experience</string>
+    <string name="no_connection">No connection</string>
+
 </resources>

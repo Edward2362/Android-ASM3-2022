@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.BottomSheet.Modal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:behavior_fitToContents="true">
+
+    <!-- Drag handle for accessibility -->
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--    CONDITION   -->
+
+    <TextView
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/currentFilterTxt"
+        android:layout_width="match_parent"
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline6"
+        android:layout_height="wrap_content"
+        android:text="Current filter: " />
+
+    <RadioGroup
+        android:id="@+id/filterRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="22dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_sort_condition"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+            android:textStyle="bold" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/conditionNewUsedBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/filter_new_used"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+            app:useMaterialThemeColors="true" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/conditionUsedNewBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/filter_used_new"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+        <!--    RATING   -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_sort_rating"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+            android:textStyle="bold" />
+
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/ratingHighLowBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/filter_high_low"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/ratingLowHighBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/filter_low_high"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+
+        <!--    PRICE   -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_sort_price"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1"
+            android:textStyle="bold" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/priceHighLowBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/filter_high_low"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/priceLowHighBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/filter_low_high"
+            android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Body1" />
+    </RadioGroup>
+
+</LinearLayout>

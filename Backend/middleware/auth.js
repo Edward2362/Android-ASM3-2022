@@ -5,7 +5,9 @@ const verifyToken = (req, response, next) => {
 
   if (token === undefined) {
     return response.json({
-      message: "Error"
+      message: "Error",
+      error: true,
+      data: []
     });
   }
 
@@ -15,7 +17,9 @@ const verifyToken = (req, response, next) => {
     return next();
   } catch(error) {
     return response.json({
-      message: "Wrong token"
+      message: "Wrong token",
+      error: true,
+      data: []
     });
   }
 };

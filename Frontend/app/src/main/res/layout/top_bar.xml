@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backButton"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="0dp"
+        android:visibility="visible"
+        app:icon="@drawable/ic_back_arrow"
+        app:iconGravity="start" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/searchview_bg"
+        android:visibility="visible"
+        app:iconifiedByDefault="false"
+        android:layout_marginHorizontal="17dp"/>
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="0dp"
+        android:text="@string/app_name"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.MdcTypographyStyles.Headline3"
+        android:visibility="gone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cartButton"
+        style="?attr/materialIconButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="2dp"
+        android:visibility="visible"
+        app:icon="@drawable/cart"
+        app:iconGravity="end" />
+
+</merge>

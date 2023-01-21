@@ -20,21 +20,32 @@ const bookSchema = new mongoose.Schema({
       default: 0
     },
     publishedAt: {
-      type: Date
-    },
-    createdAt: {
-      type: Date
+      type: String,
     },
     category: {
       type: Schema.Types.ObjectId,
       ref: "Category"
     },
+    subCategory: [{
+      type: Schema.Types.ObjectId,
+      ref: "SubCategory"
+    }],
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
+    },
+    isNewProduct: {
+      type: Boolean,
+    },
+    image: {
+      type: String
     }
 });
 
+
 const Book = mongoose.model("Book", bookSchema);
+
+
+
 
 module.exports = Book;

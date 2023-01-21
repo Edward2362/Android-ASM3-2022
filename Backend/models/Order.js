@@ -3,16 +3,33 @@ const { Schema } = mongoose;
 
 const orderSchema = new mongoose.Schema({
     timeStamp: {
-      type: Date,
-      default: Date.now()
+      type: String
+    },
+    status: {
+      type: String
+    },
+    buyer: {
+      type: Schema.Types.ObjectId,
+      ref: "Customer"
     },
     seller: {
       type: Schema.Types.ObjectId,
       ref: "Customer"
     },
-    customer: {
-      type: Schema.Types.ObjectId,
-      ref: "Customer"
+    bookImage: {
+      type: String
+    },
+    bookName: {
+      type: String
+    },
+    bookPrice: {
+      type: Number
+    },
+    quantity: {
+      type: Number
+    },
+    hasReview: {
+      type: Boolean
     }
 });
 
