@@ -73,7 +73,7 @@ const getAllReviews = async (req, response) => {
 
 const getAllCustomerReviews = async (req, response) => {
 	const customerId = req.customer.customerId;
-	const reviews = await Review.find({}).populate("order");
+	const reviews = await Review.find({}).populate("order").populate("customer");
 	let customerReviews = [];
 	for (let i = 0; i < reviews.length; i++) {
 		if (reviews[i].order.seller.toString() === customerId.toString()) {
@@ -89,7 +89,7 @@ const getAllCustomerReviews = async (req, response) => {
 
 const getAllPublicCustomerReviews = async (req, response) => {
 	const customerId = req.params.customerId;
-	const reviews = await Review.find({}).populate("order");
+	const reviews = await Review.find({}).populate("order").populate("customer");
 	let customerReviews = [];
 	for (let i = 0; i < reviews.length; i++) {
 		if (reviews[i].order.seller.toString() === customerId.toString()) {
