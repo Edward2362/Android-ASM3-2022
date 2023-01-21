@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.asm3.ProfileActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.BookHolder;
@@ -244,7 +245,7 @@ public class ProfileActivityController extends BaseController implements
         }
         switch (view.getId()) {
             case R.id.reviewUserImgLayout:
-                Log.d(TAG, "onAvatarClick: test " + position);
+                goToSellerProfile(displayReviews.get(position).getCustomer().get_id());
                 break;
         }
     }
@@ -320,6 +321,12 @@ public class ProfileActivityController extends BaseController implements
         publicProfileAvatarImg.setImageBitmap(Helper.stringToBitmap(publicCustomer.getAvatar()));
         publicProfileDataBtnGrp.check(R.id.publicProfileSellingBtn);
         publicProfileSellingRecView.setVisibility(View.VISIBLE);
+    }
+
+    private void goToSellerProfile(String sellerId) {
+        Intent intent = new Intent(getContext(), ProfileActivity.class);
+        intent.putExtra(Constant.publicProfileIdKey, sellerId);
+        getActivity().startActivity(intent);
     }
 
     // Request functions

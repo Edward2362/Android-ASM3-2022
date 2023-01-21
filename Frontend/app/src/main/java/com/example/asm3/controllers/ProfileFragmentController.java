@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.AccountSettingActivity;
 import com.example.asm3.AuthenticationActivity;
+import com.example.asm3.ProfileActivity;
 import com.example.asm3.R;
 import com.example.asm3.SaleProgressActivity;
 import com.example.asm3.base.adapter.GenericAdapter;
@@ -351,7 +352,7 @@ public class ProfileFragmentController extends BaseController implements
         }
         switch (view.getId()) {
             case R.id.reviewUserImgLayout:
-                Log.d(TAG, "onAvatarClick: test " + position);
+                goToSellerProfile(displayReviews.get(position).getCustomer().get_id());
                 break;
         }
     }
@@ -513,6 +514,12 @@ public class ProfileFragmentController extends BaseController implements
                 reviewHolder.getReviewDateTxt().setText(item.getDate());
             }
         };
+    }
+
+    private void goToSellerProfile(String sellerId) {
+        Intent intent = new Intent(getContext(), ProfileActivity.class);
+        intent.putExtra(Constant.publicProfileIdKey, sellerId);
+        getActivity().startActivity(intent);
     }
 
     private void loadSelling() {
