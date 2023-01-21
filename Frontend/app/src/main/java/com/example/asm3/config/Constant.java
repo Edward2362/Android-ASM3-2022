@@ -3,11 +3,7 @@ package com.example.asm3.config;
 import java.util.regex.Pattern;
 
 public class Constant {
-<<<<<<< HEAD
-    public static String baseDomain = "http://192.168.1.4:9000"; //
-=======
-    public static String baseDomain = "http://192.168.0.114:9000"; //
->>>>>>> origin/change-password-bug
+    public static String baseDomain = "https://go-goat-api-v1.herokuapp.com"; //
     public static String loginCustomer = "/api/auth/login";
     public static String registerCustomer = "/api/auth/register";
     public static String getCustomerData = "/api/auth/getData";
