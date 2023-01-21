@@ -20,7 +20,6 @@
 |-------------------------|-------------------------------------------------------------------------------------|
 |Login                    | Validate account with a username, and password.                                     |
 |Register                 | Register with a username, email, and password.                                      |
-|Password Reset           |                                                                                     |
 |Search Book              |Filtering/Search products by authors, sellers, categories, and subcategories         |
 |Post Book                | Add data using self-made web API                                                    |
 |Update Book              | Update data using self-made web API                                                 |
