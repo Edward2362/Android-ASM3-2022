@@ -278,6 +278,9 @@ public class ManageBookActivityController extends BaseController implements
 
     public void onUploadProduct() {
         if (validated()) {
+            manageProgressBar.setVisibility(View.VISIBLE);
+            uploadProduct.setEnabled(false);
+
             String productName = "";
             String productAuthor = "";
             String productDescription = "";
@@ -319,6 +322,10 @@ public class ManageBookActivityController extends BaseController implements
 
     public void onUpdateProduct() {
         if (validated()) {
+            manageProgressBar.setVisibility(View.VISIBLE);
+            updateProduct.setEnabled(false);
+            removeProduct.setEnabled(false);
+
             String productName = "";
             String productAuthor = "";
             String productDescription = "";
@@ -358,6 +365,9 @@ public class ManageBookActivityController extends BaseController implements
     }
 
     public void onRemoveProduct() {
+        manageProgressBar.setVisibility(View.VISIBLE);
+        updateProduct.setEnabled(false);
+        removeProduct.setEnabled(false);
         deleteBook(productId);
     }
 
@@ -409,8 +419,6 @@ public class ManageBookActivityController extends BaseController implements
                     showConnectDialog();
                     return;
                 }
-                manageProgressBar.setVisibility(View.VISIBLE);
-                uploadProduct.setEnabled(false);
                 onUploadProduct();
                 break;
             case R.id.updateProduct:
@@ -418,9 +426,6 @@ public class ManageBookActivityController extends BaseController implements
                     showConnectDialog();
                     return;
                 }
-                manageProgressBar.setVisibility(View.VISIBLE);
-                updateProduct.setEnabled(false);
-                removeProduct.setEnabled(false);
                 onUpdateProduct();
                 break;
             case R.id.removeProduct:
@@ -428,9 +433,6 @@ public class ManageBookActivityController extends BaseController implements
                     showConnectDialog();
                     return;
                 }
-                manageProgressBar.setVisibility(View.VISIBLE);
-                updateProduct.setEnabled(false);
-                removeProduct.setEnabled(false);
                 onRemoveProduct();
                 break;
         }

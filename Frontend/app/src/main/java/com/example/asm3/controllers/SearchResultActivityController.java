@@ -109,19 +109,24 @@ public class SearchResultActivityController extends BaseController implements
         resultViewModel.getFilterType().observe(getActivity(), new Observer<String>() {
             @Override
             public void onChanged(String currentFilter) {
-//                if (currentFilter.equals(Constant.conditionNewUsedKey)) {
-//                    conditionNewUsedBtn.setChecked(true);
-//                } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
+                ArrayList<Book> newBooksOrder = new ArrayList<>();
+                if (currentFilter.equals(Constant.conditionNewUsedKey)) {
+//                    for (int position = 0; position < searchResults.size() - 1; position++) {
+//                        for (int  = 0; i < ; i++) {
+//
+//                        }
+//                    }
+                } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
 //                    conditionUsedNewBtn.setChecked(true);
-//                } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
+                } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
 //                    ratingHighLowBtn.setChecked(true);
-//                } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
+                } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
 //                    ratingLowHighBtn.setChecked(true);
-//                } else if (currentFilter.equals(Constant.priceHighLowKey)) {
+                } else if (currentFilter.equals(Constant.priceHighLowKey)) {
 //                    priceHighLowBtn.setChecked(true);
-//                } else if (currentFilter.equals(Constant.priceLowHighKey)) {
+                } else if (currentFilter.equals(Constant.priceLowHighKey)) {
 //                    priceLowHighBtn.setChecked(true);
-//                }
+                }
             }
         });
 
@@ -216,6 +221,10 @@ public class SearchResultActivityController extends BaseController implements
         };
     }
 
+
+//    private void sorting(ArrayList<Book> books, String filter) {}
+
+
     // Request functions
     public void getSearchResults(String textInput) {
         getData = new GetData(getContext(), this);
@@ -253,6 +262,7 @@ public class SearchResultActivityController extends BaseController implements
             searchResults.addAll(apiList.getList());
             searchResultAdapter.notifyDataSetChanged();
         }
+        Log.d(TAG, "onFinished: test search result " + searchResults.get(0).getCustomer().getRatings());
         if (searchResults.isEmpty()) {
             searchResultNotifyLayout.setVisibility(View.VISIBLE);
         } else {

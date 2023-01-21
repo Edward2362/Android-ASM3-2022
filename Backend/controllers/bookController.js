@@ -114,7 +114,7 @@ const deleteBook = async (req, response) => {
 const getProducts = async (req, response) => {
 	const input = req.query;
 
-	let products = await Book.find({}).populate("category").populate("subCategory");
+	let products = await Book.find({}).populate("category").populate("subCategory").populate("customer");
 
 	if (input.subCategory === undefined && input.category === undefined) {
 		return response.json({
@@ -313,7 +313,7 @@ const searchProduct = async (req, response) => {
 				data: [],
 			});
 		}
-		let products = await Book.find({ name: { $regex: new RegExp(input.queryInput.toLowerCase(), "i") } });
+		let products = await Book.find({ name: { $regex: new RegExp(input.queryInput.toLowerCase(), "i") } }).populate("customer");
 		return response.json({
 			message: "",
 			error: false,
