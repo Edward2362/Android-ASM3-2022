@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
     private MaterialRadioButton conditionNewUsedBtn, conditionUsedNewBtn, ratingHighLowBtn, ratingLowHighBtn, priceHighLowBtn, priceLowHighBtn;
     private ResultViewModel resultViewModel;
     private String currentFilter;
+    private TextView currentFilterTxt;
 
     public FilterBottomSheetFragment() {
     }
@@ -45,6 +47,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
     }
 
     public void onInit(View view, ViewModel viewModel) {
+        currentFilterTxt = view.findViewById(R.id.currentFilterTxt);
         filterRadioGroup = view.findViewById(R.id.filterRadioGroup);
         conditionNewUsedBtn = view.findViewById(R.id.conditionNewUsedBtn);
         conditionUsedNewBtn = view.findViewById(R.id.conditionUsedNewBtn);
@@ -54,19 +57,19 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
         priceLowHighBtn = view.findViewById(R.id.priceLowHighBtn);
 
         filterRadioGroup.setOnCheckedChangeListener(this);
-//        if (currentFilter.equals(Constant.conditionNewUsedKey)) {
-//            conditionNewUsedBtn.setChecked(true);
-//        } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
-//            conditionUsedNewBtn.setChecked(true);
-//        } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
-//            ratingHighLowBtn.setChecked(true);
-//        } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
-//            ratingLowHighBtn.setChecked(true);
-//        } else if (currentFilter.equals(Constant.priceHighLowKey)) {
-//            priceHighLowBtn.setChecked(true);
-//        } else if (currentFilter.equals(Constant.priceLowHighKey)) {
-//            priceLowHighBtn.setChecked(true);
-//        }
+        if (currentFilter.equals(Constant.conditionNewUsedKey)) {
+            currentFilterTxt.setText("Current filter condition: " + getActivity().getResources().getString(R.string.filter_new_used));
+        } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
+            currentFilterTxt.setText("Current filter condition: " + getActivity().getResources().getString(R.string.filter_used_new));
+        } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
+            currentFilterTxt.setText("Current filter rating: " + getActivity().getResources().getString(R.string.filter_high_low));
+        } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
+            currentFilterTxt.setText("Current filter rating: " + getActivity().getResources().getString(R.string.filter_low_high));
+        } else if (currentFilter.equals(Constant.priceHighLowKey)) {
+            currentFilterTxt.setText("Current filter price: " + getActivity().getResources().getString(R.string.filter_high_low));
+        } else if (currentFilter.equals(Constant.priceLowHighKey)) {
+            currentFilterTxt.setText("Current filter price: " + getActivity().getResources().getString(R.string.filter_low_high));
+        }
     }
 
     @Override
@@ -99,7 +102,6 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
         }
         Log.d("TAG", "onCreate: test " + resultViewModel.getFilterType().getValue());
         Log.d("TAG", "onCheckedChanged: test " + resultViewModel.getFilterProgressBar().getValue());
-        resultViewModel.getFilterProgressBar().getValue().setVisibility(View.VISIBLE);
         dismiss();
     }
 }

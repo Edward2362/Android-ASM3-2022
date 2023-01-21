@@ -111,21 +111,65 @@ public class SearchResultActivityController extends BaseController implements
             public void onChanged(String currentFilter) {
                 ArrayList<Book> newBooksOrder = new ArrayList<>();
                 if (currentFilter.equals(Constant.conditionNewUsedKey)) {
-//                    for (int position = 0; position < searchResults.size() - 1; position++) {
-//                        for (int  = 0; i < ; i++) {
-//
-//                        }
-//                    }
+                    newBooksOrder.addAll(searchResults);
+                    for (int position = 0; position < newBooksOrder.size() - 1; position++) {
+                        for (int observee = 0; observee < newBooksOrder.size() - 1 - position; observee++) {
+                            if (!newBooksOrder.get(observee).isNew() && newBooksOrder.get(observee + 1).isNew()) {
+                                swap(newBooksOrder, observee);
+                            }
+                        }
+                    }
+                    resetAdapter(newBooksOrder);
                 } else if (currentFilter.equals(Constant.conditionUsedNewKey)) {
-//                    conditionUsedNewBtn.setChecked(true);
+                    newBooksOrder.addAll(searchResults);
+                    for (int position = 0; position < searchResults.size() - 1; position++) {
+                        for (int observee = 0; observee < searchResults.size() - 1 - position; observee++) {
+                            if (newBooksOrder.get(observee).isNew() && !newBooksOrder.get(observee + 1).isNew()) {
+                                swap(newBooksOrder, observee);
+                            }
+                        }
+                    }
+                    resetAdapter(newBooksOrder);
                 } else if (currentFilter.equals(Constant.ratingHighLowKey)) {
-//                    ratingHighLowBtn.setChecked(true);
+                    newBooksOrder.addAll(searchResults);
+                    for (int position = 0; position < searchResults.size() - 1; position++) {
+                        for (int observee = 0; observee < searchResults.size() - 1 - position; observee++) {
+                            if (newBooksOrder.get(observee).getCustomer().getRatings() < newBooksOrder.get(observee + 1).getCustomer().getRatings()) {
+                                swap(newBooksOrder, observee);
+                            }
+                        }
+                    }
+                    resetAdapter(newBooksOrder);
                 } else if (currentFilter.equals(Constant.ratingLowHighKey)) {
-//                    ratingLowHighBtn.setChecked(true);
+                    newBooksOrder.addAll(searchResults);
+                    for (int position = 0; position < searchResults.size() - 1; position++) {
+                        for (int observee = 0; observee < searchResults.size() - 1 - position; observee++) {
+                            if (newBooksOrder.get(observee).getCustomer().getRatings() > newBooksOrder.get(observee + 1).getCustomer().getRatings()) {
+                                swap(newBooksOrder, observee);
+                            }
+                        }
+                    }
+                    resetAdapter(newBooksOrder);
                 } else if (currentFilter.equals(Constant.priceHighLowKey)) {
-//                    priceHighLowBtn.setChecked(true);
+                    newBooksOrder.addAll(searchResults);
+                    for (int position = 0; position < searchResults.size() - 1; position++) {
+                        for (int observee = 0; observee < searchResults.size() - 1 - position; observee++) {
+                            if (newBooksOrder.get(observee).getPrice() < newBooksOrder.get(observee + 1).getPrice()) {
+                                swap(newBooksOrder, observee);
+                            }
+                        }
+                    }
+                    resetAdapter(newBooksOrder);
                 } else if (currentFilter.equals(Constant.priceLowHighKey)) {
-//                    priceLowHighBtn.setChecked(true);
+                    newBooksOrder.addAll(searchResults);
+                    for (int position = 0; position < searchResults.size() - 1; position++) {
+                        for (int observee = 0; observee < searchResults.size() - 1 - position; observee++) {
+                            if (newBooksOrder.get(observee).getPrice() > newBooksOrder.get(observee + 1).getPrice()) {
+                                swap(newBooksOrder, observee);
+                            }
+                        }
+                    }
+                    resetAdapter(newBooksOrder);
                 }
             }
         });
@@ -153,7 +197,7 @@ public class SearchResultActivityController extends BaseController implements
         searchResultRecView.setVisibility(View.INVISIBLE);
         if (isOnline()) {
             if (isCategorySearch) {
-                getProductsByCategoryAndSubcategories(searchCategory,searchSubcategories);
+                getProductsByCategoryAndSubcategories(searchCategory, searchSubcategories);
             } else {
                 getSearchResults(queryInput);
             }
@@ -215,10 +259,34 @@ public class SearchResultActivityController extends BaseController implements
                 BookHolder bookHolder = (BookHolder) holder;
                 bookHolder.getBookImg().setImageBitmap(Helper.stringToBitmap(item.getImage()));
                 bookHolder.getBookNameTxt().setText(item.getName());
-                bookHolder.getBookConditionTxt().setText("Condition: New");
+                bookHolder.getBookConditionTxt().setText("Condition: " + (item.isNew() ? "new" : "used"));
                 bookHolder.getBookPriceTxt().setText(item.getPrice() + " đ");
             }
         };
+    }
+
+    private void swap(ArrayList<Book> newBooksOrder, int observee) {
+        Book temp = newBooksOrder.get(observee);
+        newBooksOrder.set(observee, newBooksOrder.get(observee + 1));
+        newBooksOrder.set(observee + 1, temp);
+    }
+
+    private void resetAdapter(ArrayList<Book> newBooksOrder) {
+        searchResults.clear();
+        searchResults.addAll(newBooksOrder);
+        searchResultAdapter.notifyDataSetChanged();
+    }
+
+    private void sorting(ArrayList<Book> newBooksOrder, boolean condition) {
+        newBooksOrder.addAll(searchResults);
+        for (int position = 0; position < searchResults.size() - 1; position++) {
+            for (int observee = 0; observee < searchResults.size() - 1 - position; observee++) {
+                if (condition) {
+                    swap(newBooksOrder, observee);
+                }
+            }
+        }
+        resetAdapter(newBooksOrder);
     }
 
 
@@ -233,9 +301,9 @@ public class SearchResultActivityController extends BaseController implements
         getData.execute();
     }
 
-    public void getProductsByCategoryAndSubcategories(String categoryName,ArrayList<String> subCategoriesList) {
+    public void getProductsByCategoryAndSubcategories(String categoryName, ArrayList<String> subCategoriesList) {
         String subCategoriesQuery = "";
-        for (int i=0;i<subCategoriesList.size();i++){
+        for (int i = 0; i < subCategoriesList.size(); i++) {
             subCategoriesQuery = subCategoriesQuery + "&subCategory=" + subCategoriesList.get(i);
         }
         getData = new GetData(getContext(), this);
@@ -262,7 +330,6 @@ public class SearchResultActivityController extends BaseController implements
             searchResults.addAll(apiList.getList());
             searchResultAdapter.notifyDataSetChanged();
         }
-        Log.d(TAG, "onFinished: test search result " + searchResults.get(0).getCustomer().getRatings());
         if (searchResults.isEmpty()) {
             searchResultNotifyLayout.setVisibility(View.VISIBLE);
         } else {
