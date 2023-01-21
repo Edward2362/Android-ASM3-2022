@@ -183,6 +183,12 @@ public class CheckoutActivityController extends BaseController implements
             ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message),Customer.class);
             customer = apiData.getData();
             generateOrders();
+            if(customer.getAddress().equals("")){
+                addressDetailTxt.setText("No Address");
+                checkoutBtn.setEnabled(false);
+            }else{
+                addressDetailTxt.setText(customer.getAddress());
+            }
         } else if (taskType.equals(Constant.orderProductsTaskType)) {
             getActivity().finish();
         } else if (taskType.equals(Constant.generateOrdersTaskType)) {
