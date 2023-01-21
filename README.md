@@ -34,7 +34,7 @@
 |Java, XML                |Nodejs, Render        |MongoDB, Mongo Atlas|Android Studio, Visual Studio Code|Heroku|
 
 ### Web API
-> We have create a Heroku hosting () to connect to the server\n
+> We have create a Heroku hosting domain (https://go-goat-api-v1.herokuapp.com/) to connect to the server
 > you can click on the sample below to perform a get all products GET method
 [Sample](https://go-goat-api-v1.herokuapp.com/api/book/getProducts)
 ### Fail to delivery function
