@@ -312,6 +312,7 @@ public class ProfileActivityController extends BaseController implements
         publicProfileUsernameTxt.setText(publicCustomer.getUsername());
         publicProfileEmailTxt.setText(publicCustomer.getEmail());
         publicProfileAvatarImg.setImageBitmap(Helper.stringToBitmap(publicCustomer.getAvatar()));
+        publicProfileRatingBar.setRating(publicCustomer.getRatings());
         publicProfileDataBtnGrp.check(R.id.publicProfileSellingBtn);
         publicProfileSellingRecView.setVisibility(View.VISIBLE);
     }
