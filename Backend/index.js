@@ -42,4 +42,4 @@ app.use("/api/notification", notificationRouter);
 app.use("/api/review", reviewRouter);
 
 
-app.listen(9000);
+app.listen(process.env.PORT||9000);
