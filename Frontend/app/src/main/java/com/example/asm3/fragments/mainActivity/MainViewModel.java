@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.asm3.R;
 import com.example.asm3.custom.components.TopBarView;
-import com.example.asm3.fragments.authenticationActivity.LoginFragment;
-import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;

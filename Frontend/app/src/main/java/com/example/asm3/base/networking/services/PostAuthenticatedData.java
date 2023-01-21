@@ -2,7 +2,6 @@ package com.example.asm3.base.networking.services;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.example.asm3.base.networking.api.ApiService;
 import com.example.asm3.config.Constant;

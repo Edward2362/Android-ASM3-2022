@@ -1,11 +1,8 @@
 package com.example.asm3.controllers;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -210,7 +207,6 @@ public class SearchResultActivityController extends BaseController implements
             showConnectDialog();
             return;
         }
-        Log.d(TAG, "onBookClick: book clicked " + searchResults.get(position).getName());
         Helper.goToBookDetail(getContext(), getActivity(), searchResults.get(position).get_id(), position);
     }
 

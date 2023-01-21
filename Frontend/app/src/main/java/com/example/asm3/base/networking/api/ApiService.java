@@ -1,12 +1,7 @@
 package com.example.asm3.base.networking.api;
 
-import static android.content.ContentValues.TAG;
-
-import android.util.Log;
-
 import com.example.asm3.config.Constant;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -34,26 +29,19 @@ public class ApiService {
 
     public String getJSON(String endPoint) {
         String json = "";
-        Log.d(TAG, "getJSON: test ");
         try {
             URL url = new URL(baseUrl + endPoint);
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            Log.d(TAG, "getJSON:  test in try " + httpURLConnection);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            Log.d(TAG, "getJSON:  test in try");
             String line = "";
             StringBuilder stringBuilder = new StringBuilder();
-            Log.d(TAG, "getJSON:  test in try bufferedReader " + bufferedReader);
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
             }
             json = stringBuilder.toString();
-            Log.d(TAG, "getJSON:  test in try json " + json);
         } catch(MalformedURLException malformedURLException) {
-            Log.d(TAG, "getJSON:  test in 1 catch");
             malformedURLException.printStackTrace();
         } catch(IOException ioException) {
-            Log.d(TAG, "getJSON:  test in 2 catch");
             ioException.printStackTrace();
         }
         return json;
@@ -61,7 +49,6 @@ public class ApiService {
 
     public String getJSON(String endPoint, String token) {
         String json = "";
-        Log.d("place", baseUrl + endPoint);
         try {
             URL url = new URL(baseUrl + endPoint);
             httpURLConnection = (HttpURLConnection) url.openConnection();

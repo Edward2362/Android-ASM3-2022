@@ -1,6 +1,5 @@
 package com.example.asm3.controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.widget.Toast;
 

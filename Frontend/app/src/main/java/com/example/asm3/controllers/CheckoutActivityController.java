@@ -1,13 +1,9 @@
 package com.example.asm3.controllers;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +27,6 @@ import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
-import com.example.asm3.models.CartItem;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
 import com.google.android.material.textfield.TextInputEditText;
@@ -61,15 +56,15 @@ public class CheckoutActivityController extends BaseController implements
     private float newTotalPrice = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public CheckoutActivityController(Context context, FragmentActivity activity){
-        super(context,activity);
+    public CheckoutActivityController(Context context, FragmentActivity activity) {
+        super(context, activity);
         topBar = getActivity().findViewById(R.id.checkoutTopBar);
         topBar.setSubPage("Checkout");
         orders = new ArrayList<Order>();
     }
 
     @Override
-    public void onInit(){
+    public void onInit() {
         backBtn = topBar.getBackButton();
         backBtn.setOnClickListener(this);
 
@@ -86,8 +81,8 @@ public class CheckoutActivityController extends BaseController implements
         loadOrders();
         checkoutSubmitProgressBar.setVisibility(View.INVISIBLE);
         checkoutBtn.setEnabled(true);
-        if (!isAuth()){
-            Helper.goToLogin(getContext(),getActivity());
+        if (!isAuth()) {
+            Helper.goToLogin(getContext(), getActivity());
         } else {
             token = getToken();
             getAuthCustomer();
@@ -95,17 +90,18 @@ public class CheckoutActivityController extends BaseController implements
 
         couponEt.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Log.d(TAG, "afterTextChanged: " + editable.toString());
-                if(editable.toString().equals("HAPPYNEWYEAR")){
+                if (editable.toString().equals("HAPPYNEWYEAR")) {
                     newTotalPrice -= 100000;
-                    if(newTotalPrice < 0) newTotalPrice = 0;
+                    if (newTotalPrice < 0) newTotalPrice = 0;
                     orderTotalPriceTxt.setText("Order total: " + newTotalPrice + " đ");
                 }
             }
@@ -153,7 +149,7 @@ public class CheckoutActivityController extends BaseController implements
                 orderHolder.getOrderBookTxt().setText(order.getBookName());
                 orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(order.getBookImage()));
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + order.getQuantity());
-                orderHolder.getOrderPriceTxt().setText(order.getBookPrice()*order.getQuantity() + " đ");
+                orderHolder.getOrderPriceTxt().setText(order.getBookPrice() * order.getQuantity() + " đ");
             }
         };
     }
@@ -163,6 +159,7 @@ public class CheckoutActivityController extends BaseController implements
         orderRecView.setAdapter(orderAdapter);
 
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -178,26 +175,26 @@ public class CheckoutActivityController extends BaseController implements
     }
 
     @Override
-    public void onFinished(String message, String taskType){
+    public void onFinished(String message, String taskType) {
         if (taskType.equals(Constant.getCustomer)) {
-            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message),Customer.class);
+            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             customer = apiData.getData();
             generateOrders();
-            if(customer.getAddress().equals("")){
+            if (customer.getAddress().equals("")) {
                 addressDetailTxt.setText("No Address");
                 checkoutBtn.setEnabled(false);
-            }else{
+            } else {
                 addressDetailTxt.setText(customer.getAddress());
             }
         } else if (taskType.equals(Constant.orderProductsTaskType)) {
             getActivity().finish();
         } else if (taskType.equals(Constant.generateOrdersTaskType)) {
-            ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message),Order.class);
+            ApiList<Order> apiList = ApiList.fromJSON(ApiList.getData(message), Order.class);
             orders.clear();
             orders.addAll(apiList.getList());
             orderAdapter.notifyDataSetChanged();
             for (int i = 0; i < apiList.getList().size(); i++) {
-                newTotalPrice = newTotalPrice + apiList.getList().get(i).getBookPrice()* apiList.getList().get(i).getQuantity();
+                newTotalPrice = newTotalPrice + apiList.getList().get(i).getBookPrice() * apiList.getList().get(i).getQuantity();
             }
             orderTotalPriceTxt.setText("Order total: " + newTotalPrice + " đ");
             checkoutProgressBar.setVisibility(View.INVISIBLE);
@@ -212,7 +209,7 @@ public class CheckoutActivityController extends BaseController implements
 
     @Override
     public void onOrderClick(int position, View view) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return;
         }

@@ -1,23 +1,17 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.example.asm3.CheckoutActivity;
 import com.example.asm3.ForgetPasswordActivity;
 import com.example.asm3.MainActivity;
 import com.example.asm3.R;
@@ -27,7 +21,6 @@ import com.example.asm3.base.networking.services.PostData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.authenticationActivity.AuthViewModel;
-import com.example.asm3.fragments.authenticationActivity.LoginFragment;
 import com.example.asm3.fragments.authenticationActivity.RegisterFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.Customer;
@@ -96,7 +89,7 @@ public class LoginFragmentController extends BaseController implements
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.forgetPwTxt:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
@@ -107,7 +100,7 @@ public class LoginFragmentController extends BaseController implements
                 Helper.loadFragment(fragmentManager, registerFragment, "register", authLayoutId);
                 break;
             case R.id.loginBtn:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
@@ -144,10 +137,8 @@ public class LoginFragmentController extends BaseController implements
             postData.setEndPoint(Constant.loginCustomer);
             postData.setTaskType(Constant.login);
             postData.execute(jsonObject);
-            Log.d(TAG, "loginCustomer: test normal");
         } catch (JSONException jsonException) {
             jsonException.printStackTrace();
-            Log.d(TAG, "loginCustomer: test error");
         }
     }
 
@@ -169,10 +160,8 @@ public class LoginFragmentController extends BaseController implements
     }
 
 
-
     @Override
     public void onFinished(String message, String taskType) {
-        Log.d(TAG, "onFinished: test " + message);
         if (taskType.equals(Constant.login)) {
             onLoginFinished(message);
         }
@@ -180,7 +169,7 @@ public class LoginFragmentController extends BaseController implements
 
     @Override
     public void onError(String taskType) {
-        if(taskType.equals(Constant.login)) {
+        if (taskType.equals(Constant.login)) {
             loginFailTxt.setVisibility(View.VISIBLE);
         }
     }

@@ -1,14 +1,10 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +38,6 @@ import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
-import com.example.asm3.models.CartItem;
-import com.example.asm3.models.Category;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Review;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -184,7 +178,6 @@ public class ProfileActivityController extends BaseController implements
         publicProfileNotifyLayout.setVisibility(View.VISIBLE);
         publicProfileSellingRecView.setVisibility(View.GONE);
         publicProfileFeedbackRecView.setVisibility(View.GONE);
-        Log.d(TAG, "onButtonChecked: test " + isChecked);
         switch (group.getCheckedButtonId()) {
             case R.id.publicProfileSellingBtn:
                 if (!sellingBooks.getValue().isEmpty()) {
@@ -331,7 +324,7 @@ public class ProfileActivityController extends BaseController implements
 
     // Request functions
     public void getProfileCustomer(String id) {
-        getData = new GetData(getContext(),this);
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getProfileCustomer + "/" + id);
         getData.setTaskType(Constant.getProfileCustomerTaskType);
         getData.execute();
@@ -339,14 +332,14 @@ public class ProfileActivityController extends BaseController implements
     }
 
     public void getPublicCustomerProducts(String id) {
-        getData = new GetData(getContext(),this);
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getPublicCustomerProducts + "/" + id);
         getData.setTaskType(Constant.getPublicCustomerProductsTaskType);
         getData.execute();
     }
 
-    public void getAllPublicCustomerReviews(String id){
-        getData = new GetData(getContext(),this);
+    public void getAllPublicCustomerReviews(String id) {
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getAllPublicCustomerReviews + "/" + id);
         getData.setTaskType(Constant.getAllPublicCustomerReviewsTaskType);
         getData.execute();
@@ -358,17 +351,16 @@ public class ProfileActivityController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-        if (taskType.equals(Constant.getProfileCustomerTaskType)){
-            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message),Customer.class);
+        if (taskType.equals(Constant.getProfileCustomerTaskType)) {
+            ApiData<Customer> apiData = ApiData.fromJSON(ApiData.getData(message), Customer.class);
             publicCustomer = apiData.getData();
             bindData();
             profileProgressBar.setVisibility(View.GONE);
-        } else if (taskType.equals(Constant.getPublicCustomerProductsTaskType)){
-            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
+        } else if (taskType.equals(Constant.getPublicCustomerProductsTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             sellingBooks.setValue(apiList.getList());
-        } else if (taskType.equals(Constant.getAllPublicCustomerReviewsTaskType)){
-            Log.d("dadadsa ","test " + message);
-            ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message),Review.class);
+        } else if (taskType.equals(Constant.getAllPublicCustomerReviewsTaskType)) {
+            ApiList<Review> apiList = ApiList.fromJSON(ApiList.getData(message), Review.class);
             reviews.setValue(apiList.getList());
         }
     }

@@ -1,12 +1,8 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.asm3.CartActivity;
 import com.example.asm3.CheckoutActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
@@ -35,10 +30,8 @@ import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
-import com.example.asm3.models.Book;
 import com.example.asm3.models.CartItem;
 import com.example.asm3.models.Customer;
-import com.example.asm3.models.OrderDetail;
 
 import org.json.JSONException;
 import org.json.JSONObject;

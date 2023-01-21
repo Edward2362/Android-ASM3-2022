@@ -1,24 +1,19 @@
 package com.example.asm3.fragments.searchResultActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.R;
 import com.example.asm3.config.Constant;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 
 public class FilterBottomSheetFragment extends BottomSheetDialogFragment implements RadioGroup.OnCheckedChangeListener {
@@ -36,7 +31,6 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
         super.onCreate(savedInstanceState);
         resultViewModel = new ViewModelProvider(requireActivity()).get(ResultViewModel.class);
         currentFilter = resultViewModel.getFilterType().getValue();
-        Log.d("TAG", "onCreate: test " + currentFilter);
     }
 
     @Override
@@ -77,31 +71,23 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment impleme
         switch (i) {
             case R.id.conditionNewUsedBtn:
                 resultViewModel.setFilterType(Constant.conditionNewUsedKey);
-                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
             case R.id.conditionUsedNewBtn:
                 resultViewModel.setFilterType(Constant.conditionUsedNewKey);
-                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
             case R.id.ratingHighLowBtn:
                 resultViewModel.setFilterType(Constant.ratingHighLowKey);
-                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
             case R.id.ratingLowHighBtn:
                 resultViewModel.setFilterType(Constant.ratingLowHighKey);
-                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
             case R.id.priceHighLowBtn:
                 resultViewModel.setFilterType(Constant.priceHighLowKey);
-                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
             case R.id.priceLowHighBtn:
                 resultViewModel.setFilterType(Constant.priceLowHighKey);
-                Log.d("TAG", "onCheckedChanged: test conditionNewUsedKey");
                 break;
         }
-        Log.d("TAG", "onCreate: test " + resultViewModel.getFilterType().getValue());
-        Log.d("TAG", "onCheckedChanged: test " + resultViewModel.getFilterProgressBar().getValue());
         dismiss();
     }
 }

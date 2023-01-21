@@ -1,5 +1,4 @@
 package com.example.asm3.config;
-import static android.content.ContentValues.TAG;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,13 +6,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModel;
 
 import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.CartActivity;
@@ -102,7 +98,6 @@ public class Helper {
             notifBadge.setVisible(true);
             notifBadge.setNumber(countUnread);
         } else {
-            Log.d(TAG, "onChanged: Noti test");
             notifBadge.setVisible(false);
             notifBadge.clearNumber();
         }
@@ -144,7 +139,7 @@ public class Helper {
                 byte[] encodeByte = Base64.getDecoder().decode(encodedData);
                 bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
             }
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             exception.getMessage();
         }
         return bitmap;
@@ -159,11 +154,12 @@ public class Helper {
             if (jsonArray.length() == 0) {
                 isEmpty = true;
             }
-        } catch(JSONException jsonException) {
+        } catch (JSONException jsonException) {
 
         }
         return isEmpty;
     }
+
     public static String deAccent(String str) {
         String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
 

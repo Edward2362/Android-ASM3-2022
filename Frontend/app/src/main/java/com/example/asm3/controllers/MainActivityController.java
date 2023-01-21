@@ -1,15 +1,9 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +16,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.NewUserActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
@@ -36,7 +29,6 @@ import com.example.asm3.fragments.mainActivity.HomeFragment;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
 import com.example.asm3.fragments.mainActivity.NotificationFragment;
 import com.example.asm3.fragments.mainActivity.ProfileFragment;
-import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
 import com.example.asm3.fragments.mainActivity.SearchFragment;
 import com.example.asm3.models.ApiData;
 import com.example.asm3.models.ApiList;
@@ -47,13 +39,9 @@ import com.example.asm3.models.Notification;
 import com.example.asm3.models.Order;
 import com.example.asm3.models.Review;
 import com.example.asm3.models.SubCategory;
-import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -129,7 +117,7 @@ public class MainActivityController extends BaseController implements
         cartBtn.setOnClickListener(this);
         menu.setOnItemSelectedListener(this);
         menu.setOnItemReselectedListener(this);
-        if(isNewUser()){
+        if (isNewUser()) {
             Intent intent = new Intent(getContext(), NewUserActivity.class);
             getActivity().startActivity(intent);
         }
@@ -143,7 +131,6 @@ public class MainActivityController extends BaseController implements
 
         if (isOnline()) {
             if (isAuth()) {
-                Log.d(TAG, "onInit: test customer");
                 getAuthCustomer();
             }
             getAllCategories();
@@ -153,7 +140,6 @@ public class MainActivityController extends BaseController implements
     public void onResume() {
         if (isOnline()) {
             if (isAuth()) {
-                Log.d(TAG, "onInit: test customer");
                 getAuthCustomer();
             }
         }
@@ -186,7 +172,6 @@ public class MainActivityController extends BaseController implements
 
     // Request functions
     public void getAllCategories() {
-        Log.d(TAG, "getAllCategories: test " + homeFragment);
         getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.getAllCategories);
         getData.setTaskType(Constant.getAllCategoriesTaskType);
@@ -216,6 +201,7 @@ public class MainActivityController extends BaseController implements
         getAuthenticatedData.setTaskType(Constant.getCustomer);
         getAuthenticatedData.execute();
     }
+
     public boolean isNewUser() {
         String path = getContext().getFilesDir().getAbsolutePath();
         File dataFile = new File(path + "/token.txt");
@@ -337,11 +323,9 @@ public class MainActivityController extends BaseController implements
 //            categories = apiList.getList();
             mainViewModel.setCateArray(apiList.getList());
 //            Toast.makeText(getContext(), categories.getValue().get(0).getName(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "onFinished: test " + mainViewModel.getCateArray().getValue().get(0).getSubCategories());
         } else if (taskType.equals(Constant.getSubCategoriesTaskType)) {
             ApiList<SubCategory> apiList = ApiList.fromJSON(ApiList.getData(message), SubCategory.class);
             subCategories = apiList.getList();
-            Log.d(TAG, "onFinished: " + subCategories.size());
         } else if (taskType.equals(Constant.getNotificationsTaskType)) {
             ApiList<Notification> apiList = ApiList.fromJSON(ApiList.getData(message), Notification.class);
             mainViewModel.setNotifications(apiList.getList());

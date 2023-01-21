@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +25,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.asm3.ManageBookActivity;
 import com.example.asm3.ProductDetailActivity;
-
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.SubCategoryHolder;
@@ -415,21 +412,21 @@ public class ManageBookActivityController extends BaseController implements
                 getImageFromGallery();
                 break;
             case R.id.uploadProduct:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
                 onUploadProduct();
                 break;
             case R.id.updateProduct:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
                 onUpdateProduct();
                 break;
             case R.id.removeProduct:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
@@ -483,7 +480,6 @@ public class ManageBookActivityController extends BaseController implements
         if (taskType.equals(Constant.uploadBookTaskType)) {
             ApiData<Book> apiData = ApiData.fromJSON(ApiData.getData(message), Book.class);
             Intent intent = getActivity().getIntent();
-            Log.d("TAG", "onFinished: test " + apiData.getData().getName());
             intent.putExtra(Constant.productKey, apiData.getData());
             intent.putExtra(Constant.isUploadKey, Constant.isUploadKey);
             getActivity().setResult(Activity.RESULT_OK, intent);

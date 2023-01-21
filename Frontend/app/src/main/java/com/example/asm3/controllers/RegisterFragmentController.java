@@ -1,21 +1,14 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.asm3.MainActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
@@ -86,7 +79,7 @@ public class RegisterFragmentController extends BaseController implements
                 Helper.loadFragment(fragmentManager, loginFragment, "login", authLayoutId);
                 break;
             case R.id.registerBtn:
-                if(!isOnline()) {
+                if (!isOnline()) {
                     showConnectDialog();
                     return;
                 }
@@ -130,11 +123,9 @@ public class RegisterFragmentController extends BaseController implements
 
     // Callback functions
     public void onRegisterFinished(String message) {
-        Log.d(TAG, "onRegisterFinished: test " + message);
         Helper.loadFragment(fragmentManager, loginFragment, "login", authLayoutId);
         authViewModel.setEmail(email);
         authViewModel.setPassword(password);
-        Log.d(TAG, "onRegisterFinished: after test " + message);
     }
 
     @Override

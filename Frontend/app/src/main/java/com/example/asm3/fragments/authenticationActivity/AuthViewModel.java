@@ -1,10 +1,5 @@
 package com.example.asm3.fragments.authenticationActivity;
 
-import static android.content.ContentValues.TAG;
-
-
-import android.util.Log;
-
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -41,7 +36,6 @@ public class AuthViewModel extends ViewModel {
     }
 
     public void setEmail(String newEmail) {
-        Log.d(TAG, "setEmail: test");
         email.setValue(newEmail);
     }
 

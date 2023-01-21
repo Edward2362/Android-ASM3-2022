@@ -1,10 +1,6 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +12,14 @@ import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.R;
 import com.example.asm3.base.adapter.GenericAdapter;
 import com.example.asm3.base.adapter.viewHolder.NotificationHolder;
 import com.example.asm3.base.controller.BaseController;
 import com.example.asm3.base.networking.services.AsyncTaskCallBack;
-import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
-import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
-import com.example.asm3.fragments.mainActivity.NotificationFragment;
 import com.example.asm3.models.Notification;
-import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
@@ -67,7 +58,6 @@ public class NotificationFragmentController extends BaseController implements
             notifications.observe(getActivity(), new Observer<ArrayList<Notification>>() {
                 @Override
                 public void onChanged(ArrayList<Notification> notifications) {
-                    Log.d(TAG, "onChanged: Noti test");
                     Helper.setBadge(notifications, mainViewModel);
                     if (notifications.isEmpty()) {
                         notifNotifyLayout.setVisibility(View.VISIBLE);
@@ -80,12 +70,6 @@ public class NotificationFragmentController extends BaseController implements
 
                 }
             });
-//        //test
-//        notificationsList = new ArrayList<>();
-//        notificationsList.add(new Notification("00", "Karen", "Hello this is a notification", "11:00", true));
-//        notificationsList.add(new Notification("01", "Karen", "Hello this is another notification", "10:00", false));
-//
-//        //end test
         }
     }
 

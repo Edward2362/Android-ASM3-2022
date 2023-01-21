@@ -1,13 +1,9 @@
 package com.example.asm3.base.controller;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
-import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -70,14 +66,12 @@ public abstract class BaseController {
         if (!arrayList.isEmpty() && !arrayList.get(0).equals("")) {
             isTokenStored = true;
         }
-        Log.d("TAG", "getToken: test " + isTokenStored);
         return isTokenStored;
     }
 
     public abstract void onInit();
 
     public boolean isOnline() {
-        Log.d(TAG, "isOnline: test");
         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         //should check null because in airplane mode it will be null
@@ -85,7 +79,6 @@ public abstract class BaseController {
     }
 
     public void showConnectDialog() {
-        Log.d(TAG, "showConnectDialog: context " + getContext());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle(R.string.no_connection).
                 setMessage(R.string.no_connection_message).

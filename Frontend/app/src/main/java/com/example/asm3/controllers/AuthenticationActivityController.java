@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.R;
 import com.example.asm3.base.controller.BaseController;
-import com.example.asm3.base.networking.services.PostData;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.authenticationActivity.AuthViewModel;

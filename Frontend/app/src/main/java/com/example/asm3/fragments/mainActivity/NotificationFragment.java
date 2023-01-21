@@ -10,8 +10,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.R;
-import com.example.asm3.controllers.HomeFragmentController;
-import com.example.asm3.controllers.MainActivityController;
 import com.example.asm3.controllers.NotificationFragmentController;
 
 

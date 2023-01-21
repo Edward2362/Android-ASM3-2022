@@ -1,16 +1,11 @@
 package com.example.asm3.custom.components;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,9 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
-import androidx.compose.foundation.interaction.DragInteraction;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.example.asm3.R;
 import com.google.android.material.button.MaterialButton;
@@ -59,26 +51,6 @@ public class TopBarView extends LinearLayout {
         // change color of search view
         setSearchViewColor();
     }
-
-//    @RequiresApi(api = Build.VERSION_CODES.M)
-//    @Override
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.backButton:       // BACK BUTTON
-//                Log.d(TAG, "onClick: test Back button was clicked!");
-//                break;
-//            case R.id.searchView:       // SEARCH VIEW
-//                if (searchView.isIconified()) {
-//                    // go back to search fragment
-//                } else {
-//
-//                }
-//                break;
-//            case R.id.cartButton:       // CART BUTTON
-//                Log.d(TAG, "onClick: Cart button was clicked!");
-//                break;
-//        }
-//    }
 
     /**
      * Set color for search view's icon

@@ -1,18 +1,12 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
@@ -29,7 +23,6 @@ import com.example.asm3.base.networking.services.GetData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.custom.components.TopBarView;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
-import com.example.asm3.fragments.mainActivity.SearchFragment;
 import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -39,7 +32,7 @@ import java.util.ArrayList;
 public class SearchFragmentController extends BaseController implements
         AsyncTaskCallBack,
         SearchView.OnQueryTextListener,
-        SearchSuggestionHolder.OnSelectListener{
+        SearchSuggestionHolder.OnSelectListener {
 
     private SearchView searchView;
     private LinearProgressIndicator progressBar;
@@ -88,14 +81,12 @@ public class SearchFragmentController extends BaseController implements
 
     @Override
     public void onSearchSuggestionClick(int position, View view, String suggestionText) {
-        // TODO: get text and go to search result
-        Log.d(TAG, "onSearchSuggestionClick: clicked!");
         goToSearchResult(suggestionText);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return false;
         }
@@ -105,7 +96,7 @@ public class SearchFragmentController extends BaseController implements
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if(!isOnline()) {
+        if (!isOnline()) {
             showConnectDialog();
             return false;
         }
@@ -118,8 +109,6 @@ public class SearchFragmentController extends BaseController implements
                 @Override
                 public void run() {
                     getSuggestions(newText);
-                    Log.d("error","newText " + newText);
-                    // TODO: put these 2 lines in onFinished, a fetching function will be called here
                 }
             }, 1000);
         } else {
@@ -130,7 +119,7 @@ public class SearchFragmentController extends BaseController implements
     }
 
     public void getSuggestions(String textInput) {
-        getData = new GetData(getContext(),this);
+        getData = new GetData(getContext(), this);
         getData.setEndPoint(Constant.suggestProduct + "/" + "?queryInput=" + textInput);
         getData.setTaskType(Constant.suggestProductTaskType);
         getData.execute();
@@ -160,7 +149,6 @@ public class SearchFragmentController extends BaseController implements
     private void goToSearchResult(String query) {
         Intent intent = new Intent(getContext(), SearchResultActivity.class);
         intent.putExtra("query", query);
-        Log.d(TAG, "goToSearchResult: activity: " + getActivity());
         getActivity().startActivity(intent);
     }
 
@@ -168,12 +156,12 @@ public class SearchFragmentController extends BaseController implements
     // Callback functions
     @Override
     public void onFinished(String message, String taskType) {
-        if(taskType.equals(Constant.suggestProductTaskType)) {
-            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message),Book.class);
+        if (taskType.equals(Constant.suggestProductTaskType)) {
+            ApiList<Book> apiList = ApiList.fromJSON(ApiList.getData(message), Book.class);
             ArrayList<Book> products = apiList.getList();
             ArrayList<String> newSuggestion = new ArrayList<>();
             newSuggestion.clear();
-            for (int i=0; i<products.size(); i++) {
+            for (int i = 0; i < products.size(); i++) {
                 newSuggestion.add(products.get(i).getName());
             }
             searchSuggestions.clear();

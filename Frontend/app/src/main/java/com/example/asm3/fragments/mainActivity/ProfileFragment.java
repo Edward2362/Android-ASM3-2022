@@ -1,7 +1,6 @@
 package com.example.asm3.fragments.mainActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.asm3.R;
-import com.example.asm3.controllers.HomeFragmentController;
-import com.example.asm3.controllers.MainActivityController;
 import com.example.asm3.controllers.ProfileFragmentController;
 
 
@@ -47,7 +44,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("TAG", "onResume: test " );
         profileFragmentController.onResume();
     }
 
@@ -58,7 +54,6 @@ public class ProfileFragment extends Fragment {
         menuItemId = R.id.profileNav;
         mainViewModel.setSelectedItemId(menuItemId);
         onInit(profile, mainViewModel);
-        Log.d("TAG", "onCreateView: test + running");
         return profile;
     }
 

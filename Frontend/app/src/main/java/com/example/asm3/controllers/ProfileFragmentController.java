@@ -1,9 +1,6 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.asm3.AccountSettingActivity;
-import com.example.asm3.AuthenticationActivity;
 import com.example.asm3.ProfileActivity;
 import com.example.asm3.R;
 import com.example.asm3.SaleProgressActivity;
@@ -50,12 +45,11 @@ import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.fragments.mainActivity.MainViewModel;
-import com.example.asm3.models.ApiList;
 import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
+import com.example.asm3.models.ApiList;
 import com.example.asm3.models.Book;
 import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
-import com.example.asm3.models.OrderDetail;
 import com.example.asm3.models.Review;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -274,10 +268,6 @@ public class ProfileFragmentController extends BaseController implements
         sellingRecView.setVisibility(View.GONE);
         feedbackRecView.setVisibility(View.GONE);
         purchasedRecView.setVisibility(View.GONE);
-        Log.d(TAG, "onButtonChecked: test " + checkedId);
-        Log.d(TAG, "onButtonChecked:R.id.sellingBtn test " + R.id.sellingBtn);
-        Log.d(TAG, "onButtonChecked:R.id.purchasedBtn test " + R.id.purchasedBtn);
-        Log.d(TAG, "onButtonChecked:R.id.feedbackBtn test " + R.id.feedbackBtn);
         switch (group.getCheckedButtonId()) {
             case R.id.sellingBtn:
                 checkedBtnId = R.id.sellingBtn;
@@ -325,13 +315,9 @@ public class ProfileFragmentController extends BaseController implements
         }
         switch (view.getId()) {
             case R.id.orderBody:
-                Log.d(TAG, "onOrderClick: test " + position);
                 showDialog(displayOrders.get(position).getSeller().getUsername());
                 selectedOrderId = displayOrders.get(position).get_id();
                 selectedOrderIdInt = position;
-                break;
-            case R.id.orderDeleteBtn:
-                Log.d(TAG, "onOrderClick: test delete " + position);
                 break;
         }
     }
@@ -360,7 +346,6 @@ public class ProfileFragmentController extends BaseController implements
                 goToSetting();
                 break;
             case R.id.profileAvatarLayout:
-                Log.d("test", "here");
                 getImageFromGallery();
                 break;
             case R.id.userLogoutBtn:
@@ -395,17 +380,13 @@ public class ProfileFragmentController extends BaseController implements
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) { // onClick for dialog
-        Log.d(TAG, "onClick: dialog click " + i);
         switch (i) {
             case -1: // submit
                 float rating = reviewDialogBody.getRatingBar().getRating();
                 String userReviewTxt = reviewDialogBody.getReviewTxt().getText().toString();
-                Log.d(TAG, "onClick: dialog rating = " + rating);
                 uploadReview(userReviewTxt, rating, selectedOrderId);
                 displayOrders.get(selectedOrderIdInt).setHasReview(true);
                 orderAdapter.notifyItemChanged(selectedOrderIdInt);
-                Log.d(TAG, "onClick: dialog rating = " + rating);
-                Log.d(TAG, "onClick: dialog user review text = " + userReviewTxt);
                 break;
             case -2: // cancel
                 break;
@@ -443,9 +424,7 @@ public class ProfileFragmentController extends BaseController implements
 
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, Order item) {
-                Log.d(TAG, "onBindData: " + item.getStatus());
                 OrderHolder orderHolder = (OrderHolder) holder;
-//                orderHolder.getOrderBookImg().setImageBitmap(Helper.stringToBitmap(item.get));
                 orderHolder.getOrderBookTxt().setText(item.getBookName());
                 orderHolder.getOrderQuantityTxt().setText("Quantity: " + item.getQuantity());
                 if (item.isHasReview()) {
@@ -568,7 +547,6 @@ public class ProfileFragmentController extends BaseController implements
 
     public void changeAvatar(String customerAvatar) {
         try {
-            Log.d("test", "no");
             postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
             postAuthenticatedData.setEndPoint(Constant.changeAvatar);
             postAuthenticatedData.setTaskType(Constant.changeAvatarTaskType);

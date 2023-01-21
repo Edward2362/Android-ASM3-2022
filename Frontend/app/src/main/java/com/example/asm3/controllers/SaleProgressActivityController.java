@@ -1,14 +1,10 @@
 package com.example.asm3.controllers;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +25,7 @@ import com.example.asm3.base.networking.services.PostAuthenticatedData;
 import com.example.asm3.config.Constant;
 import com.example.asm3.config.Helper;
 import com.example.asm3.custom.components.TopBarView;
-import com.example.asm3.fragments.mainActivity.ReviewDialogBody;
 import com.example.asm3.models.ApiList;
-import com.example.asm3.models.Customer;
 import com.example.asm3.models.Order;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -114,7 +108,6 @@ public class SaleProgressActivityController extends BaseController implements
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
-        Log.d(TAG, "onClick: in dialog " + i);
         switch (i) {
             case 0: // packaging
                 status = "Packaging";
@@ -129,7 +122,7 @@ public class SaleProgressActivityController extends BaseController implements
                 if (status != null) {
                     sales.get(saleClicked).setStatus(status);
                     salesAdapter.notifyItemChanged(saleClicked);
-                    updateStatusOrder(sales.get(saleClicked).get_id(),status);
+                    updateStatusOrder(sales.get(saleClicked).get_id(), status);
                 }
                 break;
             case -2: // cancel button
@@ -145,7 +138,6 @@ public class SaleProgressActivityController extends BaseController implements
                 showDialog(sales.get(position).getStatus());
                 break;
             case R.id.orderLocationBtn:
-                Log.d(TAG, "onOrderClick: test "+ position);
                 String address = sales.get(position).getBuyer().getAddress();
                 String uri = "geo:0,0?q=" + address;
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
@@ -232,17 +224,17 @@ public class SaleProgressActivityController extends BaseController implements
         getAuthenticatedData.execute();
     }
 
-    public void updateStatusOrder(String orderId,String status) {
+    public void updateStatusOrder(String orderId, String status) {
         try {
             postAuthenticatedData = new PostAuthenticatedData(getContext(), this);
             postAuthenticatedData.setEndPoint(Constant.updateStatusOrder);
             postAuthenticatedData.setTaskType(Constant.updateStatusOrderTaskType);
             postAuthenticatedData.setToken(token);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(Constant.orderIdKey,orderId);
-            jsonObject.put(Order.statusKey,status);
+            jsonObject.put(Constant.orderIdKey, orderId);
+            jsonObject.put(Order.statusKey, status);
             postAuthenticatedData.execute(jsonObject);
-        } catch (JSONException jsonException){
+        } catch (JSONException jsonException) {
             jsonException.printStackTrace();
         }
 
@@ -259,7 +251,7 @@ public class SaleProgressActivityController extends BaseController implements
             sales.addAll(apiList.getList());
             salesAdapter.notifyDataSetChanged();
             salesProgressBar.setVisibility(View.INVISIBLE);
-        } else if (taskType.equals(Constant.updateStatusOrderTaskType)){
+        } else if (taskType.equals(Constant.updateStatusOrderTaskType)) {
 
         }
     }

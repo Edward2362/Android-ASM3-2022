@@ -1,11 +1,7 @@
 package com.example.asm3.controllers;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +70,6 @@ public class HomeFragmentController extends BaseController implements
         categories.observe(getActivity(), new Observer<ArrayList<Category>>() {
             @Override
             public void onChanged(ArrayList<Category> categories) {
-                Log.d(TAG, "onChanged controller: test " + categories);
                 if (!categories.isEmpty()) {
                     foreign = categories.get(0).getSubCategories();
                     domestic = categories.get(1).getSubCategories();
@@ -207,15 +202,15 @@ public class HomeFragmentController extends BaseController implements
             case R.id.findBookBtn:
                 Intent intent = new Intent(getContext(), SearchResultActivity.class);
                 ArrayList<String> subCategoryArrayList = new ArrayList<String>();
-                for (int i=0;i<displayList.size();i++){
+                for (int i = 0; i < displayList.size(); i++) {
                     if (displayList.get(i).isChosen()) {
                         subCategoryArrayList.add(displayList.get(i).getName());
                     }
                 }
-                intent.putExtra(Constant.categorySearchKey,selectedCategory);
-                intent.putExtra(Constant.subCategorySearchKey,subCategoryArrayList);
-                intent.putExtra(Constant.isCategorySearchKey,Constant.isCategorySearchCode);
-                getActivity().startActivityForResult(intent,Constant.searchResultActivityCode);
+                intent.putExtra(Constant.categorySearchKey, selectedCategory);
+                intent.putExtra(Constant.subCategorySearchKey, subCategoryArrayList);
+                intent.putExtra(Constant.isCategorySearchKey, Constant.isCategorySearchCode);
+                getActivity().startActivityForResult(intent, Constant.searchResultActivityCode);
                 break;
         }
     }

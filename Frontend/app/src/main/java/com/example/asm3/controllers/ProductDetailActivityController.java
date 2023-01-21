@@ -1,11 +1,8 @@
 package com.example.asm3.controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.asm3.CartActivity;
 import com.example.asm3.MainActivity;
 import com.example.asm3.ManageBookActivity;
 import com.example.asm3.ProfileActivity;
@@ -37,7 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class ProductDetailActivityController extends BaseController implements
         AsyncTaskCallBack,
@@ -132,20 +127,16 @@ public class ProductDetailActivityController extends BaseController implements
                 getActivity().finish();
                 break;
             case R.id.detailSellerTxt:
-                Log.d("TAG", "onClick: test seller ");
                 goToSellerProfile();
                 break;
             case R.id.detailAddCartBtn:
-                Log.d("TAG", "onClick: test cart ");
                 if (!isAuth()) {
                     Helper.goToLogin(getContext(), getActivity());
                 } else {
-                    Log.d("TAG", "onClick: Test hehe");
                     saveProduct(productId, 1);
                 }
                 break;
             case R.id.detailUpdateCartBtn:
-                Log.d("TAG", "onClick: test update ");
                 goToManageBookActivity();
                 break;
         }
@@ -222,7 +213,6 @@ public class ProductDetailActivityController extends BaseController implements
                     detailAddCartBtn.setVisibility(View.GONE);
                 }
             }
-            Log.d("tag",book.getCustomer().getUsername());
 
             sellerId = book.getCustomer().get_id();
             detailSellerTxt.setText(book.getCustomer().getUsername());
