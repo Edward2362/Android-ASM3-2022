@@ -195,6 +195,8 @@ public class ProfileFragmentController extends BaseController implements
                         if (!authCustomer.getValue().getAvatar().equals("")) {
                             profileAvatarImg.setImageBitmap(Helper.stringToBitmap(authCustomer.getValue().getAvatar()));
                         }
+
+                        ratingBar.setRating(authCustomer.getValue().getRatings());
                     }
                 }
             });
@@ -502,6 +504,9 @@ public class ProfileFragmentController extends BaseController implements
             public void onBindData(RecyclerView.ViewHolder holder, Review item) {
                 ReviewHolder reviewHolder = (ReviewHolder) holder;
 //                reviewHolder.getReviewUserImg().setImageBitmap(Helper.stringToBitmap(item.getCustomer().getAvatar()));
+                if (!item.getCustomer().getAvatar().equals("")) {
+                    reviewHolder.getReviewUserImg().setImageBitmap(Helper.stringToBitmap(item.getCustomer().getAvatar()));
+                }
                 reviewHolder.getReviewUserNameTxt().setText(item.getCustomer().getUsername());
                 reviewHolder.getReviewContentTxt().setText(item.getContent());
                 reviewHolder.getReviewRatingBar().setRating(item.getRating());
